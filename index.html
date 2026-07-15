@@ -107,7 +107,12 @@
   .rich-title{font-size:13px; color:var(--green-deep); font-weight:700; padding-bottom:6px;}
   .rich-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2);}
   .rich-item:last-child{border-bottom:0;}
-  .rich-item .img{width:58px; height:58px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .rich-item .rk{
+    width:18px; flex-shrink:0; font-size:15px; font-weight:800; font-style:italic;
+    color:var(--t45); text-align:center;
+  }
+  .rich-item.t1 .rk{color:var(--gold);}
+  .rich-item .img{width:44px; height:44px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
   .rich-item .img img{width:100%; height:100%; object-fit:cover;}
   .rich-item .mid{flex:1; min-width:0;}
   .rich-item .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
@@ -122,26 +127,25 @@
     display:flex; gap:12px; align-items:stretch;
   }
   .pcard .img{
-    width:64px; height:64px; align-self:center;
+    width:64px; align-self:stretch;
     border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;
   }
   .pcard .img img{width:100%; height:100%; object-fit:cover;}
   .pcard .body{
     flex:1; min-width:0;
-    display:flex; flex-direction:column; justify-content:center; gap:6px;
+    display:flex; flex-direction:column; justify-content:space-between; gap:4px;
   }
+  .pcard .top{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
   .pcard .nm{font-size:14px; font-weight:600; color:var(--t80); line-height:1.35;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; min-width:0;}
+  .pcard .price{color:var(--red); font-weight:700; font-size:13px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
   .pcard .features{
     font-size:11.5px; color:var(--t62); line-height:1.5;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
-  .pcard .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px; margin-top:-3px;}
-  .pcard .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
-  .pcard .stars-line{font-size:14px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
-  .pcard .stars-line .s{color:var(--gold); font-size:16px; margin-right:3px;}
-  .pcard .stars-line .unit{font-size:11px; font-weight:600; margin-left:1px;}
-  .pcard .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
+  .pcard .stars-line{font-size:11px; color:var(--t62); font-variant-numeric:tabular-nums;}
+  .pcard .stars-line .s{color:var(--gold); font-size:12px; margin-right:2px;}
+  .pcard .stars-line .cnt{color:var(--t45); font-size:10px; margin-left:3px;}
 
   /* ============ 引用块 · 用户评价原声 ============ */
   .voice{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
@@ -238,8 +242,7 @@
   .comp-table th.link{color:var(--blue-deep); text-decoration:underline; text-decoration-color:rgba(90,154,255,0.4); cursor:pointer;}
   .comp-table th.link:hover{color:var(--blue); text-decoration-color:var(--blue);}
   .comp-table td.dim{color:var(--t45); width:30%; font-size:11px;}
-  .comp-table td.win{color:var(--green-deep); font-weight:700;}
-  .comp-table td.win::before{content:"★ "; color:var(--gold); font-weight:700;}
+  .comp-table td.win{color:var(--green-deep); font-weight:600; background:rgba(86,209,191,0.06);}
   .comp-table tr:last-child td{border-bottom:0;}
 
   /* ============ 高亮块（决策锚点） ============ */
@@ -298,12 +301,11 @@
   .detail-params .row + .row{border-top:1px dashed var(--line2);}
   .detail-params .row:nth-child(n+4){display:none;}
   .detail-params.expanded .row:nth-child(n+4){display:flex;}
-  .params-toggle{position:relative; display:block; width:100%; background:none; border:none; font-family:inherit; font-size:14px; color:var(--t45); padding:0; cursor:pointer; text-align:center; height:28px; margin-top:-20px;}
-  .params-toggle::before{content:''; position:absolute; top:-20px; left:0; right:0; height:20px; background:linear-gradient(to bottom, rgba(250,250,251,0), rgba(250,250,251,1)); pointer-events:none;}
+  .params-toggle{position:relative; display:flex; align-items:center; justify-content:center; width:100%; background:none; border:none; font-family:inherit; font-size:12px; color:var(--t45); padding:4px 0 0; cursor:pointer; height:24px;}
+  .params-toggle::before{content:''; position:absolute; bottom:100%; left:0; right:0; height:28px; background:linear-gradient(to bottom, rgba(250,250,251,0), rgba(250,250,251,1)); pointer-events:none;}
   .params-toggle .arrow{display:inline-block; transition:transform .2s;}
   .params-toggle.on .arrow{transform:rotate(180deg);}
   .params-toggle.on::before{display:none;}
-  .params-toggle.on{margin-top:0;}
 
   /* 购买渠道列表 */
   .shop-list{display:flex; flex-direction:column;}
@@ -484,7 +486,8 @@
       <div class="blead">画质、防抖、配件生态都均衡，骑行 / 滑雪 / 潜水场景最主流。</div>
       <div class="comp-note rich">商品富集卡</div>
       <div class="rich">
-        <div class="rich-item">
+        <div class="rich-item t1">
+          <div class="rk">1</div>
           <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Action 6</div>
@@ -493,6 +496,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">2</div>
           <div class="img"><img src="images/Insta360_Ace_Pro.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 Ace Pro 2</div>
@@ -501,6 +505,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">3</div>
           <div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
           <div class="mid">
             <div class="nm">GoPro Hero 13 Black</div>
@@ -509,6 +514,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">4</div>
           <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Action 5 Pro</div>
@@ -523,7 +529,8 @@
       <div class="blead">360° 全景拍摄，剪辑时"事后转镜头"，适合 vlog 和跟拍。</div>
       <div class="comp-note rich">商品富集卡</div>
       <div class="rich">
-        <div class="rich-item">
+        <div class="rich-item t1">
+          <div class="rk">1</div>
           <div class="img"><img src="images/DJI_Osmo_360.png" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo 360</div>
@@ -532,6 +539,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">2</div>
           <div class="img"><img src="images/Insta360_X5.png" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 X5</div>
@@ -540,6 +548,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">3</div>
           <div class="img"><img src="images/GoPro_Max_front.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">GoPro Max 2</div>
@@ -554,7 +563,8 @@
       <div class="blead">机身超轻，磁吸或胸挂，第一人称随手拍。</div>
       <div class="comp-note rich">商品富集卡</div>
       <div class="rich">
-        <div class="rich-item">
+        <div class="rich-item t1">
+          <div class="rk">1</div>
           <div class="img"><img src="images/DJI_Osmo_Nano.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Nano</div>
@@ -563,6 +573,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">2</div>
           <div class="img"><img src="images/Insta360_GO_3S_Camera.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 GO Ultra</div>
@@ -571,6 +582,7 @@
           </div>
         </div>
         <div class="rich-item">
+          <div class="rk">3</div>
           <div class="img"><img src="images/Insta360_X4_su_una_superficie_bianca.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 X4 Air</div>
@@ -645,12 +657,12 @@
       <div class="pcard">
         <div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
         <div class="body">
-          <div class="nm">GoPro Hero 13 Black</div>
-          <div class="features">1/1.9" · 5.3K60 · 原生 10 米防水</div>
-          <div class="pbottom">
+          <div class="top">
+            <div class="nm">GoPro Hero 13 Black</div>
             <div class="price">¥2,800–3,200</div>
-            <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">2.1k 人推荐</span></div>
           </div>
+          <div class="features">1/1.9" · 5.3K60 · 原生 10 米防水</div>
+          <div class="stars-line"><span class="s">★</span>4.7 <span class="cnt">(2.3k)</span></div>
         </div>
       </div>
 
@@ -1235,22 +1247,6 @@
             <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
             <div class="mid">
               <div class="nm">DJI 大疆官方旗舰店</div>
-              <div class="price">¥2,399</div>
-            </div>
-            <div class="arrow">›</div>
-          </a>
-          <a class="shop-item" href="#" onclick="return false">
-            <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt=""></div>
-            <div class="mid">
-              <div class="nm">大疆创新京东自营店</div>
-              <div class="price">¥2,349</div>
-            </div>
-            <div class="arrow">›</div>
-          </a>
-          <a class="shop-item" href="#" onclick="return false">
-            <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt=""></div>
-            <div class="mid">
-              <div class="nm">大疆天猫官方旗舰店</div>
               <div class="price">¥2,399</div>
             </div>
             <div class="arrow">›</div>

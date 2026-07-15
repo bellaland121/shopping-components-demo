@@ -107,12 +107,7 @@
   .rich-title{font-size:13px; color:var(--green-deep); font-weight:700; padding-bottom:6px;}
   .rich-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2);}
   .rich-item:last-child{border-bottom:0;}
-  .rich-item .rk{
-    width:18px; flex-shrink:0; font-size:15px; font-weight:800; font-style:italic;
-    color:var(--t45); text-align:center;
-  }
-  .rich-item.t1 .rk{color:var(--gold);}
-  .rich-item .img{width:44px; height:44px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .rich-item .img{width:58px; height:58px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
   .rich-item .img img{width:100%; height:100%; object-fit:cover;}
   .rich-item .mid{flex:1; min-width:0;}
   .rich-item .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
@@ -243,7 +238,8 @@
   .comp-table th.link{color:var(--blue-deep); text-decoration:underline; text-decoration-color:rgba(90,154,255,0.4); cursor:pointer;}
   .comp-table th.link:hover{color:var(--blue); text-decoration-color:var(--blue);}
   .comp-table td.dim{color:var(--t45); width:30%; font-size:11px;}
-  .comp-table td.win{color:var(--green-deep); font-weight:600; background:rgba(86,209,191,0.06);}
+  .comp-table td.win{color:var(--green-deep); font-weight:700;}
+  .comp-table td.win::before{content:"★ "; color:var(--gold); font-weight:700;}
   .comp-table tr:last-child td{border-bottom:0;}
 
   /* ============ 高亮块（决策锚点） ============ */
@@ -488,8 +484,7 @@
       <div class="blead">画质、防抖、配件生态都均衡，骑行 / 滑雪 / 潜水场景最主流。</div>
       <div class="comp-note rich">商品富集卡</div>
       <div class="rich">
-        <div class="rich-item t1">
-          <div class="rk">1</div>
+        <div class="rich-item">
           <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Action 6</div>
@@ -498,7 +493,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">2</div>
           <div class="img"><img src="images/Insta360_Ace_Pro.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 Ace Pro 2</div>
@@ -507,7 +501,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">3</div>
           <div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
           <div class="mid">
             <div class="nm">GoPro Hero 13 Black</div>
@@ -516,7 +509,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">4</div>
           <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Action 5 Pro</div>
@@ -531,8 +523,7 @@
       <div class="blead">360° 全景拍摄，剪辑时"事后转镜头"，适合 vlog 和跟拍。</div>
       <div class="comp-note rich">商品富集卡</div>
       <div class="rich">
-        <div class="rich-item t1">
-          <div class="rk">1</div>
+        <div class="rich-item">
           <div class="img"><img src="images/DJI_Osmo_360.png" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo 360</div>
@@ -541,7 +532,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">2</div>
           <div class="img"><img src="images/Insta360_X5.png" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 X5</div>
@@ -550,7 +540,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">3</div>
           <div class="img"><img src="images/GoPro_Max_front.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">GoPro Max 2</div>
@@ -565,8 +554,7 @@
       <div class="blead">机身超轻，磁吸或胸挂，第一人称随手拍。</div>
       <div class="comp-note rich">商品富集卡</div>
       <div class="rich">
-        <div class="rich-item t1">
-          <div class="rk">1</div>
+        <div class="rich-item">
           <div class="img"><img src="images/DJI_Osmo_Nano.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Nano</div>
@@ -575,7 +563,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">2</div>
           <div class="img"><img src="images/Insta360_GO_3S_Camera.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 GO Ultra</div>
@@ -584,7 +571,6 @@
           </div>
         </div>
         <div class="rich-item">
-          <div class="rk">3</div>
           <div class="img"><img src="images/Insta360_X4_su_una_superficie_bianca.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">Insta360 X4 Air</div>

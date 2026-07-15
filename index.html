@@ -85,18 +85,9 @@
   .comp-note{
     display:inline-block; margin:0 18px 8px;
     font-size:10px; padding:2px 8px; border-radius:100px;
-    background:rgba(90,154,255,0.12); color:var(--blue-deep);
+    background:rgba(0,0,0,0.06); color:var(--t80);
     letter-spacing:0.04em;
   }
-  .comp-note.richcard{background:rgba(86,209,191,0.16); color:var(--green-deep);}
-  .comp-note.card{background:rgba(90,154,255,0.12); color:var(--blue-deep);}
-  .comp-note.table{background:rgba(0,0,0,0.08); color:var(--t80);}
-  .comp-note.voice{background:rgba(122,95,160,0.14); color:#5C4680;}
-  .comp-note.quote{background:rgba(217,83,79,0.10); color:var(--red);}
-  .comp-note.cite{background:rgba(217,83,79,0.10); color:var(--red);}
-  .comp-note.mark{background:rgba(232,163,61,0.16); color:var(--gold);}
-  .comp-note.follow{background:rgba(90,154,255,0.12); color:var(--blue-deep);}
-  .comp-note.detail{background:rgba(90,154,255,0.12); color:var(--blue-deep);}
 
   /* ============ 富集卡（分类推荐榜单） ============ */
   .rich{
@@ -112,8 +103,11 @@
   .rich-item .mid{flex:1; min-width:0;}
   .rich-item .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
   .rich-item .desc{font-size:11px; color:var(--t45); line-height:1.4; margin-bottom:5px;}
-  .rich-item .stars-line{display:flex; align-items:center; gap:4px; font-size:11px; color:var(--t62); font-variant-numeric:tabular-nums;}
-  .rich-item .stars-line .s{color:var(--gold);}
+  .rich-item .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px;}
+  .rich-item .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .rich-item .stars-line{font-size:13px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
+  .rich-item .stars-line .s{color:var(--gold); font-size:13px; margin-right:3px;}
+  .rich-item .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
 
   /* ============ 商品卡 · 扁平横条 ============ */
   .pcard{
@@ -481,14 +475,17 @@
       <!-- 富集卡 1 · 传统运动相机 -->
       <div class="sec-label">📷 1. 传统运动相机 · 主流水陆通吃</div>
       <div class="blead">画质、防抖、配件生态都均衡，骑行 / 滑雪 / 潜水场景最主流。</div>
-      <div class="comp-note richcard">商品富集卡</div>
+      <div class="comp-note richcard">商品富集卡·点击进详情页</div>
       <div class="rich">
         <div class="rich-item">
           <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Action 6</div>
             <div class="desc">1/1.1" 方形传感器 · 可变光圈 · 8K30</div>
-            <div class="stars-line"><span class="s">★</span>4.8 <span class="cnt">(1.6k)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,600–3,000</div>
+              <div class="stars-line"><span class="s">★</span>4.8<span class="cnt">1.6k 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -496,7 +493,10 @@
           <div class="mid">
             <div class="nm">Insta360 Ace Pro 2</div>
             <div class="desc">徕卡镜头 · AI 双芯 · 翻转屏</div>
-            <div class="stars-line"><span class="s">★</span>4.6 <span class="cnt">(940)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,500–2,800</div>
+              <div class="stars-line"><span class="s">★</span>4.6<span class="cnt">940 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -504,7 +504,10 @@
           <div class="mid">
             <div class="nm">GoPro Hero 13 Black</div>
             <div class="desc">5.3K60 · HB 镜头生态 · 防水 10 米</div>
-            <div class="stars-line"><span class="s">★</span>4.7 <span class="cnt">(2.3k)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,900–3,300</div>
+              <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">2.3k 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -512,7 +515,10 @@
           <div class="mid">
             <div class="nm">DJI Osmo Action 5 Pro</div>
             <div class="desc">1/1.3" 传感器 · 4K120 · 4 小时续航</div>
-            <div class="stars-line"><span class="s">★</span>4.6 <span class="cnt">(1.8k)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,300–2,600</div>
+              <div class="stars-line"><span class="s">★</span>4.6<span class="cnt">1.8k 人推荐</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -520,14 +526,17 @@
       <!-- 富集卡 2 · 全景相机 -->
       <div class="sec-label">🌐 2. 全景运动相机 · 一镜拍全</div>
       <div class="blead">360° 全景拍摄，剪辑时"事后转镜头"，适合 vlog 和跟拍。</div>
-      <div class="comp-note richcard">商品富集卡</div>
+      <div class="comp-note richcard">商品富集卡·点击进详情页</div>
       <div class="rich">
         <div class="rich-item">
           <div class="img"><img src="images/DJI_Osmo_360.png" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo 360</div>
             <div class="desc">1 英寸全景影像 · 8K50 · 120MP</div>
-            <div class="stars-line"><span class="s">★</span>4.7 <span class="cnt">(780)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,800–3,100</div>
+              <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">780 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -535,7 +544,10 @@
           <div class="mid">
             <div class="nm">Insta360 X5</div>
             <div class="desc">双 1/1.28 传感器 · 8K30 · 15 米防水</div>
-            <div class="stars-line"><span class="s">★</span>4.6 <span class="cnt">(1.2k)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,900–3,300</div>
+              <div class="stars-line"><span class="s">★</span>4.6<span class="cnt">1.2k 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -543,7 +555,10 @@
           <div class="mid">
             <div class="nm">GoPro Max 2</div>
             <div class="desc">原生 8K360 · 光学玻璃镜头 · 10-bit</div>
-            <div class="stars-line"><span class="s">★</span>4.4 <span class="cnt">(520)</span></div>
+            <div class="pbottom">
+              <div class="price">¥3,300–3,800</div>
+              <div class="stars-line"><span class="s">★</span>4.4<span class="cnt">520 人推荐</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -551,14 +566,17 @@
       <!-- 富集卡 3 · 穿戴式 -->
       <div class="sec-label">📎 3. 穿戴式 / 轻量相机</div>
       <div class="blead">机身超轻，磁吸或胸挂，第一人称随手拍。</div>
-      <div class="comp-note richcard">商品富集卡</div>
+      <div class="comp-note richcard">商品富集卡·点击进详情页</div>
       <div class="rich">
         <div class="rich-item">
           <div class="img"><img src="images/DJI_Osmo_Nano.jpg" alt=""></div>
           <div class="mid">
             <div class="nm">DJI Osmo Nano</div>
             <div class="desc">52g · 1/1.3" 传感器 · 4K60 · 磁吸</div>
-            <div class="stars-line"><span class="s">★</span>4.5 <span class="cnt">(640)</span></div>
+            <div class="pbottom">
+              <div class="price">¥1,800–2,300</div>
+              <div class="stars-line"><span class="s">★</span>4.5<span class="cnt">640 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -566,7 +584,10 @@
           <div class="mid">
             <div class="nm">Insta360 GO Ultra</div>
             <div class="desc">53g · 1/1.28 传感器 · 4K60 · 夜景</div>
-            <div class="stars-line"><span class="s">★</span>4.4 <span class="cnt">(820)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,000–2,500</div>
+              <div class="stars-line"><span class="s">★</span>4.4<span class="cnt">820 人推荐</span></div>
+            </div>
           </div>
         </div>
         <div class="rich-item">
@@ -574,7 +595,10 @@
           <div class="mid">
             <div class="nm">Insta360 X4 Air</div>
             <div class="desc">165g · 8K 全景 · 4K60 单镜头</div>
-            <div class="stars-line"><span class="s">★</span>4.3 <span class="cnt">(460)</span></div>
+            <div class="pbottom">
+              <div class="price">¥2,600–3,100</div>
+              <div class="stars-line"><span class="s">★</span>4.3<span class="cnt">460 人推荐</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -661,46 +685,6 @@
       </div>
       <div class="lead">
         不过 1/1.9” 的传感器面积偏小，深潜到 15 米以下光线不足时噪点会比较明显<cite style=”--conf:71”>”</cite>。另外默认色调偏冷，水下容易发蓝，想出好看的色彩需要后期调色<cite style=”--conf:58”>”</cite>。电池续航也是老问题，连续录制大概 90 分钟就需要换电池。
-      </div>
-
-      <!-- cite 半层示意 -->
-      <div class="sec-label">🔍 点击角标 <cite style="--conf:89">”</cite> 展开半层</div>
-      <div class="comp-note cite">cite 弹出半层示意</div>
-      <div class="cite-panel">
-        <div class="cp-head">
-          <span class="cp-idx">1</span>
-          <div class="cp-title">生态最全 · 配件系统成熟</div>
-        </div>
-        <div class="cp-conf">
-          <div>
-            <div class="num">89<span style="font-size:14px">%</span></div>
-            <div class="lbl">置信度</div>
-          </div>
-          <div class="stats">
-            基于 <b>147 篇笔记 · 312 条评论</b><br>
-            支持 89% · 中立 8% · 反对 3%
-            <div class="bar">
-              <div class="p" style="flex:89"></div>
-              <div class="m" style="flex:8"></div>
-              <div class="n" style="flex:3"></div>
-            </div>
-          </div>
-        </div>
-        <div class="cp-src">相关内容 · 部分展示</div>
-        <div class="cp-note">
-          <div class="av">康</div>
-          <div class="body">
-            <div class="u">@水下摄影师-老康 · 笔记 · 1.2k 赞<span class="tg p">支持</span></div>
-            <div class="t">GoPro 从 5 代开始的配件基本都能用，我柜子里堆的稳定架、水下灯、快装板全兼容 13</div>
-          </div>
-        </div>
-        <div class="cp-note">
-          <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">M</div>
-          <div class="body">
-            <div class="u">@潜水日记Mo · 评论 · 342 赞<span class="tg p">支持</span></div>
-            <div class="t">配件生态没得说，某鱼上二手配件一大堆，比 DJI 好淘</div>
-          </div>
-        </div>
       </div>
 
       <!-- 用户原声 quote -->

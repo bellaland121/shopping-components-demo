@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3C · 运动相机 — 选品 / 单品 / 对比</title>
+<style>
+  :root{
+    --green:#34B39D; --green-deep:#3B887C; --green-bg:rgba(86,209,191,0.10); --green-line:rgba(52,179,157,0.4); --green-hl:rgba(131,242,223,0.28);
+    --t80:rgba(0,0,0,0.80); --t62:rgba(0,0,0,0.62); --t45:rgba(0,0,0,0.45); --t27:rgba(0,0,0,0.27);
+    --line:rgba(48,48,52,0.10); --line2:rgba(48,48,52,0.06);
+    --gold:#E8A33D; --red:#D9534F; --red-bg:rgba(255,90,90,0.06);
+    --blue:#5A9AFF; --blue-deep:#3A6FCC; --blue-bg:rgba(90,154,255,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-font-smoothing:antialiased;}
+  body{
+    font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    background:#E9E9EC;
+    color:var(--t80);
+    padding:32px 16px 60px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:24px;
+    align-items:flex-start;
+  }
+
+  /* ============ 每列（手机 + 标题） ============ */
+  .col{display:flex; flex-direction:column; align-items:center; gap:6px; width:393px;}
+  .col-tag{
+    font-size:11px; font-weight:600; border-radius:100px; padding:3px 10px;
+    align-self:flex-start; margin-left:6px;
+  }
+  .col.rec .col-tag{color:var(--green-deep); background:rgba(86,209,191,0.16);}
+  .col.single .col-tag{color:var(--blue-deep); background:rgba(90,154,255,0.14);}
+  .col.versus .col-tag{color:var(--gold); background:rgba(232,163,61,0.16);}
+  .col-title{font-size:15px; color:var(--t80); font-weight:600; align-self:flex-start; margin-left:6px;}
+  .col-sub{font-size:12px; color:var(--t62); margin-bottom:6px; align-self:flex-start; margin-left:6px;}
+
+  /* ============ 手机 chrome ============ */
+  .phone{
+    position:relative; width:393px; height:844px;
+    background:#F7F7F6;
+    border-radius:48px;
+    overflow:hidden;
+    box-shadow:0 16px 50px rgba(0,0,0,0.14);
+    display:flex; flex-direction:column;
+  }
+  .phone > .nav{flex-shrink:0;}
+  .phone:not(.has-sidebar) > .userq,
+  .phone:not(.has-sidebar) > .answer{flex-shrink:0;}
+  .phone:not(.has-sidebar){overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .phone:not(.has-sidebar)::-webkit-scrollbar{width:0;}
+  .phone.has-sidebar{height:844px; display:flex; flex-direction:column;}
+  .chat-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .nav{display:flex; align-items:center; justify-content:center; gap:6px; padding:52px 16px 8px;}
+  .nav .av{width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); border:0.5px solid #fff;}
+  .nav .nm{font-size:16px; font-weight:500; color:var(--t80);}
+  .userq{padding:8px 20px 18px; text-align:right;}
+  .userq span{
+    display:inline-block; background:#E8E9E8; border:0.5px solid #FAFAFA;
+    color:#242424; padding:12px 16px; border-radius:22px;
+    font-size:16px; line-height:24px; letter-spacing:0.04em; max-width:280px; text-align:left;
+  }
+
+  /* ============ 回答气泡 ============ */
+  .answer{
+    margin:0 18px 18px;
+    background:#fff;
+    border:0.5px solid rgba(0,0,0,0.08);
+    border-radius:34px;
+    padding:20px 6px 16px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.05);
+  }
+  .ref{display:flex; align-items:center; gap:6px; padding:2px 14px 4px; color:var(--t45); font-size:13px;}
+  .ref .avs{display:flex;}
+  .ref .avs i{
+    width:18px; height:18px; border-radius:50%;
+    border:1.5px solid #fff; display:inline-block; margin-left:-6px;
+    background:linear-gradient(135deg,#7EE8D4,#34B39D);
+  }
+  .ref .avs i:first-child{margin-left:0; background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+  .ref .avs i:nth-child(2){background:linear-gradient(135deg,#B5C7F7,#5A9AFF);}
+  .lead{padding:6px 14px 12px; font-size:15px; line-height:1.66; color:#141414; letter-spacing:0.01em;}
+  .lead .hl{background:var(--green-hl); border-radius:2px; padding:0 2px; font-weight:500;}
+  .lead b{font-weight:500;}
+
+  /* 段标题 */
+  .sec-label{display:flex; align-items:center; gap:6px; font-size:14px; color:var(--t80); font-weight:600; margin:14px 18px 10px;}
+  .blead{margin:0 18px 10px; font-size:13px; line-height:1.6; color:var(--t62);}
+
+  /* 概念拆解 · 排除+锁定 */
+  .concept-parse{
+    margin:6px 14px 12px; padding:12px 14px;
+    background:linear-gradient(180deg, rgba(86,209,191,0.08), rgba(86,209,191,0.02));
+    border:0.5px solid var(--green-line);
+    border-radius:12px;
+  }
+  .concept-parse .cp-title{
+    font-size:12px; font-weight:600; color:var(--green-deep);
+    margin-bottom:10px; letter-spacing:0.02em;
+  }
+  .concept-parse .cp-row{
+    display:flex; gap:10px; font-size:13px; line-height:1.65; margin-bottom:8px;
+  }
+  .concept-parse .cp-row:last-child{margin-bottom:0;}
+  .concept-parse .cp-key{
+    flex-shrink:0; color:var(--t80); font-weight:600;
+    background:#fff; padding:2px 8px; border-radius:6px; height:fit-content;
+    border:0.5px solid var(--line); font-size:12px;
+  }
+  .concept-parse .cp-val{flex:1; color:var(--t62);}
+  .concept-parse .cp-val b{color:var(--t80); font-weight:600;}
+
+  /* 组件标注 · 已隐藏 */
+  .comp-note{display:none;}
+
+  /* ============ 富集卡（分类推荐榜单） ============ */
+  .rich{
+    margin:0 14px 4px; border:0.5px solid var(--green-line); border-radius:16px;
+    background:linear-gradient(180deg,rgba(86,209,191,0.08),rgba(86,209,191,0.02));
+    padding:10px 14px 12px;
+  }
+  .rich-title{font-size:13px; color:var(--green-deep); font-weight:700; padding-bottom:6px;}
+  .rich-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2);}
+  .rich-item:last-child{border-bottom:0;}
+  .rich-item .img{width:58px; height:58px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .rich-item .img img{width:100%; height:100%; object-fit:cover;}
+  .rich-item .mid{flex:1; min-width:0;}
+  .rich-item .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
+  .rich-item .desc{font-size:11px; color:var(--t45); line-height:1.4; margin-bottom:5px;}
+  .rich-item .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px;}
+  .rich-item .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .rich-item .stars-line{font-size:13px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
+  .rich-item .stars-line .s{color:var(--gold); font-size:13px; margin-right:3px;}
+  .rich-item .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
+
+  /* ============ 商品卡 · 扁平横条 ============ */
+  .pcard{
+    margin:0 14px 4px; background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; padding:12px 14px;
+    display:flex; gap:12px; align-items:stretch;
+  }
+  .pcard .img{
+    width:64px; height:64px; align-self:center;
+    border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;
+  }
+  .pcard .img img{width:100%; height:100%; object-fit:cover;}
+  .pcard .body{
+    flex:1; min-width:0;
+    display:flex; flex-direction:column; justify-content:center; gap:6px;
+  }
+  .pcard .nm{font-size:14px; font-weight:600; color:var(--t80); line-height:1.35;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pcard .features{
+    font-size:11.5px; color:var(--t62); line-height:1.5;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .pcard .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px; margin-top:-3px;}
+  .pcard .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .pcard .stars-line{font-size:14px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
+  .pcard .stars-line .s{color:var(--gold); font-size:16px; margin-right:3px;}
+  .pcard .stars-line .unit{font-size:11px; font-weight:600; margin-left:1px;}
+  .pcard .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
+
+  /* ============ 引用块 · 用户评价原声 ============ */
+  .voice{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
+  .voice .v{background:#FAFAFB; border-radius:12px; padding:11px 12px;}
+  .voice .f{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .voice .avv{width:22px; height:22px; border-radius:50%; flex-shrink:0;}
+  .voice .nm{font-size:12.5px; color:var(--t62);}
+  .voice .lk{margin-left:auto; font-size:11px; color:var(--t45);}
+  .voice .tx{font-size:13px; line-height:1.55; color:var(--t80);}
+  .voice .tx .q{color:rgba(48,48,52,0.25); font-weight:700;}
+
+  /* ============ 观点分布（好评 / 差评） ============ */
+  .pc{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
+  .pc-block{border-radius:12px; padding:12px 13px;}
+  .pc-block.pro{background:rgba(52,179,157,0.07);}
+  .pc-block.con{background:var(--red-bg);}
+  .pc-hd{display:flex; align-items:baseline; gap:5px; margin-bottom:9px;}
+  .pc-hd .num{font-size:16px; font-weight:800;}
+  .pc-hd .lbl{font-size:13px; font-weight:600;}
+  .pc-block.pro .pc-hd{color:var(--green-deep);}
+  .pc-block.con .pc-hd{color:var(--red);}
+  .pc-item{display:flex; gap:7px; font-size:13px; line-height:1.5; color:var(--t80); margin-bottom:7px;}
+  .pc-item:last-child{margin-bottom:0;}
+  .pc-item .ic{flex-shrink:0; font-size:12px;}
+  .pc-block.pro .ic{color:var(--green);}
+  .pc-block.con .ic{color:var(--red);}
+  .pc-item .heat{margin-left:auto; flex-shrink:0; font-size:11px; color:var(--t45); white-space:nowrap;}
+
+  /* ============ 对比表格 ============ */
+  .comp-table{
+    margin:0 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; overflow:hidden;
+  }
+  .comp-table table{width:100%; border-collapse:collapse;}
+  .comp-table th, .comp-table td{
+    padding:9px 12px; font-size:12px;
+    border-bottom:0.5px solid var(--line2);
+    text-align:left;
+  }
+  .comp-table th{
+    background:#FAFAFB; font-weight:600; color:var(--t45); font-size:11px;
+    letter-spacing:0.02em;
+  }
+  .comp-table th.link{color:var(--blue-deep); text-decoration:underline; text-decoration-color:rgba(90,154,255,0.4); cursor:pointer;}
+  .comp-table th.link:hover{color:var(--blue); text-decoration-color:var(--blue);}
+  .comp-table td.dim{color:var(--t45); width:30%; font-size:11px;}
+  .comp-table td.win{color:var(--green-deep); font-weight:700;}
+  .comp-table td.win::before{content:"★ "; color:var(--gold); font-weight:700;}
+  .comp-table tr:last-child td{border-bottom:0;}
+
+  /* ============ 高亮块（决策锚点） ============ */
+  .scene{
+    margin:0 14px 4px;
+    background:linear-gradient(180deg,rgba(232,163,61,0.10),rgba(232,163,61,0.02));
+    border:0.5px solid rgba(232,163,61,0.4); border-radius:16px;
+    padding:14px 15px;
+  }
+  .scene-row{font-size:13px; line-height:1.65; margin-bottom:8px; color:var(--t80);}
+  .scene-row:last-child{margin-bottom:0;}
+  .scene-row b{color:var(--t80); font-weight:600;}
+
+  /* ============ 追问 ============ */
+  .follow{margin:6px 14px 4px; display:flex; flex-direction:column; gap:6px;}
+  .follow .fbtn{
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:100px; padding:8px 14px;
+    font-size:12.5px; color:var(--t80); text-align:left; cursor:pointer;
+    font-family:inherit;
+  }
+  .follow .fbtn::before{content:"→ "; color:var(--green-deep); margin-right:4px;}
+  .follow .fbtn:hover{border-color:var(--green); background:var(--green-bg);}
+
+  /* AI 总结 */
+  .ai-sum{margin:0 14px 4px; background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02)); border:0.5px solid var(--green-line); border-radius:12px; padding:12px 14px;}
+  .ai-sum .head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px;}
+  .ai-sum .lbl{display:inline-flex; align-items:center; gap:4px; font-size:10px; letter-spacing:0.08em; color:var(--green-deep); font-weight:700; text-transform:uppercase;}
+  .ai-sum .lbl::before{content:"✦"; color:var(--green);}
+  .ai-sum .score{display:flex; align-items:baseline; gap:4px; font-variant-numeric:tabular-nums;}
+  .ai-sum .score .n{font-size:22px; font-weight:800; color:var(--t80); line-height:1;}
+  .ai-sum .score .mx{font-size:11px; color:var(--t45);}
+  .ai-sum .score .st{color:var(--gold); font-size:11px; margin-left:4px;}
+  .ai-sum .text{font-size:12.5px; color:var(--t80); line-height:1.7;}
+  .ai-sum .text b{color:var(--t80); font-weight:600;}
+  .ai-sum .from{font-size:10px; color:var(--t45); margin-top:8px;}
+
+  /* 底部 footer */
+  .foot-info{padding:14px 18px 20px; text-align:center; color:var(--t27); font-size:10px;}
+
+  /* 底部输入栏 */
+  .input-bar{display:flex; align-items:center; gap:10px; padding:10px 16px 32px; background:#fff; border-top:0.5px solid var(--line); flex-shrink:0;}
+  .input-bar .ib-voice{width:32px; height:32px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; background:#fff; color:var(--green); font-size:14px; cursor:pointer; flex-shrink:0;}
+  .input-bar .ib-ph{flex:1; font-size:14px; color:var(--t27);}
+  .input-bar .ib-icon{font-size:20px; color:var(--t45); cursor:pointer; flex-shrink:0; line-height:1;}
+
+  /* ============ 顶部标题 ============ */
+  .header{width:100%; text-align:center; margin-bottom:8px;}
+  .header h1{font-size:20px; font-weight:700; color:var(--t80); margin-bottom:6px;}
+  .header p{font-size:13px; color:var(--t62); max-width:640px; margin:0 auto;}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>3C · 运动相机 — 潜水场景</h1>
+  <p>选品推荐 / 单品评估 / 对比决策 —— 同一品类下三种意图的回答范式</p>
+</div>
+
+<!-- ================================================================
+     第一列 · 选品推荐
+     ================================================================ -->
+<div class="col rec">
+  <div class="col-tag">选品推荐</div>
+  <div class="col-title">我想学潜水，想买个运动相机，推荐一下</div>
+  <div class="col-sub">锁定核心需求 · 分层推荐 · 按场景选 · 配件提醒</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+    <div class="userq"><span>我想学潜水，想买个运动相机，推荐一下</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">87 篇</b>潜水装备笔记</span>
+      </div>
+
+      <div class="lead">
+        潜水选运动相机，核心就看两件事：<span class="hl">裸机防水深度</span>和<span class="hl">水下直出色彩</span>。水下光线衰减快，防水不够深就得买壳，色彩不好后期救不回来。下面按目前主流的三个选择排。
+      </div>
+
+      <!-- 富集卡 · 潜水运动相机 TOP 3 -->
+      <div class="sec-label">🎯 潜水运动相机 TOP 3</div>
+      <div class="blead">三款各有侧重，先看你更在意"省心"还是"好玩"。</div>
+      <div class="rich">
+        <div class="rich-item">
+          <div class="img"></div>
+          <div class="mid">
+            <div class="nm">DJI Action 5 Pro</div>
+            <div class="desc">裸机防水 20m · RockSteady 3.0 防抖 · 4K120fps</div>
+            <div class="pbottom">
+              <div class="price">¥1,999–2,299</div>
+              <div class="stars-line"><span class="s">★</span>4.8<span class="cnt">1.6k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"></div>
+          <div class="mid">
+            <div class="nm">Insta360 Ace Pro 2</div>
+            <div class="desc">裸机防水 12m · 徕卡联名 · 翻转触摸屏 · AI 剪辑</div>
+            <div class="pbottom">
+              <div class="price">¥2,498–2,798</div>
+              <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">890 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"></div>
+          <div class="mid">
+            <div class="nm">GoPro Hero 13 Black</div>
+            <div class="desc">裸机防水 10m · 配件生态丰富 · HyperSmooth 6.0</div>
+            <div class="pbottom">
+              <div class="price">¥2,998–3,398</div>
+              <div class="stars-line"><span class="s">★</span>4.5<span class="cnt">2.3k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户原声 -->
+      <div class="sec-label">💬 用过的人怎么说</div>
+      <div class="voice">
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>
+            <div class="nm">马尔代夫潜水党</div>
+            <div class="lk">♡ 2,340</div>
+          </div>
+          <div class="tx"><span class="q">"</span>带 Action 去马尔代夫，裸机直接下水，20 米完全没问题，省了买防水壳的钱和漏水的担心<span class="q">"</span></div>
+        </div>
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>
+            <div class="nm">三年潜水老手</div>
+            <div class="lk">♡ 1,567</div>
+          </div>
+          <div class="tx"><span class="q">"</span>Action 6 裸机防水 20 米，直出色彩鲜艳，水质好的地方基本不用后期<span class="q">"</span></div>
+        </div>
+      </div>
+
+      <!-- 选购对比段 -->
+      <div class="sec-label">🔍 各有什么不同</div>
+      <div class="lead">
+        <b>DJI Action 系列</b>是目前潜水圈最主流的选择，裸机 20 米免壳下水，水下防抖稳，续航也长。直出色彩偏真实，水下会有点蓝绿色偏，喜欢鲜艳直出的可能需要调一下。
+      </div>
+      <div class="lead">
+        <b>Insta360 Ace Pro 2</b>有徕卡调色加持，暗光表现最好，翻转屏自拍方便。但裸机只防 12 米，潜水超过这个深度必须加壳——而第三方防水壳有漏水风险，买之前要想清楚。
+      </div>
+      <div class="lead">
+        <b>GoPro Hero 13 Black</b>配件生态最成熟，全球潜店租借最普遍。但裸机防水只有 10 米，色彩偏冷需要后期调色，国内售后也不太方便。
+      </div>
+
+      <!-- 高亮块 · 直接选 -->
+      <div class="sec-label">🧭 直接按需求选</div>
+      <div class="scene">
+        <div class="scene-row">新手潜水、想省心不折腾，选 <b>DJI Action 5 Pro</b>——裸机 20m，不用另买壳。</div>
+        <div class="scene-row">喜欢自拍 vlog、重视暗光画质，选 <b>Insta360 Ace Pro 2</b>——翻转屏 + 徕卡调色。</div>
+        <div class="scene-row">经常出国潜水、看重配件生态，选 <b>GoPro Hero 13</b>——全球通用。</div>
+        <div class="scene-row">预算有限、只浮潜不深潜，三款都行，选最便宜的 <b>Action 5 Pro</b> 最划算。</div>
+      </div>
+
+      <!-- 配件提醒 -->
+      <div class="lead" style="color:var(--t62); font-size:13px;">
+        <b>新手必备配件</b>：浮力手柄（水下防丢）、防雾片（镜头起雾克星）、防丢绳。预算允许的话加一个红色滤镜，能纠正水下蓝绿色偏。整套配件大约 ¥200–400。
+      </div>
+
+      <!-- 追问 -->
+      <div class="follow">
+        <button class="fbtn">预算 3000 能配齐一套吗？</button>
+        <button class="fbtn">浮潜和水肺对相机要求有什么区别？</button>
+        <button class="fbtn">360 全景相机适合潜水吗？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人潜水装备笔记</div>
+    </div>
+    </div><!-- /.chat-body -->
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     第二列 · 单品评估
+     ================================================================ -->
+<div class="col single">
+  <div class="col-tag">单品评估</div>
+  <div class="col-title">DJI Action 5 Pro 潜水用值得入手吗</div>
+  <div class="col-sub">核弹结论 · 优缺点分布 · 参数设置 · 综合评分</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+    <div class="userq"><span>DJI Action 5 Pro 潜水用值得入手吗？</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">124 篇</b>真人水下实拍帖</span>
+      </div>
+
+      <div class="lead">
+        <b>值得，潜水用它是目前最省心的选择。</b><span class="hl">裸机防水 20 米、不用买壳</span>，这一点直接省掉了大多数人最担心的漏水风险。潜水圈口碑很好，尤其是新手入门，几乎没有比它更合适的了。
+      </div>
+
+      <!-- 商品卡 -->
+      <div class="pcard">
+        <div class="img"></div>
+        <div class="body">
+          <div class="nm">DJI Action 5 Pro</div>
+          <div class="features">裸机防水 20m · 4K120fps · RockSteady 3.0 · 1770mAh</div>
+          <div class="pbottom">
+            <div class="price">¥1,999–2,299</div>
+            <div class="stars-line"><span class="s">★</span>4.8<span class="unit">分</span><span class="cnt">1.6k 人推荐</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 观点分布 -->
+      <div class="sec-label">📊 大家怎么评价</div>
+      <div class="pc">
+        <div class="pc-block pro">
+          <div class="pc-hd"><span class="num">5</span><span class="lbl">个值得入手的理由</span></div>
+          <div class="pc-item"><span class="ic">✓</span>低光表现好，水下暗光环境也能拍清楚<span class="heat">🔥 提及 89%</span></div>
+          <div class="pc-item"><span class="ic">✓</span>裸机防水 20 米，浮潜不用任何壳<span class="heat">🔥 提及 94%</span></div>
+          <div class="pc-item"><span class="ic">✓</span>RockSteady 3.0 防抖稳，水下画面不晃<span class="heat">提及 78%</span></div>
+          <div class="pc-item"><span class="ic">✓</span>1770mAh 大电池，续航比上一代强很多<span class="heat">提及 72%</span></div>
+          <div class="pc-item"><span class="ic">✓</span>内置深度传感器，自动记录下潜深度<span class="heat">提及 45%</span></div>
+        </div>
+        <div class="pc-block con">
+          <div class="pc-hd"><span class="num">2</span><span class="lbl">个要注意的地方</span></div>
+          <div class="pc-item"><span class="ic">✗</span>水下直出偏蓝绿，需要后期调色彩<span class="heat">提及 63%</span></div>
+          <div class="pc-item"><span class="ic">✗</span>深潜超 20m 仍需官方潜水壳（¥799）<span class="heat">提及 38%</span></div>
+        </div>
+      </div>
+
+      <!-- 和 Action 6 的对比 -->
+      <div class="sec-label">🔄 和 Action 6 怎么选</div>
+      <div class="lead">
+        DJI 最新的 <b>Action 6</b> 直出色彩更鲜艳，水下不用怎么调色就能发朋友圈。但价格贵了 ¥500 左右。<b>如果追求"拍完即发"的鲜艳直出效果</b>，上 Action 6；<b>如果看重性价比</b>，Action 5 Pro 水下表现已经很好了，省下的钱够买一整套配件。
+      </div>
+
+      <!-- 概念拆解 · 推荐拍摄参数 -->
+      <div class="sec-label">📋 水下推荐参数设置</div>
+      <div class="concept-parse">
+        <div class="cp-title">拿到手这样设，水下直出就能用</div>
+        <div class="cp-row">
+          <span class="cp-key">分辨率</span>
+          <span class="cp-val"><b>4K / 60fps</b>——兼顾画质和慢动作，水下鱼群慢放特别好看</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-key">曝光补偿</span>
+          <span class="cp-val"><b>-0.3 EV</b>——水下光线强时防止过曝，保留更多细节</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-key">ISO 范围</span>
+          <span class="cp-val"><b>100–3200</b>——锁定上限防噪点，暗光环境画面更干净</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-key">防抖模式</span>
+          <span class="cp-val"><b>RockSteady +</b>——最强增稳，水下游动画面稳如云台</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-key">色彩模式</span>
+          <span class="cp-val"><b>D-Log M</b>——如果会调色用这个，后期空间大；不会调色就用标准模式</span>
+        </div>
+      </div>
+
+      <!-- AI 总结 -->
+      <div class="ai-sum">
+        <div class="head">
+          <span class="score"><span class="n">9</span><span class="mx">/ 10</span><span class="st">★★★★★</span></span>
+          <span class="lbl">AI 总结</span>
+        </div>
+        <div class="text">潜水用运动相机的<b>最佳性价比之选</b>。裸机 20m 防水省掉了防水壳的钱和漏水的焦虑，防抖和续航都是同价位最强。唯一短板是水下色彩偏蓝绿需要后期，介意的话可以加 ¥500 上 Action 6。</div>
+        <div class="from">基于 124 篇小红书水下实拍 · 340 条评论综合</div>
+      </div>
+
+      <!-- 高亮块 -->
+      <div class="scene">
+        <div class="scene-row">追求色彩鲜艳、拍完直发，上 <b>Action 6</b>。</div>
+        <div class="scene-row">看重性价比、愿意简单调色，选 <b>Action 5 Pro</b>——省下的钱买配件更实在。</div>
+        <div class="scene-row">纯浮潜不深潜，<b>Action 5 Pro 完全够用</b>。</div>
+      </div>
+
+      <!-- 追问 -->
+      <div class="follow">
+        <button class="fbtn">和 GoPro Hero 13 比呢？</button>
+        <button class="fbtn">潜水壳买官方的还是第三方？</button>
+        <button class="fbtn">水下拍视频还是拍照好？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人水下实拍</div>
+    </div>
+    </div><!-- /.chat-body -->
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     第三列 · 对比决策
+     ================================================================ -->
+<div class="col versus">
+  <div class="col-tag">对比决策</div>
+  <div class="col-title">潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个</div>
+  <div class="col-sub">分流结论 · 参数对比 · 风险提醒 · 按场景选</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+    <div class="userq"><span>潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个？</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">156 篇</b>真人对比实测</span>
+      </div>
+
+      <div class="lead">
+        <span class="hl">潜水为主选 DJI，本质是"省心"和"好玩"之间的选择。</span>DJI 裸机防水 20 米，下水不用想；Insta360 裸机只有 12 米，深潜必须加壳——而壳是有漏水风险的。
+      </div>
+
+      <!-- 参数对比表 -->
+      <div class="sec-label">📊 关键参数对比</div>
+      <div class="comp-table">
+        <table>
+          <tr>
+            <th></th>
+            <th>DJI Action 5 Pro</th>
+            <th>Insta360 Ace Pro 2</th>
+          </tr>
+          <tr><td class="dim">裸机防水</td><td class="win">20 米</td><td>12 米</td></tr>
+          <tr><td class="dim">屏幕</td><td>前后双屏</td><td class="win">翻转触摸屏</td></tr>
+          <tr><td class="dim">传感器</td><td>1/1.3" CMOS</td><td class="win">1/1.3" 徕卡联名</td></tr>
+          <tr><td class="dim">暗光表现</td><td>良好</td><td class="win">优秀（纯光学防抖）</td></tr>
+          <tr><td class="dim">直出色彩</td><td>偏真实，水下偏蓝绿</td><td class="win">鲜艳直出，发圈即用</td></tr>
+          <tr><td class="dim">防抖</td><td class="win">RockSteady 3.0</td><td>FlowState</td></tr>
+          <tr><td class="dim">续航</td><td class="win">1770mAh · 约 160 分钟</td><td>1800mAh · 约 100 分钟</td></tr>
+          <tr><td class="dim">AI 功能</td><td>基础</td><td class="win">AI 精彩时刻 · 自动剪辑</td></tr>
+          <tr><td class="dim">参考价</td><td class="win">¥1,999–2,299</td><td>¥2,498–2,798</td></tr>
+        </table>
+      </div>
+
+      <!-- 深度解析 -->
+      <div class="sec-label">🔍 深度解析</div>
+      <div class="lead">
+        <b>DJI 的"省心"逻辑</b>：20 米裸机防水意味着浮潜、自由潜完全不需要额外装备，下水前不用检查密封圈、不用担心进水。防抖和续航也是同级最强，拍完不用怎么剪就能用。适合"拍了发朋友圈就行"的人。
+      </div>
+      <div class="lead">
+        <b>Insta360 的"好玩"逻辑</b>：徕卡调色暗光更好看，翻转屏水面自拍方便，AI 自动剪辑省后期时间。如果你潜水之外还 vlog、旅行拍摄，它的综合玩法更多。但潜水场景的短板也明显——12 米防水不够深，要深潜就得加壳。
+      </div>
+
+      <!-- 风险提醒 · 用户原声 -->
+      <div class="sec-label">⚠️ 防水壳风险提醒</div>
+      <div class="voice">
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#D9534F,#C9302C)"></div>
+            <div class="nm">蜜月翻车实录</div>
+            <div class="lk">♡ 4,670</div>
+          </div>
+          <div class="tx"><span class="q">"</span>蜜月带了 Insta360 + 第三方防水壳去马尔代夫，第二天防水壳就进水了，相机直接报废。不只是器材损失，更是一段极其遗憾的经历——蜜月的水下画面全没了<span class="q">"</span></div>
+        </div>
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>
+            <div class="nm">潜水教练日常</div>
+            <div class="lk">♡ 1,230</div>
+          </div>
+          <div class="tx"><span class="q">"</span>带过几百个学员，见过不少防水壳漏水的，大部分是密封圈没装好或者有沙粒。裸机防水的相机省事太多了<span class="q">"</span></div>
+        </div>
+      </div>
+
+      <div class="lead" style="color:var(--t62); font-size:13px;">
+        防水壳漏水不是小概率事件——密封圈老化、安装不到位、细沙卡入都可能导致进水。如果潜水是你的核心场景，裸机防水深度是最关键的指标，比画质、色彩都重要。
+      </div>
+
+      <!-- 高亮块 · 按场景选 -->
+      <div class="sec-label">🧭 按你的场景选</div>
+      <div class="scene">
+        <div class="scene-row">潜水是主要用途、想省心安心，选 <b>DJI Action 5 Pro</b>——裸机 20m 免壳下水，不用担心漏水。</div>
+        <div class="scene-row">潜水之外还常拍 vlog、喜欢翻转屏和 AI 玩法，选 <b>Insta360 Ace Pro 2</b>——但潜水时务必用官方壳、每次检查密封。</div>
+        <div class="scene-row">纯浮潜、不超过 10 米，两款都完全够用，按预算选就行。</div>
+      </div>
+
+      <!-- 追问 -->
+      <div class="follow">
+        <button class="fbtn">两个各配什么配件比较合理？</button>
+        <button class="fbtn">有没有两全的方案？</button>
+        <button class="fbtn">Insta360 官方壳和第三方壳差多少？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人对比实测</div>
+    </div>
+    </div><!-- /.chat-body -->
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

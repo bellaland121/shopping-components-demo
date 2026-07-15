@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>购物决策 · 三类典型 case</title>
+<style>
+  :root{
+    --green:#34B39D; --green-deep:#3B887C; --green-bg:rgba(86,209,191,0.10); --green-line:rgba(52,179,157,0.4); --green-hl:rgba(131,242,223,0.28);
+    --t80:rgba(0,0,0,0.80); --t62:rgba(0,0,0,0.62); --t45:rgba(0,0,0,0.45); --t27:rgba(0,0,0,0.27);
+    --line:rgba(48,48,52,0.10); --line2:rgba(48,48,52,0.06);
+    --gold:#E8A33D; --red:#D9534F; --red-bg:rgba(255,90,90,0.06);
+    --blue:#5A9AFF; --blue-deep:#3A6FCC; --blue-bg:rgba(90,154,255,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-font-smoothing:antialiased;}
+  body{
+    font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    background:#E9E9EC;
+    color:var(--t80);
+    padding:32px 16px 60px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:24px;
+    align-items:flex-start;
+  }
+
+  /* ============ 每列（手机 + 标题） ============ */
+  .col{display:flex; flex-direction:column; align-items:center; gap:6px; width:393px;}
+  .col-tag{
+    font-size:11px; font-weight:600; border-radius:100px; padding:3px 10px;
+    align-self:flex-start; margin-left:6px;
+  }
+  .col.rec .col-tag{color:var(--green-deep); background:rgba(86,209,191,0.16);}
+  .col.single .col-tag{color:var(--blue-deep); background:rgba(90,154,255,0.14);}
+  .col.versus .col-tag{color:var(--gold); background:rgba(232,163,61,0.16);}
+  .col-title{font-size:15px; color:var(--t80); font-weight:600; align-self:flex-start; margin-left:6px;}
+  .col-sub{font-size:12px; color:var(--t62); margin-bottom:6px; align-self:flex-start; margin-left:6px;}
+
+  /* ============ 手机 chrome ============ */
+  .phone{
+    position:relative; width:393px; height:844px;
+    background:#F7F7F6;
+    border-radius:48px;
+    overflow:hidden;
+    box-shadow:0 16px 50px rgba(0,0,0,0.14);
+    display:flex; flex-direction:column;
+  }
+  .phone > .nav{flex-shrink:0;}
+  /* 未包 .chat-body 的手机，让 .userq + .answer 之外的容器可以滚动 */
+  .phone:not(.has-sidebar) > .userq,
+  .phone:not(.has-sidebar) > .answer{flex-shrink:0;}
+  .phone:not(.has-sidebar){overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .phone:not(.has-sidebar)::-webkit-scrollbar{width:0;}
+  .nav{display:flex; align-items:center; justify-content:center; gap:6px; padding:52px 16px 8px;}
+  .nav .av{width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); border:0.5px solid #fff;}
+  .nav .nm{font-size:16px; font-weight:500; color:var(--t80);}
+  .userq{padding:8px 20px 18px; text-align:right;}
+  .userq span{
+    display:inline-block; background:#E8E9E8; border:0.5px solid #FAFAFA;
+    color:#242424; padding:12px 16px; border-radius:22px;
+    font-size:16px; line-height:24px; letter-spacing:0.04em; max-width:280px; text-align:left;
+  }
+
+  /* ============ 回答气泡 ============ */
+  .answer{
+    margin:0 18px 18px;
+    background:#fff;
+    border:0.5px solid rgba(0,0,0,0.08);
+    border-radius:34px;
+    padding:20px 6px 16px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.05);
+  }
+  .ref{display:flex; align-items:center; gap:6px; padding:2px 14px 4px; color:var(--t45); font-size:13px;}
+  .ref .avs{display:flex;}
+  .ref .avs i{
+    width:18px; height:18px; border-radius:50%;
+    border:1.5px solid #fff; display:inline-block; margin-left:-6px;
+    background:linear-gradient(135deg,#7EE8D4,#34B39D);
+  }
+  .ref .avs i:first-child{margin-left:0; background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+  .ref .avs i:nth-child(2){background:linear-gradient(135deg,#B5C7F7,#5A9AFF);}
+  .lead{padding:6px 14px 12px; font-size:15px; line-height:1.66; color:#141414; letter-spacing:0.01em;}
+  .lead .hl{background:var(--green-hl); border-radius:2px; padding:0 2px; font-weight:500;}
+  .lead b{font-weight:500;}
+
+  /* 段标题 */
+  .sec-label{display:flex; align-items:center; gap:6px; font-size:14px; color:var(--t80); font-weight:600; margin:14px 18px 10px;}
+  .blead{margin:0 18px 10px; font-size:13px; line-height:1.6; color:var(--t62);}
+
+  /* 概念拆解 · 排除+锁定 */
+  .concept-parse{
+    margin:6px 14px 12px; padding:12px 14px;
+    background:linear-gradient(180deg, rgba(86,209,191,0.08), rgba(86,209,191,0.02));
+    border:0.5px solid var(--green-line);
+    border-radius:12px;
+  }
+  .concept-parse .cp-title{
+    font-size:12px; font-weight:600; color:var(--green-deep);
+    margin-bottom:10px; letter-spacing:0.02em;
+  }
+  .concept-parse .cp-row{
+    display:flex; gap:10px; font-size:13px; line-height:1.65; margin-bottom:8px;
+  }
+  .concept-parse .cp-row:last-child{margin-bottom:0;}
+  .concept-parse .cp-key{
+    flex-shrink:0; color:var(--t80); font-weight:600;
+    background:#fff; padding:2px 8px; border-radius:6px; height:fit-content;
+    border:0.5px solid var(--line); font-size:12px;
+  }
+  .concept-parse .cp-val{flex:1; color:var(--t62);}
+  .concept-parse .cp-val b{color:var(--t80); font-weight:600;}
+
+  /* 组件标注 · 已隐藏 */
+  .comp-note{display:none;}
+
+  /* ============ 富集卡（分类推荐榜单） ============ */
+  .rich{
+    margin:0 14px 4px; border:0.5px solid var(--green-line); border-radius:16px;
+    background:linear-gradient(180deg,rgba(86,209,191,0.08),rgba(86,209,191,0.02));
+    padding:10px 14px 12px;
+  }
+  .rich-title{font-size:13px; color:var(--green-deep); font-weight:700; padding-bottom:6px;}
+  .rich-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2);}
+  .rich-item:last-child{border-bottom:0;}
+  .rich-item .img{width:58px; height:58px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .rich-item .img img{width:100%; height:100%; object-fit:cover;}
+  .rich-item .mid{flex:1; min-width:0;}
+  .rich-item .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
+  .rich-item .desc{font-size:11px; color:var(--t45); line-height:1.4; margin-bottom:5px;}
+  .rich-item .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px;}
+  .rich-item .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .rich-item .stars-line{font-size:13px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
+  .rich-item .stars-line .s{color:var(--gold); font-size:13px; margin-right:3px;}
+  .rich-item .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
+
+  /* ============ 商品卡 · 扁平横条 ============ */
+  .pcard{
+    margin:0 14px 4px; background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; padding:12px 14px;
+    display:flex; gap:12px; align-items:stretch;
+  }
+  .pcard .img{
+    width:64px; height:64px; align-self:center;
+    border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;
+  }
+  .pcard .img img{width:100%; height:100%; object-fit:cover;}
+  .pcard .body{
+    flex:1; min-width:0;
+    display:flex; flex-direction:column; justify-content:center; gap:6px;
+  }
+  .pcard .nm{font-size:14px; font-weight:600; color:var(--t80); line-height:1.35;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pcard .features{
+    font-size:11.5px; color:var(--t62); line-height:1.5;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .pcard .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px; margin-top:-3px;}
+  .pcard .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .pcard .stars-line{font-size:14px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
+  .pcard .stars-line .s{color:var(--gold); font-size:16px; margin-right:3px;}
+  .pcard .stars-line .unit{font-size:11px; font-weight:600; margin-left:1px;}
+  .pcard .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
+
+  /* ============ 引用块 · 用户评价原声 ============ */
+  .voice{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
+  .voice .v{background:#FAFAFB; border-radius:12px; padding:11px 12px;}
+  .voice .f{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .voice .avv{width:22px; height:22px; border-radius:50%; flex-shrink:0;}
+  .voice .nm{font-size:12.5px; color:var(--t62);}
+  .voice .lk{margin-left:auto; font-size:11px; color:var(--t45);}
+  .voice .tx{font-size:13px; line-height:1.55; color:var(--t80);}
+  .voice .tx .q{color:rgba(48,48,52,0.25); font-weight:700;}
+
+  /* ============ 观点分布（好评 / 差评） ============ */
+  .pc{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
+  .pc-block{border-radius:12px; padding:12px 13px;}
+  .pc-block.pro{background:rgba(52,179,157,0.07);}
+  .pc-block.con{background:var(--red-bg);}
+  .pc-hd{display:flex; align-items:baseline; gap:5px; margin-bottom:9px;}
+  .pc-hd .num{font-size:16px; font-weight:800;}
+  .pc-hd .lbl{font-size:13px; font-weight:600;}
+  .pc-block.pro .pc-hd{color:var(--green-deep);}
+  .pc-block.con .pc-hd{color:var(--red);}
+  .pc-item{display:flex; gap:7px; font-size:13px; line-height:1.5; color:var(--t80); margin-bottom:7px;}
+  .pc-item:last-child{margin-bottom:0;}
+  .pc-item .ic{flex-shrink:0; font-size:12px;}
+  .pc-block.pro .ic{color:var(--green);}
+  .pc-block.con .ic{color:var(--red);}
+  .pc-item .heat{margin-left:auto; flex-shrink:0; font-size:11px; color:var(--t45); white-space:nowrap;}
+
+  /* ============ cite · 正文角标 + 置信度环 ============ */
+  cite{
+    display:inline-flex; align-items:center; justify-content:center;
+    position:relative;
+    background:var(--green-bg); color:var(--green-deep);
+    font-size:11px; font-weight:700; line-height:1;
+    width:20px; height:20px;
+    border-radius:50%; font-style:normal;
+    vertical-align:super; margin-left:2px; cursor:pointer;
+    transition:background .15s;
+  }
+  cite::before{
+    content:'';
+    position:absolute; inset:0; border-radius:50%;
+    background:conic-gradient(from -90deg,
+      rgba(52,179,157,0.55) calc(var(--conf, 0) * 1%),
+      var(--line) calc(var(--conf, 0) * 1%));
+    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+    mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+  }
+  cite:hover{background:var(--green); color:#fff;}
+
+  /* ============ cite 弹出半层示意 ============ */
+  .cite-panel{
+    margin:8px 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; padding:12px 14px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.05);
+  }
+  .cp-head{display:flex; align-items:center; gap:6px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--line2);}
+  .cp-idx{background:var(--green-deep); color:#fff; font-size:10px; font-weight:600; padding:1px 6px; border-radius:3px;}
+  .cp-title{font-size:12.5px; font-weight:600; color:var(--t80); line-height:1.4;}
+  .cp-conf{display:flex; align-items:center; gap:12px; padding:10px 12px; background:#FAFAFB; border-radius:10px; margin-bottom:10px;}
+  .cp-conf .num{font-size:22px; font-weight:800; color:var(--green-deep); line-height:1; font-variant-numeric:tabular-nums;}
+  .cp-conf .lbl{font-size:10px; color:var(--t45); letter-spacing:0.04em; margin-top:3px;}
+  .cp-conf .stats{flex:1; min-width:0; font-size:11px; color:var(--t62); line-height:1.6;}
+  .cp-conf .bar{display:flex; height:4px; border-radius:2px; overflow:hidden; margin-top:4px;}
+  .cp-conf .bar .p{background:var(--green);} .cp-conf .bar .n{background:var(--red);} .cp-conf .bar .m{background:var(--line);}
+  .cp-src{font-size:11px; color:var(--t45); margin-bottom:8px;}
+  .cp-note{display:flex; gap:8px; padding:8px 10px; background:#FAFAFB; border-radius:8px; margin-bottom:6px; font-size:11.5px;}
+  .cp-note:last-child{margin-bottom:0;}
+  .cp-note .av{width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); color:#fff; font-size:9px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .cp-note .body{flex:1; min-width:0;}
+  .cp-note .u{font-size:10px; color:var(--t45); margin-bottom:2px;}
+  .cp-note .t{color:var(--t80); line-height:1.5;}
+  .cp-note .tg{display:inline-block; font-size:9px; padding:1px 4px; border-radius:2px; margin-left:4px; vertical-align:middle;}
+  .cp-note .tg.p{background:var(--green-bg); color:var(--green-deep);}
+  .cp-note .tg.n{background:var(--red-bg); color:var(--red);}
+
+  /* ============ 对比表格 ============ */
+  .comp-table{
+    margin:0 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; overflow:hidden;
+  }
+  .comp-table table{width:100%; border-collapse:collapse;}
+  .comp-table th, .comp-table td{
+    padding:9px 12px; font-size:12px;
+    border-bottom:0.5px solid var(--line2);
+    text-align:left;
+  }
+  .comp-table th{
+    background:#FAFAFB; font-weight:600; color:var(--t45); font-size:11px;
+    letter-spacing:0.02em;
+  }
+  .comp-table th.link{color:var(--blue-deep); text-decoration:underline; text-decoration-color:rgba(90,154,255,0.4); cursor:pointer;}
+  .comp-table th.link:hover{color:var(--blue); text-decoration-color:var(--blue);}
+  .comp-table td.dim{color:var(--t45); width:30%; font-size:11px;}
+  .comp-table td.win{color:var(--green-deep); font-weight:700;}
+  .comp-table td.win::before{content:"★ "; color:var(--gold); font-weight:700;}
+  .comp-table tr:last-child td{border-bottom:0;}
+
+  /* ============ 高亮块（决策锚点） ============ */
+  .scene{
+    margin:0 14px 4px;
+    background:linear-gradient(180deg,rgba(232,163,61,0.10),rgba(232,163,61,0.02));
+    border:0.5px solid rgba(232,163,61,0.4); border-radius:16px;
+    padding:14px 15px;
+  }
+  .scene-row{font-size:13px; line-height:1.65; margin-bottom:8px; color:var(--t80);}
+  .scene-row:last-child{margin-bottom:0;}
+  .scene-row b{color:var(--t80); font-weight:600;}
+
+  /* ============ 追问 ============ */
+  .follow{margin:6px 14px 4px; display:flex; flex-direction:column; gap:6px;}
+  .follow .fbtn{
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:100px; padding:8px 14px;
+    font-size:12.5px; color:var(--t80); text-align:left; cursor:pointer;
+    font-family:inherit;
+  }
+  .follow .fbtn::before{content:"→ "; color:var(--green-deep); margin-right:4px;}
+  .follow .fbtn:hover{border-color:var(--green); background:var(--green-bg);}
+
+  /* ============ 商品详情页 · 完整下探 ============ */
+  .detail{
+    margin:0 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:16px; overflow:hidden;
+  }
+  .detail-gallery{position:relative; background:#EEE; aspect-ratio:4/3; overflow:hidden;}
+  .detail-gallery img{width:100%; height:100%; object-fit:cover;}
+  .detail-gallery .cnt{position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:2px 8px; border-radius:100px; letter-spacing:0.04em;}
+  .detail-gallery .dots{position:absolute; bottom:8px; left:50%; transform:translateX(-50%); display:flex; gap:4px; padding:4px 8px; background:rgba(0,0,0,0.4); border-radius:100px;}
+  .detail-gallery .dots .d{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.5);}
+  .detail-gallery .dots .d.on{background:#fff;}
+  .detail-thumbs{display:flex; gap:6px; padding:10px 14px; border-bottom:0.5px solid var(--line2); overflow-x:auto;}
+  .detail-thumbs .thumb{width:44px; height:44px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid transparent; background:#EEE;}
+  .detail-thumbs .thumb.on{border-color:var(--green);}
+  .detail-thumbs .thumb img{width:100%; height:100%; object-fit:cover;}
+  .detail-body{padding:14px 16px;}
+  .detail-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:14px;}
+  .detail-title{font-size:15px; font-weight:600; color:var(--t80); flex:1; min-width:0;}
+  .detail-price{color:var(--red); font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .detail-price .lbl{color:var(--t45); font-weight:400; font-size:10px; margin-right:6px; letter-spacing:0.04em;}
+  .detail-sec{font-size:13px; font-weight:700; color:var(--t80); margin:14px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line2);}
+  .detail-sec:first-child{margin-top:0;}
+  .detail-intro{font-size:12.5px; color:var(--t62); line-height:1.7; margin-bottom:8px;}
+  .detail-params{background:#FAFAFB; border-radius:10px; padding:10px 14px;}
+  .detail-params .row{display:flex; justify-content:space-between; font-size:11.5px; padding:4px 0; font-variant-numeric:tabular-nums;}
+  .detail-params .row + .row{border-top:1px dashed var(--line2);}
+  .detail-params .row:nth-child(n+4){display:none;}
+  .detail-params.expanded .row:nth-child(n+4){display:flex;}
+  .params-toggle{position:relative; display:flex; align-items:center; justify-content:center; width:100%; background:none; border:none; font-family:inherit; font-size:12px; color:var(--t45); padding:4px 0 0; cursor:pointer; height:24px;}
+  .params-toggle::before{content:''; position:absolute; bottom:100%; left:0; right:0; height:28px; background:linear-gradient(to bottom, rgba(250,250,251,0), rgba(250,250,251,1)); pointer-events:none;}
+  .params-toggle .arrow{display:inline-block; transition:transform .2s;}
+  .params-toggle.on .arrow{transform:rotate(180deg);}
+  .params-toggle.on::before{display:none;}
+
+  /* 购买渠道列表 */
+  .shop-list{display:flex; flex-direction:column;}
+  .shop-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2); cursor:pointer; text-decoration:none; color:inherit;}
+  .shop-item:last-child{border-bottom:0;}
+  .shop-item .img{width:44px; height:44px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .shop-item .img img{width:100%; height:100%; object-fit:cover;}
+  .shop-item .mid{flex:1; min-width:0;}
+  .shop-item .nm{font-size:13px; font-weight:600; color:var(--t80); line-height:1.35; margin-bottom:2px;}
+  .shop-item .price{font-size:13px; font-weight:700; color:var(--red); font-variant-numeric:tabular-nums;}
+  .shop-item .arrow{color:var(--t27); font-size:14px; flex-shrink:0;}
+  .detail-params .row span:first-child{color:var(--t45); letter-spacing:0.02em;}
+  .detail-params .row span:last-child{font-weight:500; color:var(--t80);}
+
+  /* AI 总结 */
+  .ai-sum{background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02)); border:0.5px solid var(--green-line); border-radius:12px; padding:12px 14px;}
+  .ai-sum .head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px;}
+  .ai-sum .lbl{display:inline-flex; align-items:center; gap:4px; font-size:10px; letter-spacing:0.08em; color:var(--green-deep); font-weight:700; text-transform:uppercase;}
+  .ai-sum .lbl::before{content:"✦"; color:var(--green);}
+  .ai-sum .score{display:flex; align-items:baseline; gap:4px; font-variant-numeric:tabular-nums;}
+  .ai-sum .score .n{font-size:22px; font-weight:800; color:var(--t80); line-height:1;}
+  .ai-sum .score .mx{font-size:11px; color:var(--t45);}
+  .ai-sum .score .st{color:var(--gold); font-size:11px; margin-left:4px;}
+  .ai-sum .text{font-size:12.5px; color:var(--t80); line-height:1.7;}
+  .ai-sum .text b{color:var(--t80); font-weight:600;}
+  .ai-sum .from{font-size:10px; color:var(--t45); margin-top:8px;}
+
+  /* 观点 Tab */
+  .op-tabs{display:flex; gap:6px; overflow-x:auto; padding:2px 0 10px; -webkit-overflow-scrolling:touch; flex-wrap:nowrap; margin-top:14px;}
+  .op-tabs::-webkit-scrollbar{display:none;}
+  .op-tab{
+    flex-shrink:0; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:500;
+    cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--t62);
+    white-space:nowrap; transition:all 0.15s; font-family:inherit; line-height:1.3;
+  }
+  .op-tab .pct{font-weight:700; margin-left:3px; font-variant-numeric:tabular-nums;}
+  .op-tab.pos.on{background:var(--green-bg); border-color:var(--green-line); color:var(--green-deep);}
+  .op-tab.neg.on{background:var(--red-bg); border-color:rgba(217,83,79,0.4); color:var(--red);}
+  .op-panel{display:none; flex-direction:column; gap:8px;}
+  .op-panel.on{display:flex;}
+  .op-panel .op-desc{display:none;}
+  /* 支持/反对对抗条 */
+  .op-versus{display:flex; align-items:center; gap:0; height:22px; border-radius:6px; overflow:hidden; cursor:pointer;}
+  .op-versus .side{display:flex; align-items:center; justify-content:center; gap:4px; font-size:10px; font-weight:600; height:100%; transition:opacity 0.15s; padding:0 8px; white-space:nowrap;}
+  .op-versus .side:hover{opacity:0.85;}
+  .op-versus .side.pro{background:var(--green); color:#fff;}
+  .op-versus .side.con{background:var(--red); color:#fff;}
+  .op-versus .side.on{opacity:1; font-weight:700;}
+  .op-versus .side:not(.on){opacity:0.35; font-weight:500;}
+  /* 支持/反对下方评论列表 */
+  .op-cmts{display:none; flex-direction:column; gap:6px;}
+  .op-cmts.on{display:flex;}
+  .op-cmt{display:flex; gap:8px; padding:9px 11px; background:#FAFAFB; border-radius:8px; font-size:12px;}
+  .op-cmt .av{width:20px; height:20px; border-radius:50%; color:#fff; font-size:9px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .op-cmt .body{flex:1; min-width:0;}
+  .op-cmt .u{font-size:10px; color:var(--t45); margin-bottom:2px;}
+  .op-cmt .t{color:var(--t80); line-height:1.5; font-size:11.5px;}
+  .op-cmt .imgs{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:6px; border-radius:6px; overflow:hidden;}
+  .op-cmt .imgs img{width:100%; aspect-ratio:1; object-fit:cover; display:block;}
+
+  /* 相关笔记 · 横排 */
+  .rnotes{display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px;}
+  .rnotes::-webkit-scrollbar{display:none;}
+  .rnote{background:#fff; border:0.5px solid var(--line); border-radius:12px; overflow:hidden; flex-shrink:0; width:140px;}
+  .rnote .cover{position:relative; width:100%; aspect-ratio:4/5; background:#EEE; overflow:hidden;}
+  .rnote .cover img{width:100%; height:100%; object-fit:cover; display:block;}
+  .rnote .cover .play{
+    position:absolute; top:8px; right:8px;
+    width:24px; height:24px; border-radius:50%;
+    background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center;
+  }
+  .rnote .cover .play::after{
+    content:""; display:block;
+    width:0; height:0;
+    border-style:solid; border-width:5px 0 5px 9px;
+    border-color:transparent transparent transparent #fff;
+    margin-left:2px;
+  }
+  .rnote .info{padding:8px 10px;}
+  .rnote .t{font-size:12px; font-weight:600; color:var(--t80); line-height:1.4;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:6px;}
+  .rnote .foot{display:flex; justify-content:space-between; align-items:center; font-size:10px; color:var(--t45);}
+  .rnote .foot .lk::before{content:"♡ "; color:var(--red); margin-right:2px;}
+
+  /* 底部 footer */
+  .foot-info{padding:14px 18px 20px; text-align:center; color:var(--t27); font-size:10px;}
+
+  /* ============ 第四列 · 交互演示 ============ */
+  .col.interactive .col-tag{color:#5C4680; background:rgba(122,95,160,0.14);}
+  .phone.has-sidebar{height:844px; display:flex; flex-direction:column;}
+  .chat-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+
+  /* cite 半屏 · 从底部弹出 */
+  .cite-overlay{position:absolute; inset:0; background:rgba(0,0,0,0.18); z-index:9; opacity:0; pointer-events:none; transition:opacity .3s;}
+  .cite-overlay.open{opacity:1; pointer-events:auto;}
+  .cite-sidebar{position:absolute; bottom:0; left:0; right:0; height:90%; background:#fff; box-shadow:0 -4px 20px rgba(0,0,0,0.08); transform:translateY(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); z-index:10; display:flex; flex-direction:column; border-radius:16px 16px 0 0;}
+  .cite-sidebar.open{transform:translateY(0);}
+  .sb-handle{width:36px; height:4px; border-radius:2px; background:var(--line); margin:8px auto 0; flex-shrink:0; cursor:pointer; padding:6px 0;}
+  .sb-top{display:flex; align-items:center; gap:10px; padding:10px 14px 10px; border-bottom:0.5px solid var(--line); flex-shrink:0;}
+  .sb-close{width:26px; height:26px; border-radius:50%; background:#F2F2F2; border:none; cursor:pointer; font-size:12px; color:var(--t62); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:inherit;}
+  .sb-title{font-size:14px; font-weight:600; color:var(--t80); line-height:1.4;}
+  .sb-body{padding:12px 14px 32px; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .sb-stats{font-size:11px; color:var(--t45); margin-bottom:8px;}
+  .sb-versus{display:flex; height:30px; border-radius:8px; overflow:hidden; margin-bottom:12px;}
+  .sb-seg{display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#fff; cursor:pointer; transition:opacity .15s; white-space:nowrap; padding:0 8px; min-width:36px;}
+  .sb-seg.pro{background:var(--green);}
+  .sb-seg.mid{background:rgba(48,48,52,0.25); color:var(--t62);}
+  .sb-seg.neg{background:rgba(217,83,79,0.55);}
+  .sb-seg.on{opacity:1;}
+  .sb-seg:not(.on){opacity:0.35;}
+  .cp-note .tg.m{background:rgba(48,48,52,0.08); color:var(--t45);}
+
+  /* 推荐条目 */
+  .rec-item{padding:2px 14px 10px;}
+  .rec-hd{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .rec-hd .idx{font-size:16px; font-weight:800; color:var(--t80);}
+  .rec-hd .nm{font-size:16px; font-weight:700; color:var(--t80); flex:1;}
+  .rec-pct{font-size:12px; color:var(--green-deep); border:1px solid var(--green-line); border-radius:100px; padding:3px 10px; display:inline-flex; align-items:center; gap:2px; white-space:nowrap; flex-shrink:0;}
+  .rec-pct::after{content:"›"; font-size:14px;}
+  .rec-desc{font-size:14px; line-height:1.65; color:var(--t80); margin-bottom:6px;}
+
+  /* 行内用户引用 */
+  .iq{display:flex; gap:8px; align-items:flex-start; padding:5px 0;}
+  .iq .av{width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;}
+  .iq .qt{flex:1; font-size:13px; color:var(--t62); line-height:1.55;}
+  .iq .lk{color:var(--t45); font-size:12px; white-space:nowrap;}
+  .more-link{display:flex; align-items:center; gap:6px; padding:4px 0 2px; font-size:12px; color:var(--t45); cursor:pointer;}
+  .more-link .av{width:18px; height:18px; border-radius:50%;}
+
+  /* 底部输入栏 */
+  .input-bar{display:flex; align-items:center; gap:10px; padding:10px 16px 32px; background:#fff; border-top:0.5px solid var(--line); flex-shrink:0;}
+  .input-bar .ib-voice{width:32px; height:32px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; background:#fff; color:var(--green); font-size:14px; cursor:pointer; flex-shrink:0;}
+  .input-bar .ib-ph{flex:1; font-size:14px; color:var(--t27);}
+  .input-bar .ib-icon{font-size:20px; color:var(--t45); cursor:pointer; flex-shrink:0; line-height:1;}
+
+  /* ============ 顶部标题（唯一） ============ */
+  .header{width:100%; text-align:center; margin-bottom:8px;}
+  .header h1{font-size:20px; font-weight:700; color:var(--t80); margin-bottom:6px;}
+  .header p{font-size:13px; color:var(--t62); max-width:640px; margin:0 auto;}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>购物决策 · 三类典型 case</h1>
+  <p>选品推荐 / 单品评估 / 对比决策 —— 三种最常见的购物 query，展示回答结构和组件使用</p>
+</div>
+
+<!-- ================================================================
+     第一轮 · 选品推荐
+     ================================================================ -->
+<div class="col rec">
+  <div class="col-tag">选品推荐</div>
+  <div class="col-title">有没有最经典的不甜香水推荐？</div>
+  <div class="col-sub">开放性问题 · 先锁气质类别 + 分层推荐 + 按需求选</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+    <div class="userq"><span>有没有最经典的不甜香水推荐？</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">143 篇</b>真人试香笔记</span>
+      </div>
+
+      <div class="lead">
+        你说的"不甜"，就是排除花果甜香主导的款式，锁定<b>木质、柑橘、茶香、绿意</b>这几个方向；"经典"意味着要有<b>长期口碑积累</b>，排除短期网红款。基于这两条，下面推荐的每一支都经过时间和口碑筛选，附上参考价格区间。
+      </div>
+
+      <!-- 富集卡 1 · 最值得先试的 3 支 -->
+      <div class="sec-label">🎯 最值得先试的 3 支</div>
+      <div class="blead">这三支代表三条不同路子，先试完这三个，基本就知道自己更喜欢哪一类。</div>
+      <div class="rich">
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_chanel_n19.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Chanel N°19 EDP</div>
+            <div class="desc">青绿白松香 + 鸢尾 + 香根草 + 皮革</div>
+            <div class="pbottom">
+              <div class="price">¥680–980</div>
+              <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">2.1k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_terre.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">爱马仕大地 EDT</div>
+            <div class="desc">葡萄柚 + 燧石 + 雪松，日常最不容易出错</div>
+            <div class="pbottom">
+              <div class="price">¥550–750</div>
+              <div class="stars-line"><span class="s">★</span>4.8<span class="cnt">4.9k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_guerlain_vetiver.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Guerlain 香根草 EDT</div>
+            <div class="desc">胡椒 + 香根草 + 烟草，成熟老派香根草</div>
+            <div class="pbottom">
+              <div class="price">¥450–650</div>
+              <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 富集卡 2 · 另外 5 支经典 -->
+      <div class="sec-label">📚 另外 5 支经典选择</div>
+      <div class="blead">如果先试的 3 支不完全对味，从这 5 支里找对应气质。</div>
+      <div class="rich">
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_eau_sauvage.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Dior Eau Sauvage EDT</div>
+            <div class="desc">佛手柑 + 茉莉酮 + 西普，法式明亮皂感（别混淆 Sauvage）</div>
+            <div class="pbottom">
+              <div class="price">¥500–700</div>
+              <div class="stars-line"><span class="s">★</span>4.6<span class="cnt">1.5k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_clinique.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Clinique 香氛精粹</div>
+            <div class="desc">玫瑰 + 广藿香 + 橡木苔，药草苔藓复古大女主气场</div>
+            <div class="pbottom">
+              <div class="price">¥400–580</div>
+              <div class="stars-line"><span class="s">★</span>4.5<span class="cnt">890 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_lalique.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Lalique Encre Noire</div>
+            <div class="desc">柏树 + 香根草 + 开司米木，墨水般的阴暗木质</div>
+            <div class="pbottom">
+              <div class="price">¥180–280</div>
+              <div class="stars-line"><span class="s">★</span>4.5<span class="cnt">670 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_jo_malone.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Jo Malone 鼠尾草与海盐</div>
+            <div class="desc">黄葵籽 + 海盐，"不像香水的自然空气感"</div>
+            <div class="pbottom">
+              <div class="price">¥480–680</div>
+              <div class="stars-line"><span class="s">★</span>4.5<span class="cnt">3.2k 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="img"><img src="images/perfume_creed.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Creed Original Vetiver</div>
+            <div class="desc">柠檬 + 姜 + 白麝香，高级酒店清洁木质气息</div>
+            <div class="pbottom">
+              <div class="price">¥1,200–1,800</div>
+              <div class="stars-line"><span class="s">★</span>4.6<span class="cnt">540 人推荐</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 高亮块 · 按需求直选 -->
+      <div class="sec-label">🧭 直接按需求选</div>
+      <div class="scene">
+        <div class="scene-row">日常最不容易出错，选 <b>爱马仕大地 EDT</b>。</div>
+        <div class="scene-row">清冷、知性、有距离感，选 <b>Chanel N°19</b>。</div>
+        <div class="scene-row">彻底干燥、一点甜都不要，选 <b>Lalique Encre Noire</b>。</div>
+        <div class="scene-row">成熟传统的香根草，选 <b>Guerlain Vétiver</b>。</div>
+        <div class="scene-row">复古大女主气场，选 <b>Clinique 香氛精粹</b>。</div>
+        <div class="scene-row">不像传统香水、只要自然空气感，选 <b>Jo Malone 鼠尾草与海盐</b>。</div>
+      </div>
+
+      <!-- 注意事项 -->
+      <div class="lead" style="color:var(--t62); font-size:13px;">
+        <b>需要注意的地方</b>：第一次购买建议先弄 1–2ml 试香分装，完整试穿至少两小时——不甜香水中的橡木苔、白松香、香根草和广藿香，在皮肤上可能呈现<b>苦绿、药感或潮湿土壤感</b>，前调容易劝退。真正打动人的往往是中后调，别用前 5 分钟下判断。
+      </div>
+
+      <!-- 追问 -->
+      <div class="follow">
+        <button class="fbtn">日常通勤想低调点，哪支最合适？</button>
+        <button class="fbtn">冬天想要有温度感的木质香</button>
+        <button class="fbtn">上海哪里能一次试香多个牌子？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人试香笔记</div>
+    </div>
+    </div><!-- /.chat-body -->
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+
+    <!-- 半屏遮罩 -->
+    <div class="cite-overlay" onclick="closeSidebar(this)"></div>
+
+    <!-- 半屏：Chanel N°19 -->
+    <div class="cite-sidebar" id="sb-n19">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">Chanel N°19 · 清冷、理性、疏离</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>62 篇笔记 · 178 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:88" onclick="switchStance(this,'pro')">支持 88%</div>
+          <div class="sb-seg mid" style="flex:8" onclick="switchStance(this,'mid')">8%</div>
+          <div class="sb-seg neg" style="flex:4" onclick="switchStance(this,'neg')">4%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">冷</div>
+            <div class="body">
+              <div class="u">@冷空气爱好者 · 笔记 · 987 赞<span class="tg p">支持</span></div>
+              <div class="t">闻起来像冷空气、熨平的白衬衫和微苦绿叶，气质清冷、理性、疏离，是"不甜女香/中性香"里非常有代表性的一支</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">白</div>
+            <div class="body">
+              <div class="u">@白衬衫党 · 评论 · 543 赞<span class="tg p">支持</span></div>
+              <div class="t">中性香里的天花板，男女都能驾驭，气场直接拉满</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">绿</div>
+            <div class="body">
+              <div class="u">@绿意尖锐党 · 笔记 · 267 赞<span class="tg m">中立</span></div>
+              <div class="t">前调的绿意比较尖锐，不建议直接买大瓶，先分装试</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">苦</div>
+            <div class="body">
+              <div class="u">@接受不了苦绿 · 评论 · 89 赞<span class="tg n">反对</span></div>
+              <div class="t">前 20 分钟像药，我劝退了，可能得等中调</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 半屏：大地 -->
+    <div class="cite-sidebar" id="sb-terre">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">爱马仕大地 · "一棵树在日光下蒸发的味道"</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>72 篇笔记 · 218 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:92" onclick="switchStance(this,'pro')">支持 92%</div>
+          <div class="sb-seg mid" style="flex:5" onclick="switchStance(this,'mid')">5%</div>
+          <div class="sb-seg neg" style="flex:3" onclick="switchStance(this,'neg')">3%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">树</div>
+            <div class="body">
+              <div class="u">@一棵树 · 笔记 · 4.9k 赞<span class="tg p">支持</span></div>
+              <div class="t">你闻起来好像大自然……不是洗衣液味道、不是沐浴露味道，是一棵树在日光下蒸发出来的味道</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">都</div>
+            <div class="body">
+              <div class="u">@都市奔忙 · 评论 · 876 赞<span class="tg p">支持</span></div>
+              <div class="t">给一个不太适应大都市但又在都市奔忙的人——闻到它像在精神上短暂出逃，回到山里、河边、某棵树底下</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">本</div>
+            <div class="body">
+              <div class="u">@本命香 · 评论 · 543 赞<span class="tg p">支持</span></div>
+              <div class="t">大地是我的本命香……每次闻到都觉得回到了最好的状态</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">版</div>
+            <div class="body">
+              <div class="u">@版本党 · 笔记 · 267 赞<span class="tg m">中立</span></div>
+              <div class="t">EDT 和 EDP 完全是两个东西，EDT 更清新更矿物感，EDP 更深沉更木质，买前一定试</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">千</div>
+            <div class="body">
+              <div class="u">@千人千味 · 评论 · 189 赞<span class="tg n">反对</span></div>
+              <div class="t">千人千味，我觉得大地难闻死了，问了朋友，一个觉得还不错</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================================================================
+     第二轮 · 单品评估
+     ================================================================ -->
+<div class="col single">
+  <div class="col-tag">单品评估</div>
+  <div class="col-title">小白买的话，17 Pro 会不会后悔？</div>
+  <div class="col-sub">核弹结论 · 论证差异 · 分场景对号入座 · 时间点提醒</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+    <div class="userq"><span>小白买的话，17 Pro 会不会后悔？</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">216 篇</b>真人半年使用帖</span>
+      </div>
+
+      <div class="lead">
+        目前叫"17 Pro"的手机有两款：<b>iPhone 17 Pro</b> 和 <b>小米 17 Pro</b>。你说的是"小白"和"后悔"，语境更接近 iPhone 17 Pro——先按它回答，如果指的是小米我再切换。
+      </div>
+
+      <div class="lead">
+        <b>结论：值得买，小白不会后悔</b>——这一代 iPhone 17 Pro 的完成度非常高，是"多用几年也不会觉得落后"的机型。<span class="hl">但有两个前提：预算宽裕、能接受 204g 的重量。</span>
+      </div>
+
+      <!-- 商品卡 -->
+      <div class="pcard">
+        <div class="img"><img src="images/iphone_17_pro.png" alt=""></div>
+        <div class="body">
+          <div class="nm">iPhone 17 Pro 256GB</div>
+          <div class="features">A19 Pro · 48MP 长焦 5× 光学 · 6.3" ProMotion · 204g</div>
+          <div class="pbottom">
+            <div class="price">¥7,300–8,999</div>
+            <div class="stars-line"><span class="s">★</span>4.6<span class="cnt">3.4k 人推荐</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 优点 -->
+      <div class="sec-label">👍 值得入手的理由</div>
+      <div class="lead">
+        <b>影像是这代最大的升级点</b>：48MP 长焦支持 5× 光学 / 8× 品质变焦<cite style="--conf:91" onclick="openSidebar(this)" data-sb="sb-tele">"</cite>，演唱会最后一排也能拍到清晰的脸，出门旅行远景不用带备机。
+      </div>
+      <div class="lead">
+        <b>持续性能能撑住 4-5 年</b>：A19 Pro + 12GB RAM + VC 均热板，长时间打游戏、剪视频不会掉帧发烫，日常轻度使用几乎感受不到发热。
+      </div>
+      <div class="lead">
+        <b>屏幕硬件到位</b>：6.3" OLED + 120Hz ProMotion + 全天候显示，滑动跟手、户外可见度都能打。
+      </div>
+      <div class="lead">
+        <b>USB 3 高速传输</b>：拍 ProRes 视频、往电脑导 4K 素材，速度是老机型的十倍以上——不是刚需但用过就回不去。
+      </div>
+
+      <!-- 缺点 -->
+      <div class="sec-label">⚠️ 要想清楚的地方</div>
+      <div class="lead">
+        <b>重</b>——204g 是这代最直接的痛点，带壳后单手刷手机、躺着玩会明显坠手<cite style="--conf:76" onclick="openSidebar(this)" data-sb="sb-weight">"</cite>。小手用户、习惯单手操作的人建议先去店里上手 10 分钟。
+      </div>
+      <div class="lead">
+        <b>屏幕抽奖</b>——OLED 供应商有京东方 / 三星 / LG 之分，京东方偏黄糊、三星刺眼、LG 相对护眼，抽到差屏幕的用户是真的头晕换机<cite style="--conf:64" onclick="openSidebar(this)" data-sb="sb-screen">"</cite>。
+      </div>
+      <div class="lead">
+        <b>拍照连续录制发热</b>——夏天户外连续 4K 录制 20 分钟会烫手，相机 app 有概率卡死。日常拍不会遇到，但博主/vlogger 要注意。
+      </div>
+      <div class="lead">
+        <b>原价太贵</b>——¥7,300 起是心理门槛，非急用建议等 9 月 iPhone 18 发布后的降价窗口。
+      </div>
+
+      <!-- 情感浓度：真实翻车 -->
+      <div class="voice">
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>
+            <div class="nm">被砸脸的睡前党</div>
+            <div class="lk">♡ 1,842</div>
+          </div>
+          <div class="tx"><span class="q">"</span>17 Pro 带上壳，晚上玩手机我都快拿不住了，砸脸的经历不能再来一次<span class="q">"</span></div>
+        </div>
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>
+            <div class="nm">用了一个月又换回 11</div>
+            <div class="lk">♡ 2,103</div>
+          </div>
+          <div class="tx"><span class="q">"</span>用了一个月的 iPhone 17 Pro，今天还是再买了个 11 Pro Max，OLED 屏幕真的太受不了了<span class="q">"</span></div>
+        </div>
+      </div>
+
+      <!-- 最终答案 -->
+      <div class="sec-label">🎯 到底买不买</div>
+      <div class="scene">
+        <div class="scene-row"><b>直接买</b>——预算宽裕、能接受 204g、常拍照或玩游戏、想用四五年。这个价位段完成度最高的选择，你不会后悔。</div>
+        <div class="scene-row"><b>等 9 月再看</b>——不急着换机、能等新机上市或降价窗口。届时 17 Pro 大概率降 ¥800–1,500，后悔概率最低。</div>
+        <div class="scene-row"><b>不建议现在原价买</b>——不常拍长焦、追求轻薄、买完会心疼差价。</div>
+      </div>
+
+      <div class="lead" style="color:var(--t62); font-size:13px; margin-top:14px;">
+        一句话总结：<b>iPhone 17 Pro 是"不会买错"的机器，但"什么时候买"比"要不要买"更重要</b>。</div>
+
+      <!-- 追问 -->
+      <div class="follow">
+        <button class="fbtn">17 Pro 和标准版续航实测差多少？</button>
+        <button class="fbtn">现在买还是等 iPhone 18？</button>
+        <button class="fbtn">港版和国行怎么选？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+    </div>
+    </div><!-- /.chat-body -->
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+
+    <!-- 半屏遮罩 -->
+    <div class="cite-overlay" onclick="closeSidebar(this)"></div>
+
+    <!-- 半屏：长焦 -->
+    <div class="cite-sidebar" id="sb-tele">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">48MP 长焦 · Pro 唯一不可替代的硬差距</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>128 篇笔记 · 342 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:91" onclick="switchStance(this,'pro')">支持 91%</div>
+          <div class="sb-seg mid" style="flex:6" onclick="switchStance(this,'mid')">6%</div>
+          <div class="sb-seg neg" style="flex:3" onclick="switchStance(this,'neg')">3%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">演</div>
+            <div class="body">
+              <div class="u">@演唱会常客 · 笔记 · 1.2k 赞<span class="tg p">支持</span></div>
+              <div class="t">Pro 的长焦是刚需，演唱会最后一排也能拍到清晰的脸，标准版只能靠数码裁切糊成一片</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">宠</div>
+            <div class="body">
+              <div class="u">@宠物摄影 · 评论 · 543 赞<span class="tg p">支持</span></div>
+              <div class="t">拍猫拍狗真的差得多，能保持距离不惊扰它，标准版怎么裁都没这个焦段</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">相</div>
+            <div class="body">
+              <div class="u">@补位党 · 笔记 · 782 赞<span class="tg p">支持</span></div>
+              <div class="t">手里有相机的人，iPhone 长焦刚好补位，旅行时不想带两台机，长焦成了决定因素</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">低</div>
+            <div class="body">
+              <div class="u">@低频用户 · 评论 · 267 赞<span class="tg m">中立</span></div>
+              <div class="t">日常扫街拍食物，长焦一个月用不了几次，就是心理安慰</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">性</div>
+            <div class="body">
+              <div class="u">@性价比党 · 评论 · 189 赞<span class="tg n">反对</span></div>
+              <div class="t">3000 差价买个长焦，不如直接省下钱买个二手 GR3，成像秒杀手机</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 半屏：重量 -->
+    <div class="cite-sidebar" id="sb-weight">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">204g 的重量代价</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>88 篇笔记 · 197 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:76" onclick="switchStance(this,'pro')">支持 76%</div>
+          <div class="sb-seg mid" style="flex:16" onclick="switchStance(this,'mid')">16%</div>
+          <div class="sb-seg neg" style="flex:8" onclick="switchStance(this,'neg')">8%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">睡</div>
+            <div class="body">
+              <div class="u">@睡前刷机党 · 笔记 · 634 赞<span class="tg p">支持</span></div>
+              <div class="t">17 Pro 带上壳，晚上玩手机我都快拿不住了，砸脸的经历不能再来一次</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">通</div>
+            <div class="body">
+              <div class="u">@地铁通勤 · 评论 · 421 赞<span class="tg p">支持</span></div>
+              <div class="t">Pro 和 Max 都太重了，标准版刚好，单手握持完全 OK</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">板</div>
+            <div class="body">
+              <div class="u">@手感党 · 评论 · 312 赞<span class="tg p">支持</span></div>
+              <div class="t">标准版拿着很舒适，Pro 套个壳像板砖</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">钛</div>
+            <div class="body">
+              <div class="u">@钛金属党 · 笔记 · 198 赞<span class="tg m">中立</span></div>
+              <div class="t">钛金属边框配上不到 200 克的重量，久握不累，习惯了就不觉得重</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">从</div>
+            <div class="body">
+              <div class="u">@从 15 Pro 升级 · 评论 · 143 赞<span class="tg n">反对</span></div>
+              <div class="t">从 15 Pro 换过来觉得差不多，重量不是问题，Pro 的密度分布挺舒服</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 半屏：屏幕 -->
+    <div class="cite-sidebar" id="sb-screen">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">OLED 屏幕供应商抽奖</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>47 篇笔记 · 132 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:64" onclick="switchStance(this,'pro')">认同 64%</div>
+          <div class="sb-seg mid" style="flex:24" onclick="switchStance(this,'mid')">24%</div>
+          <div class="sb-seg neg" style="flex:12" onclick="switchStance(this,'neg')">12%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">京</div>
+            <div class="body">
+              <div class="u">@抽到京东方 · 笔记 · 543 赞<span class="tg p">支持</span></div>
+              <div class="t">京东方的屏刷视频又黄又模糊，看着眼睛特别难受</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">头</div>
+            <div class="body">
+              <div class="u">@头晕换机 · 评论 · 342 赞<span class="tg p">支持</span></div>
+              <div class="t">用了一个月的 iPhone 17 Pro，今天还是再买了个 11 Pro Max，OLED 屏幕还是太受不了了</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">调</div>
+            <div class="body">
+              <div class="u">@调设置党 · 评论 · 234 赞<span class="tg m">中立</span></div>
+              <div class="t">关了高刷亲测有效——辅助功能-动态效果-限制帧速率</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">L</div>
+            <div class="body">
+              <div class="u">@LG屏党 · 笔记 · 189 赞<span class="tg n">反对</span></div>
+              <div class="t">LG 久看不累，三星刺眼，其实 17 的 LG 是好屏幕，看运气</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ================================================================
+     第三轮 · 对比决策 + 商品详情页下探
+     ================================================================ -->
+<div class="col versus">
+  <div class="col-tag">对比决策</div>
+  <div class="col-title">安热沙和蜜丝婷防晒哪个好？</div>
+  <div class="col-sub">分流结论 · 场景对号入座 · 参数差异化 · 避坑提醒</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+    <div class="userq"><span>安热沙和蜜丝婷防晒哪个好？</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">184 篇</b>真人晒黑实测</span>
+      </div>
+
+      <div class="lead">
+        <span class="hl">综合防晒性能，安热沙更好；日常通勤和性价比，蜜丝婷更合适。</span>
+      </div>
+
+      <!-- 直接按场景选 · 自然段落 -->
+      <div class="sec-label">🧭 直接按场景选</div>
+      <div class="lead">
+        如果你是<b>军训、海边、爬山、长时间户外</b>或者要<b>游泳、水上活动</b>，选安热沙小金瓶，它的耐水耐沙能力是蜜丝婷没法比的。
+      </div>
+      <div class="lead">
+        日常<b>上下班、上学、短时间外出</b>，蜜丝婷小黄帽完全够用，肤感舒服、价格友好，涂全身也不心疼。<b>油皮怕油亮</b>的可以选蜜丝婷 Aqua Base 版本，哑光效果更好。
+      </div>
+      <div class="lead">
+        如果你<b>特别容易晒黑、长斑</b>，建议选安热沙小金瓶，PA++++ 的长波防护更稳。<b>敏感肌、对酒精香精过敏</b>的话，看安热沙温和型（粉瓶），但要注意核对具体版本的成分表。
+      </div>
+
+      <!-- 参数对比 -->
+      <div class="sec-label">📊 关键参数对比</div>
+      <div class="comp-table">
+        <table>
+          <tr>
+            <th></th>
+            <th class="link" onclick="openSidebar(this)" data-sb="sb-anessa-detail">安热沙小金瓶</th>
+            <th class="link" onclick="openSidebar(this)" data-sb="sb-mistine-detail">蜜丝婷小黄帽</th>
+          </tr>
+          <tr><td class="dim">SPF / PA</td><td class="win">SPF50+ PA++++</td><td>SPF50+ PA+++</td></tr>
+          <tr><td class="dim">水中测试</td><td class="win">80 分钟</td><td>无标注</td></tr>
+          <tr><td class="dim">耐摩擦耐沙</td><td class="win">明确标注</td><td>无</td></tr>
+          <tr><td class="dim">质地</td><td>乳液 · 微光泽</td><td class="win">乳液 · 轻薄哑光</td></tr>
+          <tr><td class="dim">酒精</td><td>含酒精 8%+</td><td class="win">不含酒精</td></tr>
+          <tr><td class="dim">卸妆</td><td>需卸妆</td><td class="win">洗面奶可卸</td></tr>
+          <tr><td class="dim">参考价</td><td>¥200 / 60ml（免税 ¥100+）</td><td class="win">¥70 / 60ml</td></tr>
+        </table>
+      </div>
+
+      <div class="lead">
+        <b>安热沙小金瓶</b>官方产品页明确标注汗、水、热、湿度环境下的防晒膜稳定性，并给出 <b>80 分钟水中测试 + 耐摩擦耐沙</b>——明显偏向高强度户外<cite style="--conf:93" onclick="openSidebar(this)" data-sb="sb-anessa-detail">"</cite>。
+      </div>
+      <div class="lead">
+        <b>蜜丝婷 Aqua Base 小黄帽</b>同为 SPF50+ PA++++，但产品页没有给出相同等级的耐水测试信息，主打<b>轻薄、不黏、哑光肤感</b>，更适合日常通勤和偏油肤质。
+      </div>
+
+      <!-- 真人原声 -->
+      <div class="sec-label">💬 大家怎么说</div>
+      <div class="voice">
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>
+            <div class="nm">安耐晒老粉</div>
+            <div class="lk">♡ 3,240</div>
+          </div>
+          <div class="tx"><span class="q">"</span>去年七月海边玩每天暴晒五六个小时，帽子都没戴，5 天用完三瓶安耐晒，一点没黑，但要涂够量<span class="q">"</span></div>
+        </div>
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>
+            <div class="nm">蜜丝婷五年粉</div>
+            <div class="lk">♡ 1,876</div>
+          </div>
+          <div class="tx"><span class="q">"</span>我日常用这个一夏天都没被晒黑，比安耐晒还好用，但是你去三亚，你得用那个摇摇乐吧<span class="q">"</span></div>
+        </div>
+      </div>
+
+      <!-- 需要注意的地方 · 避坑段 -->
+      <div class="sec-label">⚠️ 需要注意的地方</div>
+      <div class="lead">
+        <b>普通安热沙小金瓶含酒精 8%+ 和香精</b>——油皮通常喜欢它快速成膜的肤感，但皮肤屏障受损、眼周容易熏眼或对酒精敏感的人可能觉得刺激、拔干。<br><br>
+        <b>蜜丝婷不同地区、容量、版本的配方并不完全一样</b>：部分 Aqua Base 版本成分表没有列出酒精，但部分 60ml 版本含香精，不能简单把整个品牌当成"敏感肌安全"，买之前建议先在耳后或下颌试用。
+      </div>
+
+      <!-- 最终建议 -->
+      <div class="sec-label">✅ 最终建议</div>
+      <div class="scene">
+        <div class="scene-row">只准备买一支、希望防晒黑更稳，选 <b>安热沙小金瓶</b>。</div>
+        <div class="scene-row">日常上下班、学生党、预算有限、需要大量涂，选 <b>蜜丝婷小黄帽</b>。</div>
+        <div class="scene-row">敏感肌，优先考虑 <b>安热沙温和型 Mild Milk</b>（粉瓶），普通款先在耳后试用。</div>
+        <div class="scene-row">无论选哪个，游泳、擦汗或长时间户外后仍要 <b>每 2-3 小时补涂</b>。</div>
+      </div>
+
+      <div class="follow">
+        <button class="fbtn">敏感肌用哪个更稳？</button>
+        <button class="fbtn">油皮怕油亮怎么选？</button>
+        <button class="fbtn">补涂间隔多久合适？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+    </div>
+    </div><!-- /.chat-body -->
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+
+    <!-- 半屏遮罩 -->
+    <div class="cite-overlay" onclick="closeSidebar(this)"></div>
+
+    <!-- 半屏：安热沙详情 -->
+    <div class="cite-sidebar" id="sb-anessa-detail">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">安热沙小金瓶</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body" style="padding:0;">
+        <div class="detail" style="margin:0; border:none; border-radius:0;">
+          <div class="detail-gallery">
+            <img src="images/sunscreen_2.jpg" alt="">
+            <div class="cnt">1 / 5</div>
+            <div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div>
+          </div>
+          <div class="detail-thumbs">
+            <div class="thumb on"><img src="images/sunscreen_2.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_3.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_2.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_3.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_2.jpg" alt=""></div>
+          </div>
+          <div class="detail-body">
+            <div class="detail-top">
+              <div class="detail-title">安热沙小金瓶 SPF50+ PA++++</div>
+              <div class="detail-price"><span class="lbl">参考价</span>¥200 / 60ml</div>
+            </div>
+
+            <div class="ai-sum">
+              <div class="head">
+                <span class="score"><span class="n">4.8</span><span class="mx">/ 5</span><span class="st">★★★★★</span></span>
+                <span class="lbl">AI 总结</span>
+              </div>
+              <div class="text">用户高度认可<b>硬核防晒能力</b>——赤道海岛、三亚、军训场景均无失手。主要吐槽<b>辣眼睛</b>和<b>需要卸妆</b>，敏感肌不建议直接选普通款。</div>
+              <div class="from">基于 1,540 篇小红书笔记 · 4,120 条评论综合</div>
+            </div>
+
+            <div class="detail-sec">基本介绍</div>
+            <div class="detail-intro">
+              资生堂遇水强韧技术，成膜后冲水水珠完整滚落，防晒膜纹丝不动。核心能力只有一个字：<b>扛</b>。代价是含 8%+ 变性乙醇，敏感肌需绕道。
+            </div>
+            <div class="detail-params">
+              <div class="row"><span>SPF / PA</span><span>SPF50+ PA++++</span></div>
+              <div class="row"><span>水中测试</span><span>80 分钟</span></div>
+              <div class="row"><span>成膜时间</span><span>约 20 秒</span></div>
+              <div class="row"><span>质地</span><span>奶白色乳液 · 微光泽</span></div>
+              <div class="row"><span>酒精</span><span>含酒精 8%+</span></div>
+              <div class="row"><span>卸妆</span><span>需卸妆产品</span></div>
+              <div class="row"><span>补涂</span><span>每 2-3 小时</span></div>
+            </div>
+            <button class="params-toggle" onclick="toggleParams(this)"><span class="arrow">▾</span></button>
+
+            <div class="detail-sec">用户评价</div>
+
+            <div class="op-tabs">
+              <button class="op-tab pos on" onclick="switchTab(this,'ap1')">户外扛晒<span class="pct">94%</span></button>
+              <button class="op-tab pos" onclick="switchTab(this,'ap2')">耐水耐汗<span class="pct">89%</span></button>
+              <button class="op-tab neg" onclick="switchTab(this,'ap3')">辣眼睛<span class="pct">42%</span></button>
+              <button class="op-tab neg" onclick="switchTab(this,'ap4')">要卸妆<span class="pct">38%</span></button>
+            </div>
+
+            <div class="op-panel on" id="ap1">
+              <div class="op-desc">高强度紫外线场景无失手，赤道海岛也扛得住</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:94" onclick="switchSide(this,'pro')">支持 94%</div>
+                <div class="side con" style="flex:6" onclick="switchSide(this,'con')">6%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">海</div>
+                  <div class="body">
+                    <div class="u">@海边度假 · 笔记 · 1.2k 赞</div>
+                    <div class="imgs">
+                      <img src="images/sunscreen_2.jpg" alt="">
+                      <img src="images/sunscreen_3.jpg" alt="">
+                      <img src="images/sunscreen_3.jpg" alt="">
+                    </div>
+                    <div class="t">我去年七月份去海边玩每天大太阳暴晒五六个小时，帽子都没戴一个，5 天用完三瓶安耐晒，也是一直狂出汗，但一点没黑，要涂够量</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">赤</div>
+                  <div class="body">
+                    <div class="u">@赤道党 · 评论 · 876 赞</div>
+                    <div class="t">安耐晒用了 10 年了，哪怕去赤道海岛都从来没让我失望过</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">泰</div>
+                  <div class="body">
+                    <div class="u">@泰国半月游 · 评论 · 543 赞</div>
+                    <div class="t">我在泰国玩了半个月，就是涂安耐晒一点没晒黑</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">量</div>
+                  <div class="body">
+                    <div class="u">@涂不够量 · 评论 · 87 赞</div>
+                    <div class="t">涂太少完全没用，我朋友一瓶用半年，晒黑了怪产品</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="op-panel" id="ap2">
+              <div class="op-desc">水珠像荷叶滚落，防晒膜纹丝不动</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:89" onclick="switchSide(this,'pro')">支持 89%</div>
+                <div class="side con" style="flex:11" onclick="switchSide(this,'con')">11%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">水</div>
+                  <div class="body">
+                    <div class="u">@下水没补 · 评论 · 987 赞</div>
+                    <div class="t">我去海南下水且没有补涂的情况下没有晒黑，安热沙没有那么弱</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">汗</div>
+                  <div class="body">
+                    <div class="u">@出汗如雨 · 笔记 · 634 赞</div>
+                    <div class="t">户外都是安耐晒防晒力度最高。它油是对的，涂上就是猪刚鬣！但是它真的防晒</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">补</div>
+                  <div class="body">
+                    <div class="u">@补涂党 · 评论 · 65 赞</div>
+                    <div class="t">再耐水也建议每 2 小时补涂，不能靠一遍撑一天</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="op-panel" id="ap3">
+              <div class="op-desc">变性乙醇含量高，部分人一小时眼睛睁不开</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:42" onclick="switchSide(this,'pro')">认同 42%</div>
+                <div class="side con" style="flex:58" onclick="switchSide(this,'con')">58%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">辣</div>
+                  <div class="body">
+                    <div class="u">@眼睛辣的睁不开 · 笔记 · 342 赞</div>
+                    <div class="t">辣的要死，一个小时眼睛睁不开，敏感肌千万别碰</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">敏</div>
+                  <div class="body">
+                    <div class="u">@敏感肌研究所 · 评论 · 234 赞</div>
+                    <div class="t">酒精 8%+ 排位前五，皮肤屏障受损的都会拔干</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">耐</div>
+                  <div class="body">
+                    <div class="u">@我耐受 · 评论 · 156 赞</div>
+                    <div class="t">用了五年了一点不辣，可能是体质问题</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">温</div>
+                  <div class="body">
+                    <div class="u">@温和款党 · 评论 · 123 赞</div>
+                    <div class="t">敏感肌直接选温和型粉瓶就行，性能弱一档但不刺激</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="op-panel" id="ap4">
+              <div class="op-desc">洗面奶洗不干净，需要卸妆产品</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:38" onclick="switchSide(this,'pro')">认同 38%</div>
+                <div class="side con" style="flex:62" onclick="switchSide(this,'con')">62%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">卸</div>
+                  <div class="body">
+                    <div class="u">@卸妆党 · 笔记 · 189 赞</div>
+                    <div class="t">洗面奶洗不干净的，第二天不卸妆脸会闷痘</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">氨</div>
+                  <div class="body">
+                    <div class="u">@氨基酸洗面奶够 · 评论 · 145 赞</div>
+                    <div class="t">好点的氨基酸洗面奶洗两遍就干净，不用买卸妆</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-sec">购买渠道</div>
+            <div class="shop-list">
+              <a class="shop-item" href="#" onclick="return false">
+                <div class="img"><img src="images/sunscreen_2.jpg" alt=""></div>
+                <div class="mid">
+                  <div class="nm">资生堂官方旗舰店</div>
+                  <div class="price">¥200</div>
+                </div>
+                <div class="arrow">›</div>
+              </a>
+              <a class="shop-item" href="#" onclick="return false">
+                <div class="img"><img src="images/sunscreen_2.jpg" alt=""></div>
+                <div class="mid">
+                  <div class="nm">天猫国际直营</div>
+                  <div class="price">¥189</div>
+                </div>
+                <div class="arrow">›</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 半屏：蜜丝婷详情 -->
+    <div class="cite-sidebar" id="sb-mistine-detail">
+      <div class="sb-handle" onclick="closeSidebar(this)"></div>
+      <div class="sb-top">
+        <div class="sb-title">蜜丝婷小黄帽</div>
+        <button class="sb-close" onclick="closeSidebar(this)">✕</button>
+      </div>
+      <div class="sb-body" style="padding:0;">
+        <div class="detail" style="margin:0; border:none; border-radius:0;">
+          <div class="detail-gallery">
+            <img src="images/sunscreen_mistine.jpg" alt="">
+            <div class="cnt">1 / 4</div>
+            <div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span></div>
+          </div>
+          <div class="detail-thumbs">
+            <div class="thumb on"><img src="images/sunscreen_mistine.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_6.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_7.jpg" alt=""></div>
+            <div class="thumb"><img src="images/sunscreen_7.jpg" alt=""></div>
+          </div>
+          <div class="detail-body">
+            <div class="detail-top">
+              <div class="detail-title">蜜丝婷小黄帽 SPF50+ PA+++</div>
+              <div class="detail-price"><span class="lbl">参考价</span>¥70 / 60ml</div>
+            </div>
+
+            <div class="ai-sum">
+              <div class="head">
+                <span class="score"><span class="n">4.6</span><span class="mx">/ 5</span><span class="st">★★★★★</span></span>
+                <span class="lbl">AI 总结</span>
+              </div>
+              <div class="text">用户认可<b>肤感舒服</b>和<b>性价比高</b>，日常通勤场景一致好评。主要吐槽<b>高强度紫外线撑不住</b>，去三亚 / 西藏 / 海边会被打脸。</div>
+              <div class="from">基于 986 篇小红书笔记 · 2,540 条评论综合</div>
+            </div>
+
+            <div class="detail-sec">基本介绍</div>
+            <div class="detail-intro">
+              乳液状好推开，成膜后微微粘让底妆更扒脸，有一丢丢提亮。不含酒精、不辣眼睛、洗面奶能卸。日常通勤够用，但高强度紫外线场景（三亚 / 西藏）会撑不住。
+            </div>
+            <div class="detail-params">
+              <div class="row"><span>SPF / PA</span><span>SPF50+ PA+++</span></div>
+              <div class="row"><span>水中测试</span><span>无标注</span></div>
+              <div class="row"><span>质地</span><span>乳液 · 微提亮</span></div>
+              <div class="row"><span>酒精</span><span>不含</span></div>
+              <div class="row"><span>卸妆</span><span>洗面奶可卸</span></div>
+              <div class="row"><span>敏感肌</span><span>相对友好</span></div>
+              <div class="row"><span>补涂</span><span>建议 3-4 小时</span></div>
+            </div>
+            <button class="params-toggle" onclick="toggleParams(this)"><span class="arrow">▾</span></button>
+
+            <div class="detail-sec">用户评价</div>
+
+            <div class="op-tabs">
+              <button class="op-tab pos on" onclick="switchTab(this,'mp1')">日常够用<span class="pct">88%</span></button>
+              <button class="op-tab pos" onclick="switchTab(this,'mp2')">肤感舒服<span class="pct">85%</span></button>
+              <button class="op-tab pos" onclick="switchTab(this,'mp3')">性价比高<span class="pct">92%</span></button>
+              <button class="op-tab neg" onclick="switchTab(this,'mp4')">高强度不行<span class="pct">67%</span></button>
+            </div>
+
+            <div class="op-panel on" id="mp1">
+              <div class="op-desc">上海梅雨、办公室、周末逛街完全够用</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:88" onclick="switchSide(this,'pro')">支持 88%</div>
+                <div class="side con" style="flex:12" onclick="switchSide(this,'con')">12%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">粉</div>
+                  <div class="body">
+                    <div class="u">@蜜丝婷5年老粉 · 笔记 · 1.8k 赞</div>
+                    <div class="imgs">
+                      <img src="images/sunscreen_mistine.jpg" alt="">
+                      <img src="images/sunscreen_6.jpg" alt="">
+                      <img src="images/sunscreen_7.jpg" alt="">
+                    </div>
+                    <div class="t">一用就是五六个年头……乳液状很好推开，上脸后有一丢丢提亮效果，适合日常通勤、不想化妆的直接打个散粉就显得皮肤特别好</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">日</div>
+                  <div class="body">
+                    <div class="u">@日常党 · 评论 · 543 赞</div>
+                    <div class="t">我日常用这个一夏天都没被晒黑，比安耐晒还好用</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">质</div>
+                  <div class="body">
+                    <div class="u">@泰系质疑 · 评论 · 89 赞</div>
+                    <div class="t">感觉肤感是好，但防晒力度还是有点心虚</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="op-panel" id="mp2">
+              <div class="op-desc">不搓泥不假白，微提亮效果好，后续底妆扒脸</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:85" onclick="switchSide(this,'pro')">支持 85%</div>
+                <div class="side con" style="flex:15" onclick="switchSide(this,'con')">15%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">妆</div>
+                  <div class="body">
+                    <div class="u">@妆前打底 · 笔记 · 456 赞</div>
+                    <div class="t">上妆前用微微粘让粉底更服帖，不像安热沙那么油</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">泥</div>
+                  <div class="body">
+                    <div class="u">@搓泥党 · 评论 · 78 赞</div>
+                    <div class="t">和某些精华叠涂会搓泥，用之前先测试</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="op-panel" id="mp3">
+              <div class="op-desc">¥70 一瓶 60ml，可以放心大量涂</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:92" onclick="switchSide(this,'pro')">支持 92%</div>
+                <div class="side con" style="flex:8" onclick="switchSide(this,'con')">8%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">学</div>
+                  <div class="body">
+                    <div class="u">@学生党 · 笔记 · 987 赞</div>
+                    <div class="t">70 块一瓶用得不心疼，涂身上都不虚，安耐晒真涂不起</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">值</div>
+                  <div class="body">
+                    <div class="u">@一分钱一分货 · 评论 · 67 赞</div>
+                    <div class="t">便宜是便宜，但防晒力度和贵的还是没法比</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="op-panel" id="mp4">
+              <div class="op-desc">三亚、西藏、海边这些场景撑不住</div>
+              <div class="op-versus">
+                <div class="side pro on" style="flex:67" onclick="switchSide(this,'pro')">认同 67%</div>
+                <div class="side con" style="flex:33" onclick="switchSide(this,'con')">33%</div>
+              </div>
+              <div class="op-cmts pro-cmts on">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">三</div>
+                  <div class="body">
+                    <div class="u">@三亚翻车 · 笔记 · 543 赞</div>
+                    <div class="t">这个日常用还行，三亚紫外线太强了用这个不太行</div>
+                  </div>
+                </div>
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">藏</div>
+                  <div class="body">
+                    <div class="u">@西藏晒黑 · 评论 · 342 赞</div>
+                    <div class="t">带它去西藏，晒得乌漆麻黑的，还脱皮了</div>
+                  </div>
+                </div>
+              </div>
+              <div class="op-cmts con-cmts">
+                <div class="op-cmt">
+                  <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">补</div>
+                  <div class="body">
+                    <div class="u">@高频补涂党 · 评论 · 145 赞</div>
+                    <div class="t">高强度也没那么惨，每 2 小时补涂就好，日系补涂逻辑不适合这瓶</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-sec">购买渠道</div>
+            <div class="shop-list">
+              <a class="shop-item" href="#" onclick="return false">
+                <div class="img"><img src="images/sunscreen_mistine.jpg" alt=""></div>
+                <div class="mid">
+                  <div class="nm">Mistine 官方旗舰店</div>
+                  <div class="price">¥69</div>
+                </div>
+                <div class="arrow">›</div>
+              </a>
+              <a class="shop-item" href="#" onclick="return false">
+                <div class="img"><img src="images/sunscreen_mistine.jpg" alt=""></div>
+                <div class="mid">
+                  <div class="nm">天猫超市</div>
+                  <div class="price">¥65</div>
+                </div>
+                <div class="arrow">›</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function switchTab(btn,id){
+  btn.parentElement.querySelectorAll('.op-tab').forEach(function(t){t.classList.remove('on')});
+  btn.classList.add('on');
+  var container=btn.closest('.detail-body');
+  container.querySelectorAll('.op-panel').forEach(function(p){p.classList.remove('on')});
+  document.getElementById(id).classList.add('on');
+}
+function switchSide(el,side){
+  var panel=el.closest('.op-panel');
+  panel.querySelectorAll('.op-versus .side').forEach(function(s){s.classList.remove('on')});
+  el.classList.add('on');
+  panel.querySelectorAll('.op-cmts').forEach(function(c){c.classList.remove('on')});
+  panel.querySelector(side==='pro'?'.pro-cmts':'.con-cmts').classList.add('on');
+}
+function openSidebar(citeEl){
+  var phone=citeEl.closest('.phone');
+  var targetId=citeEl.getAttribute('data-sb');
+  phone.querySelectorAll('.cite-sidebar').forEach(function(s){s.classList.remove('open')});
+  phone.querySelector('.cite-overlay').classList.add('open');
+  document.getElementById(targetId).classList.add('open');
+}
+function closeSidebar(el){
+  var phone=el.closest('.phone');
+  phone.querySelector('.cite-overlay').classList.remove('open');
+  phone.querySelectorAll('.cite-sidebar').forEach(function(s){s.classList.remove('open')});
+}
+function switchStance(el,stance){
+  var bar=el.closest('.sb-versus');
+  bar.querySelectorAll('.sb-seg').forEach(function(s){s.classList.remove('on')});
+  el.classList.add('on');
+  var notes=el.closest('.sb-body').querySelectorAll('.cp-note[data-stance]');
+  notes.forEach(function(n){
+    n.style.display=n.getAttribute('data-stance')===stance?'':'none';
+  });
+}
+function toggleParams(btn){
+  var params=btn.previousElementSibling;
+  params.classList.toggle('expanded');
+  btn.classList.toggle('on');
+}
+</script>
+</body>
+</html>

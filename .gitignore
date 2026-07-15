@@ -1,0 +1,8 @@
+# Vercel
+.vercel
+
+# macOS
+.DS_Store
+
+# 本地个人配置
+.claude/

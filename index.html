@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>购物决策组件示例 · 潜水运动相机</title>
+<style>
+  :root{
+    --green:#34B39D; --green-deep:#3B887C; --green-bg:rgba(86,209,191,0.10); --green-line:rgba(52,179,157,0.4); --green-hl:rgba(131,242,223,0.28);
+    --t80:rgba(0,0,0,0.80); --t62:rgba(0,0,0,0.62); --t45:rgba(0,0,0,0.45); --t27:rgba(0,0,0,0.27);
+    --line:rgba(48,48,52,0.10); --line2:rgba(48,48,52,0.06);
+    --gold:#E8A33D; --red:#D9534F; --red-bg:rgba(255,90,90,0.06);
+    --blue:#5A9AFF; --blue-deep:#3A6FCC; --blue-bg:rgba(90,154,255,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-font-smoothing:antialiased;}
+  body{
+    font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    background:#E9E9EC;
+    color:var(--t80);
+    padding:32px 16px 60px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:24px;
+    align-items:flex-start;
+  }
+
+  /* ============ 每列（手机 + 标题） ============ */
+  .col{display:flex; flex-direction:column; align-items:center; gap:6px; width:393px;}
+  .col-tag{
+    font-size:11px; font-weight:600; border-radius:100px; padding:3px 10px;
+    align-self:flex-start; margin-left:6px;
+  }
+  .col.rec .col-tag{color:var(--green-deep); background:rgba(86,209,191,0.16);}
+  .col.single .col-tag{color:var(--blue-deep); background:rgba(90,154,255,0.14);}
+  .col.versus .col-tag{color:var(--gold); background:rgba(232,163,61,0.16);}
+  .col-title{font-size:15px; color:var(--t80); font-weight:600; align-self:flex-start; margin-left:6px;}
+  .col-sub{font-size:12px; color:var(--t62); margin-bottom:6px; align-self:flex-start; margin-left:6px;}
+
+  /* ============ 手机 chrome ============ */
+  .phone{
+    position:relative; width:393px;
+    background:#F7F7F6;
+    border-radius:48px;
+    overflow:hidden;
+    box-shadow:0 16px 50px rgba(0,0,0,0.14);
+  }
+  .nav{display:flex; align-items:center; justify-content:center; gap:6px; padding:52px 16px 8px;}
+  .nav .av{width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); border:0.5px solid #fff;}
+  .nav .nm{font-size:16px; font-weight:500; color:var(--t80);}
+  .userq{padding:8px 20px 18px; text-align:right;}
+  .userq span{
+    display:inline-block; background:#E8E9E8; border:0.5px solid #FAFAFA;
+    color:#242424; padding:12px 16px; border-radius:22px;
+    font-size:16px; line-height:24px; letter-spacing:0.04em; max-width:280px; text-align:left;
+  }
+
+  /* ============ 回答气泡 ============ */
+  .answer{
+    margin:0 18px 18px;
+    background:#fff;
+    border:0.5px solid rgba(0,0,0,0.08);
+    border-radius:34px;
+    padding:20px 6px 16px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.05);
+  }
+  .ref{display:flex; align-items:center; gap:6px; padding:2px 14px 4px; color:var(--t45); font-size:13px;}
+  .ref .avs{display:flex;}
+  .ref .avs i{
+    width:18px; height:18px; border-radius:50%;
+    border:1.5px solid #fff; display:inline-block; margin-left:-6px;
+    background:linear-gradient(135deg,#7EE8D4,#34B39D);
+  }
+  .ref .avs i:first-child{margin-left:0; background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+  .ref .avs i:nth-child(2){background:linear-gradient(135deg,#B5C7F7,#5A9AFF);}
+  .lead{padding:6px 14px 12px; font-size:15px; line-height:1.66; color:#141414; letter-spacing:0.01em;}
+  .lead .hl{background:var(--green-hl); border-radius:2px; padding:0 2px; font-weight:500;}
+  .lead b{font-weight:500;}
+
+  /* 段标题 */
+  .sec-label{display:flex; align-items:center; gap:6px; font-size:14px; color:var(--t80); font-weight:600; margin:14px 18px 10px;}
+  .blead{margin:0 18px 10px; font-size:13px; line-height:1.6; color:var(--t62);}
+
+  /* 组件标注 */
+  .comp-note{
+    display:inline-block; margin:0 18px 8px;
+    font-size:10px; padding:2px 8px; border-radius:100px;
+    background:rgba(90,154,255,0.12); color:var(--blue-deep);
+    letter-spacing:0.04em;
+  }
+  .comp-note.rich{background:rgba(86,209,191,0.16); color:var(--green-deep);}
+  .comp-note.card{background:rgba(90,154,255,0.12); color:var(--blue-deep);}
+  .comp-note.table{background:rgba(0,0,0,0.08); color:var(--t80);}
+  .comp-note.voice{background:rgba(122,95,160,0.14); color:#5C4680;}
+  .comp-note.quote{background:rgba(217,83,79,0.10); color:var(--red);}
+  .comp-note.cite{background:rgba(217,83,79,0.10); color:var(--red);}
+  .comp-note.mark{background:rgba(232,163,61,0.16); color:var(--gold);}
+  .comp-note.follow{background:rgba(90,154,255,0.12); color:var(--blue-deep);}
+  .comp-note.detail{background:rgba(90,154,255,0.12); color:var(--blue-deep);}
+
+  /* ============ 富集卡（分类推荐榜单） ============ */
+  .rich{
+    margin:0 14px 4px; border:0.5px solid var(--green-line); border-radius:16px;
+    background:linear-gradient(180deg,rgba(86,209,191,0.08),rgba(86,209,191,0.02));
+    padding:10px 14px 12px;
+  }
+  .rich-title{font-size:13px; color:var(--green-deep); font-weight:700; padding-bottom:6px;}
+  .rich-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2);}
+  .rich-item:last-child{border-bottom:0;}
+  .rich-item .rk{
+    width:18px; flex-shrink:0; font-size:15px; font-weight:800; font-style:italic;
+    color:var(--t45); text-align:center;
+  }
+  .rich-item.t1 .rk{color:var(--gold);}
+  .rich-item .img{width:44px; height:44px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .rich-item .img img{width:100%; height:100%; object-fit:cover;}
+  .rich-item .mid{flex:1; min-width:0;}
+  .rich-item .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
+  .rich-item .desc{font-size:11px; color:var(--t45); line-height:1.4; margin-bottom:5px;}
+  .rich-item .stars-line{display:flex; align-items:center; gap:4px; font-size:11px; color:var(--t62); font-variant-numeric:tabular-nums;}
+  .rich-item .stars-line .s{color:var(--gold);}
+
+  /* ============ 商品卡 · 扁平横条 ============ */
+  .pcard{
+    margin:0 14px 4px; background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; padding:12px 14px;
+    display:flex; gap:12px; align-items:stretch;
+  }
+  .pcard .img{
+    width:64px; height:64px; align-self:center;
+    border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;
+  }
+  .pcard .img img{width:100%; height:100%; object-fit:cover;}
+  .pcard .body{
+    flex:1; min-width:0;
+    display:flex; flex-direction:column; justify-content:center; gap:6px;
+  }
+  .pcard .nm{font-size:14px; font-weight:600; color:var(--t80); line-height:1.35;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pcard .features{
+    font-size:11.5px; color:var(--t62); line-height:1.5;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .pcard .pbottom{display:flex; align-items:baseline; justify-content:flex-start; gap:14px; margin-top:-3px;}
+  .pcard .price{color:var(--t62); font-weight:500; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .pcard .stars-line{font-size:14px; color:var(--t80); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline;}
+  .pcard .stars-line .s{color:var(--gold); font-size:16px; margin-right:3px;}
+  .pcard .stars-line .unit{font-size:11px; font-weight:600; margin-left:1px;}
+  .pcard .stars-line .cnt{color:var(--t45); font-size:10px; font-weight:400; margin-left:6px;}
+
+  /* ============ 引用块 · 用户评价原声 ============ */
+  .voice{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
+  .voice .v{background:#FAFAFB; border-radius:12px; padding:11px 12px;}
+  .voice .f{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .voice .avv{width:22px; height:22px; border-radius:50%; flex-shrink:0;}
+  .voice .nm{font-size:12.5px; color:var(--t62);}
+  .voice .lk{margin-left:auto; font-size:11px; color:var(--t45);}
+  .voice .tx{font-size:13px; line-height:1.55; color:var(--t80);}
+  .voice .tx .q{color:rgba(48,48,52,0.25); font-weight:700;}
+
+  /* ============ 观点分布（好评 / 差评） ============ */
+  .pc{margin:0 14px 4px; display:flex; flex-direction:column; gap:8px;}
+  .pc-block{border-radius:12px; padding:12px 13px;}
+  .pc-block.pro{background:rgba(52,179,157,0.07);}
+  .pc-block.con{background:var(--red-bg);}
+  .pc-hd{display:flex; align-items:baseline; gap:5px; margin-bottom:9px;}
+  .pc-hd .num{font-size:16px; font-weight:800;}
+  .pc-hd .lbl{font-size:13px; font-weight:600;}
+  .pc-block.pro .pc-hd{color:var(--green-deep);}
+  .pc-block.con .pc-hd{color:var(--red);}
+  .pc-item{display:flex; gap:7px; font-size:13px; line-height:1.5; color:var(--t80); margin-bottom:7px;}
+  .pc-item:last-child{margin-bottom:0;}
+  .pc-item .ic{flex-shrink:0; font-size:12px;}
+  .pc-block.pro .ic{color:var(--green);}
+  .pc-block.con .ic{color:var(--red);}
+  .pc-item .heat{margin-left:auto; flex-shrink:0; font-size:11px; color:var(--t45); white-space:nowrap;}
+
+  /* ============ cite · 正文角标 + 置信度环 ============ */
+  cite{
+    display:inline-flex; align-items:center; justify-content:center;
+    position:relative;
+    background:var(--green-bg); color:var(--green-deep);
+    font-size:11px; font-weight:700; line-height:1;
+    width:20px; height:20px;
+    border-radius:50%; font-style:normal;
+    vertical-align:super; margin-left:2px; cursor:pointer;
+    transition:background .15s;
+  }
+  cite::before{
+    content:'';
+    position:absolute; inset:0; border-radius:50%;
+    background:conic-gradient(from -90deg,
+      rgba(52,179,157,0.55) calc(var(--conf, 0) * 1%),
+      var(--line) calc(var(--conf, 0) * 1%));
+    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+    mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+  }
+  cite:hover{background:var(--green); color:#fff;}
+
+  /* ============ cite 弹出半层示意 ============ */
+  .cite-panel{
+    margin:8px 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; padding:12px 14px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.05);
+  }
+  .cp-head{display:flex; align-items:center; gap:6px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--line2);}
+  .cp-idx{background:var(--green-deep); color:#fff; font-size:10px; font-weight:600; padding:1px 6px; border-radius:3px;}
+  .cp-title{font-size:12.5px; font-weight:600; color:var(--t80); line-height:1.4;}
+  .cp-conf{display:flex; align-items:center; gap:12px; padding:10px 12px; background:#FAFAFB; border-radius:10px; margin-bottom:10px;}
+  .cp-conf .num{font-size:22px; font-weight:800; color:var(--green-deep); line-height:1; font-variant-numeric:tabular-nums;}
+  .cp-conf .lbl{font-size:10px; color:var(--t45); letter-spacing:0.04em; margin-top:3px;}
+  .cp-conf .stats{flex:1; min-width:0; font-size:11px; color:var(--t62); line-height:1.6;}
+  .cp-conf .bar{display:flex; height:4px; border-radius:2px; overflow:hidden; margin-top:4px;}
+  .cp-conf .bar .p{background:var(--green);} .cp-conf .bar .n{background:var(--red);} .cp-conf .bar .m{background:var(--line);}
+  .cp-src{font-size:11px; color:var(--t45); margin-bottom:8px;}
+  .cp-note{display:flex; gap:8px; padding:8px 10px; background:#FAFAFB; border-radius:8px; margin-bottom:6px; font-size:11.5px;}
+  .cp-note:last-child{margin-bottom:0;}
+  .cp-note .av{width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); color:#fff; font-size:9px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .cp-note .body{flex:1; min-width:0;}
+  .cp-note .u{font-size:10px; color:var(--t45); margin-bottom:2px;}
+  .cp-note .t{color:var(--t80); line-height:1.5;}
+  .cp-note .tg{display:inline-block; font-size:9px; padding:1px 4px; border-radius:2px; margin-left:4px; vertical-align:middle;}
+  .cp-note .tg.p{background:var(--green-bg); color:var(--green-deep);}
+  .cp-note .tg.n{background:var(--red-bg); color:var(--red);}
+
+  /* ============ 对比表格 ============ */
+  .comp-table{
+    margin:0 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:14px; overflow:hidden;
+  }
+  .comp-table table{width:100%; border-collapse:collapse;}
+  .comp-table th, .comp-table td{
+    padding:9px 12px; font-size:12px;
+    border-bottom:0.5px solid var(--line2);
+    text-align:left;
+  }
+  .comp-table th{
+    background:#FAFAFB; font-weight:600; color:var(--t45); font-size:11px;
+    letter-spacing:0.02em;
+  }
+  .comp-table th.link{color:var(--blue-deep); text-decoration:underline; text-decoration-color:rgba(90,154,255,0.4); cursor:pointer;}
+  .comp-table th.link:hover{color:var(--blue); text-decoration-color:var(--blue);}
+  .comp-table td.dim{color:var(--t45); width:30%; font-size:11px;}
+  .comp-table td.win{color:var(--green-deep); font-weight:600; background:rgba(86,209,191,0.06);}
+  .comp-table tr:last-child td{border-bottom:0;}
+
+  /* ============ 高亮块（决策锚点） ============ */
+  .scene{
+    margin:0 14px 4px;
+    background:linear-gradient(180deg,rgba(232,163,61,0.10),rgba(232,163,61,0.02));
+    border:0.5px solid rgba(232,163,61,0.4); border-radius:16px;
+    padding:14px 15px;
+  }
+  .scene-row{display:flex; align-items:flex-start; gap:9px; font-size:13px; line-height:1.5; margin-bottom:10px;}
+  .scene-row:last-child{margin-bottom:0;}
+  .scene-row .cond{flex:1; color:var(--t62);}
+  .scene-row .cond b{color:var(--t80); font-weight:600;}
+  .scene-row .arrow{color:var(--t27); align-self:center;}
+  .scene-row .pick{flex-shrink:0; font-size:12px; font-weight:700; border-radius:100px; padding:4px 11px; white-space:nowrap;}
+  .scene-row .pick.a{background:var(--blue-bg); color:var(--blue-deep);}
+  .scene-row .pick.b{background:rgba(232,163,61,0.14); color:var(--gold);}
+
+  /* ============ 追问 ============ */
+  .follow{margin:6px 14px 4px; display:flex; flex-direction:column; gap:6px;}
+  .follow .fbtn{
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:100px; padding:8px 14px;
+    font-size:12.5px; color:var(--t80); text-align:left; cursor:pointer;
+    font-family:inherit;
+  }
+  .follow .fbtn::before{content:"→ "; color:var(--green-deep); margin-right:4px;}
+  .follow .fbtn:hover{border-color:var(--green); background:var(--green-bg);}
+
+  /* ============ 商品详情页 · 完整下探 ============ */
+  .detail{
+    margin:0 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:16px; overflow:hidden;
+  }
+  .detail-gallery{position:relative; background:#EEE; aspect-ratio:4/3; overflow:hidden;}
+  .detail-gallery img{width:100%; height:100%; object-fit:cover;}
+  .detail-gallery .cnt{position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:2px 8px; border-radius:100px; letter-spacing:0.04em;}
+  .detail-gallery .dots{position:absolute; bottom:8px; left:50%; transform:translateX(-50%); display:flex; gap:4px; padding:4px 8px; background:rgba(0,0,0,0.4); border-radius:100px;}
+  .detail-gallery .dots .d{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.5);}
+  .detail-gallery .dots .d.on{background:#fff;}
+  .detail-thumbs{display:flex; gap:6px; padding:10px 14px; border-bottom:0.5px solid var(--line2); overflow-x:auto;}
+  .detail-thumbs .thumb{width:44px; height:44px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid transparent; background:#EEE;}
+  .detail-thumbs .thumb.on{border-color:var(--green);}
+  .detail-thumbs .thumb img{width:100%; height:100%; object-fit:cover;}
+  .detail-body{padding:14px 16px;}
+  .detail-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:14px;}
+  .detail-title{font-size:15px; font-weight:600; color:var(--t80); flex:1; min-width:0;}
+  .detail-price{color:var(--red); font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .detail-price .lbl{color:var(--t45); font-weight:400; font-size:10px; margin-right:6px; letter-spacing:0.04em;}
+  .detail-sec{font-size:13px; font-weight:700; color:var(--t80); margin:14px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line2);}
+  .detail-sec:first-child{margin-top:0;}
+  .detail-intro{font-size:12.5px; color:var(--t62); line-height:1.7; margin-bottom:8px;}
+  .detail-params{background:#FAFAFB; border-radius:10px; padding:10px 14px;}
+  .detail-params .row{display:flex; justify-content:space-between; font-size:11.5px; padding:4px 0; font-variant-numeric:tabular-nums;}
+  .detail-params .row + .row{border-top:1px dashed var(--line2);}
+  .detail-params .row:nth-child(n+4){display:none;}
+  .detail-params.expanded .row:nth-child(n+4){display:flex;}
+  .params-toggle{position:relative; display:block; width:100%; background:none; border:none; font-family:inherit; font-size:14px; color:var(--t45); padding:0; cursor:pointer; text-align:center; height:28px; margin-top:-20px;}
+  .params-toggle::before{content:''; position:absolute; top:-20px; left:0; right:0; height:20px; background:linear-gradient(to bottom, rgba(250,250,251,0), rgba(250,250,251,1)); pointer-events:none;}
+  .params-toggle .arrow{display:inline-block; transition:transform .2s;}
+  .params-toggle.on .arrow{transform:rotate(180deg);}
+  .params-toggle.on::before{display:none;}
+  .params-toggle.on{margin-top:0;}
+
+  /* 购买渠道列表 */
+  .shop-list{display:flex; flex-direction:column;}
+  .shop-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2); cursor:pointer; text-decoration:none; color:inherit;}
+  .shop-item:last-child{border-bottom:0;}
+  .shop-item .img{width:44px; height:44px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .shop-item .img img{width:100%; height:100%; object-fit:cover;}
+  .shop-item .mid{flex:1; min-width:0;}
+  .shop-item .nm{font-size:13px; font-weight:600; color:var(--t80); line-height:1.35; margin-bottom:2px;}
+  .shop-item .price{font-size:13px; font-weight:700; color:var(--red); font-variant-numeric:tabular-nums;}
+  .shop-item .arrow{color:var(--t27); font-size:14px; flex-shrink:0;}
+  .detail-params .row span:first-child{color:var(--t45); letter-spacing:0.02em;}
+  .detail-params .row span:last-child{font-weight:500; color:var(--t80);}
+
+  /* AI 总结 */
+  .ai-sum{background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02)); border:0.5px solid var(--green-line); border-radius:12px; padding:12px 14px;}
+  .ai-sum .head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px;}
+  .ai-sum .lbl{display:inline-flex; align-items:center; gap:4px; font-size:10px; letter-spacing:0.08em; color:var(--green-deep); font-weight:700; text-transform:uppercase;}
+  .ai-sum .lbl::before{content:"✦"; color:var(--green);}
+  .ai-sum .score{display:flex; align-items:baseline; gap:4px; font-variant-numeric:tabular-nums;}
+  .ai-sum .score .n{font-size:22px; font-weight:800; color:var(--t80); line-height:1;}
+  .ai-sum .score .mx{font-size:11px; color:var(--t45);}
+  .ai-sum .score .st{color:var(--gold); font-size:11px; margin-left:4px;}
+  .ai-sum .text{font-size:12.5px; color:var(--t80); line-height:1.7;}
+  .ai-sum .text b{color:var(--t80); font-weight:600;}
+  .ai-sum .from{font-size:10px; color:var(--t45); margin-top:8px;}
+
+  /* 观点 Tab */
+  .op-tabs{display:flex; gap:6px; overflow-x:auto; padding:2px 0 10px; -webkit-overflow-scrolling:touch; flex-wrap:nowrap; margin-top:14px;}
+  .op-tabs::-webkit-scrollbar{display:none;}
+  .op-tab{
+    flex-shrink:0; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:500;
+    cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--t62);
+    white-space:nowrap; transition:all 0.15s; font-family:inherit; line-height:1.3;
+  }
+  .op-tab .pct{font-weight:700; margin-left:3px; font-variant-numeric:tabular-nums;}
+  .op-tab.pos.on{background:var(--green-bg); border-color:var(--green-line); color:var(--green-deep);}
+  .op-tab.neg.on{background:var(--red-bg); border-color:rgba(217,83,79,0.4); color:var(--red);}
+  .op-panel{display:none; flex-direction:column; gap:8px;}
+  .op-panel.on{display:flex;}
+  .op-panel .op-desc{display:none;}
+  /* 支持/反对对抗条 */
+  .op-versus{display:flex; align-items:center; gap:0; height:22px; border-radius:6px; overflow:hidden; cursor:pointer;}
+  .op-versus .side{display:flex; align-items:center; justify-content:center; gap:4px; font-size:10px; font-weight:600; height:100%; transition:opacity 0.15s; padding:0 8px; white-space:nowrap;}
+  .op-versus .side:hover{opacity:0.85;}
+  .op-versus .side.pro{background:var(--green); color:#fff;}
+  .op-versus .side.con{background:var(--red); color:#fff;}
+  .op-versus .side.on{opacity:1; font-weight:700;}
+  .op-versus .side:not(.on){opacity:0.35; font-weight:500;}
+  /* 支持/反对下方评论列表 */
+  .op-cmts{display:none; flex-direction:column; gap:6px;}
+  .op-cmts.on{display:flex;}
+  .op-cmt{display:flex; gap:8px; padding:9px 11px; background:#FAFAFB; border-radius:8px; font-size:12px;}
+  .op-cmt .av{width:20px; height:20px; border-radius:50%; color:#fff; font-size:9px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .op-cmt .body{flex:1; min-width:0;}
+  .op-cmt .u{font-size:10px; color:var(--t45); margin-bottom:2px;}
+  .op-cmt .t{color:var(--t80); line-height:1.5; font-size:11.5px;}
+  .op-cmt .imgs{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:6px; border-radius:6px; overflow:hidden;}
+  .op-cmt .imgs img{width:100%; aspect-ratio:1; object-fit:cover; display:block;}
+
+  /* 相关笔记 · 横排 */
+  .rnotes{display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px;}
+  .rnotes::-webkit-scrollbar{display:none;}
+  .rnote{background:#fff; border:0.5px solid var(--line); border-radius:12px; overflow:hidden; flex-shrink:0; width:140px;}
+  .rnote .cover{position:relative; width:100%; aspect-ratio:4/5; background:#EEE; overflow:hidden;}
+  .rnote .cover img{width:100%; height:100%; object-fit:cover; display:block;}
+  .rnote .cover .play{
+    position:absolute; top:8px; right:8px;
+    width:24px; height:24px; border-radius:50%;
+    background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center;
+  }
+  .rnote .cover .play::after{
+    content:""; display:block;
+    width:0; height:0;
+    border-style:solid; border-width:5px 0 5px 9px;
+    border-color:transparent transparent transparent #fff;
+    margin-left:2px;
+  }
+  .rnote .info{padding:8px 10px;}
+  .rnote .t{font-size:12px; font-weight:600; color:var(--t80); line-height:1.4;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:6px;}
+  .rnote .foot{display:flex; justify-content:space-between; align-items:center; font-size:10px; color:var(--t45);}
+  .rnote .foot .lk::before{content:"♡ "; color:var(--red); margin-right:2px;}
+
+  /* 底部 footer */
+  .foot-info{padding:14px 18px 20px; text-align:center; color:var(--t27); font-size:10px;}
+
+  /* ============ 第四列 · 交互演示 ============ */
+  .col.interactive .col-tag{color:#5C4680; background:rgba(122,95,160,0.14);}
+  .phone.has-sidebar{height:844px; display:flex; flex-direction:column;}
+  .chat-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+
+  /* cite 侧边栏 */
+  .cite-overlay{position:absolute; inset:0; background:rgba(0,0,0,0.18); z-index:9; opacity:0; pointer-events:none; transition:opacity .3s;}
+  .cite-overlay.open{opacity:1; pointer-events:auto;}
+  .cite-sidebar{position:absolute; bottom:0; left:0; right:0; height:65%; background:#fff; box-shadow:0 -4px 20px rgba(0,0,0,0.08); transform:translateY(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); z-index:10; display:flex; flex-direction:column; border-radius:16px 16px 0 0;}
+  .cite-sidebar.open{transform:translateY(0);}
+  .sb-handle{width:36px; height:4px; border-radius:2px; background:var(--line); margin:8px auto 0; flex-shrink:0;}
+  .sb-top{display:flex; align-items:center; gap:10px; padding:10px 14px 10px; border-bottom:0.5px solid var(--line); flex-shrink:0;}
+  .sb-close{width:26px; height:26px; border-radius:50%; background:#F2F2F2; border:none; cursor:pointer; font-size:12px; color:var(--t62); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:inherit;}
+  .sb-title{font-size:14px; font-weight:600; color:var(--t80); line-height:1.4;}
+  .sb-body{padding:12px 14px 32px; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .sb-stats{font-size:11px; color:var(--t45); margin-bottom:8px;}
+  .sb-versus{display:flex; height:30px; border-radius:8px; overflow:hidden; margin-bottom:12px;}
+  .sb-seg{display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#fff; cursor:pointer; transition:opacity .15s; white-space:nowrap; padding:0 8px; min-width:36px;}
+  .sb-seg.pro{background:var(--green);}
+  .sb-seg.mid{background:rgba(48,48,52,0.25); color:var(--t62);}
+  .sb-seg.neg{background:rgba(217,83,79,0.55);}
+  .sb-seg.on{opacity:1;}
+  .sb-seg:not(.on){opacity:0.35;}
+  .cp-note .tg.m{background:rgba(48,48,52,0.08); color:var(--t45);}
+
+  /* 推荐条目 */
+  .rec-item{padding:2px 14px 10px;}
+  .rec-hd{display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+  .rec-hd .idx{font-size:16px; font-weight:800; color:var(--t80);}
+  .rec-hd .nm{font-size:16px; font-weight:700; color:var(--t80); flex:1;}
+  .rec-pct{font-size:12px; color:var(--green-deep); border:1px solid var(--green-line); border-radius:100px; padding:3px 10px; display:inline-flex; align-items:center; gap:2px; white-space:nowrap; flex-shrink:0;}
+  .rec-pct::after{content:"›"; font-size:14px;}
+  .rec-desc{font-size:14px; line-height:1.65; color:var(--t80); margin-bottom:6px;}
+
+  /* 行内用户引用 */
+  .iq{display:flex; gap:8px; align-items:flex-start; padding:5px 0;}
+  .iq .av{width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;}
+  .iq .qt{flex:1; font-size:13px; color:var(--t62); line-height:1.55;}
+  .iq .lk{color:var(--t45); font-size:12px; white-space:nowrap;}
+  .more-link{display:flex; align-items:center; gap:6px; padding:4px 0 2px; font-size:12px; color:var(--t45); cursor:pointer;}
+  .more-link .av{width:18px; height:18px; border-radius:50%;}
+
+  /* 底部输入栏 */
+  .input-bar{display:flex; align-items:center; gap:10px; padding:10px 16px 32px; background:#fff; border-top:0.5px solid var(--line); flex-shrink:0;}
+  .input-bar .ib-voice{width:32px; height:32px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; background:#fff; color:var(--green); font-size:14px; cursor:pointer; flex-shrink:0;}
+  .input-bar .ib-ph{flex:1; font-size:14px; color:var(--t27);}
+  .input-bar .ib-icon{font-size:20px; color:var(--t45); cursor:pointer; flex-shrink:0; line-height:1;}
+
+  /* ============ 顶部标题（唯一） ============ */
+  .header{width:100%; text-align:center; margin-bottom:8px;}
+  .header h1{font-size:20px; font-weight:700; color:var(--t80); margin-bottom:6px;}
+  .header p{font-size:13px; color:var(--t62); max-width:640px; margin:0 auto;}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>购物决策组件示例 · 潜水运动相机</h1>
+  <p>一位准备学潜水的用户，从"想买"到"选定"的三轮对话，串起所有组件形态</p>
+</div>
+
+<!-- ================================================================
+     第一轮 · 选品推荐
+     ================================================================ -->
+<div class="col rec">
+  <div class="col-tag">选品推荐</div>
+  <div class="col-title">运动相机有哪些？</div>
+  <div class="col-sub">用户模糊 query · AI 分类 + 多张富集卡 + 追问</div>
+
+  <div class="phone">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="userq"><span>运动相机有哪些？</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">89 篇</b>真人测评 · 供你选购参考</span>
+      </div>
+
+      <div class="lead">
+        目前主流的运动相机可以分成三类，各自适合的场景不太一样：<span class="hl">通吃场景选传统运动相机，玩后期或跟拍选全景，随手拍 vlog 选穿戴式</span>。
+      </div>
+
+      <!-- 富集卡 1 · 传统运动相机 -->
+      <div class="sec-label">📷 1. 传统运动相机 · 主流水陆通吃</div>
+      <div class="blead">画质、防抖、配件生态都均衡，骑行 / 滑雪 / 潜水场景最主流。</div>
+      <div class="comp-note rich">商品富集卡</div>
+      <div class="rich">
+        <div class="rich-item t1">
+          <div class="rk">1</div>
+          <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">DJI Osmo Action 6</div>
+            <div class="desc">1/1.1" 方形传感器 · 可变光圈 · 8K30</div>
+            <div class="stars-line"><span class="s">★</span>4.8 <span class="cnt">(1.6k)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">2</div>
+          <div class="img"><img src="images/Insta360_Ace_Pro.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Insta360 Ace Pro 2</div>
+            <div class="desc">徕卡镜头 · AI 双芯 · 翻转屏</div>
+            <div class="stars-line"><span class="s">★</span>4.6 <span class="cnt">(940)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">3</div>
+          <div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
+          <div class="mid">
+            <div class="nm">GoPro Hero 13 Black</div>
+            <div class="desc">5.3K60 · HB 镜头生态 · 防水 10 米</div>
+            <div class="stars-line"><span class="s">★</span>4.7 <span class="cnt">(2.3k)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">4</div>
+          <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">DJI Osmo Action 5 Pro</div>
+            <div class="desc">1/1.3" 传感器 · 4K120 · 4 小时续航</div>
+            <div class="stars-line"><span class="s">★</span>4.6 <span class="cnt">(1.8k)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 富集卡 2 · 全景相机 -->
+      <div class="sec-label">🌐 2. 全景运动相机 · 一镜拍全</div>
+      <div class="blead">360° 全景拍摄，剪辑时"事后转镜头"，适合 vlog 和跟拍。</div>
+      <div class="comp-note rich">商品富集卡</div>
+      <div class="rich">
+        <div class="rich-item t1">
+          <div class="rk">1</div>
+          <div class="img"><img src="images/DJI_Osmo_360.png" alt=""></div>
+          <div class="mid">
+            <div class="nm">DJI Osmo 360</div>
+            <div class="desc">1 英寸全景影像 · 8K50 · 120MP</div>
+            <div class="stars-line"><span class="s">★</span>4.7 <span class="cnt">(780)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">2</div>
+          <div class="img"><img src="images/Insta360_X5.png" alt=""></div>
+          <div class="mid">
+            <div class="nm">Insta360 X5</div>
+            <div class="desc">双 1/1.28 传感器 · 8K30 · 15 米防水</div>
+            <div class="stars-line"><span class="s">★</span>4.6 <span class="cnt">(1.2k)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">3</div>
+          <div class="img"><img src="images/GoPro_Max_front.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">GoPro Max 2</div>
+            <div class="desc">原生 8K360 · 光学玻璃镜头 · 10-bit</div>
+            <div class="stars-line"><span class="s">★</span>4.4 <span class="cnt">(520)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 富集卡 3 · 穿戴式 -->
+      <div class="sec-label">📎 3. 穿戴式 / 轻量相机</div>
+      <div class="blead">机身超轻，磁吸或胸挂，第一人称随手拍。</div>
+      <div class="comp-note rich">商品富集卡</div>
+      <div class="rich">
+        <div class="rich-item t1">
+          <div class="rk">1</div>
+          <div class="img"><img src="images/DJI_Osmo_Nano.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">DJI Osmo Nano</div>
+            <div class="desc">52g · 1/1.3" 传感器 · 4K60 · 磁吸</div>
+            <div class="stars-line"><span class="s">★</span>4.5 <span class="cnt">(640)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">2</div>
+          <div class="img"><img src="images/Insta360_GO_3S_Camera.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Insta360 GO Ultra</div>
+            <div class="desc">53g · 1/1.28 传感器 · 4K60 · 夜景</div>
+            <div class="stars-line"><span class="s">★</span>4.4 <span class="cnt">(820)</span></div>
+          </div>
+        </div>
+        <div class="rich-item">
+          <div class="rk">3</div>
+          <div class="img"><img src="images/Insta360_X4_su_una_superficie_bianca.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Insta360 X4 Air</div>
+            <div class="desc">165g · 8K 全景 · 4K60 单镜头</div>
+            <div class="stars-line"><span class="s">★</span>4.3 <span class="cnt">(460)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 高亮块 -->
+      <div class="sec-label">🧭 一句话总结</div>
+      <div class="comp-note mark">高亮块</div>
+      <div class="scene">
+        <div class="scene-row">
+          <div class="cond"><b>主流水陆全能</b></div>
+          <div class="arrow">→</div>
+          <div class="pick a">传统运动相机</div>
+        </div>
+        <div class="scene-row">
+          <div class="cond"><b>后期玩全景 / 跟拍</b></div>
+          <div class="arrow">→</div>
+          <div class="pick b">全景机</div>
+        </div>
+        <div class="scene-row">
+          <div class="cond"><b>亲子 / 宠物 / 随手拍</b></div>
+          <div class="arrow">→</div>
+          <div class="pick a">穿戴式</div>
+        </div>
+      </div>
+
+      <!-- 追问 -->
+      <div class="comp-note follow">追问</div>
+      <div class="follow">
+        <button class="fbtn">主要拍什么场景？（潜水/骑行/滑雪/vlog）</button>
+        <button class="fbtn">预算区间？</button>
+        <button class="fbtn">对画质和续航有要求吗？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     第二轮 · 单品评估
+     ================================================================ -->
+<div class="col single">
+  <div class="col-tag">单品评估</div>
+  <div class="col-title">GoPro Hero 13 潜水怎么样？</div>
+  <div class="col-sub">用户圈定单品 · 商品卡 + 正反口碑 + 引用块 + cite</div>
+
+  <div class="phone">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+      </div>
+
+      <div class="lead">
+        <span class="hl">预算 3000 左右、想要稳定生态和白天水下画质，值得</span>。如果主要拍夜潜或暗光洞穴，它的传感器会有点吃力。
+      </div>
+
+      <!-- 商品卡 -->
+      <div class="comp-note card">商品卡</div>
+      <div class="pcard">
+        <div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
+        <div class="body">
+          <div class="nm">GoPro Hero 13 Black</div>
+          <div class="features">1/1.9" · 5.3K60 · 原生 10 米防水</div>
+          <div class="pbottom">
+            <div class="price">¥2,800–3,200</div>
+            <div class="stars-line"><span class="s">★</span>4.7<span class="cnt">2.1k 人推荐</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 值得入手 / 要想清楚 · 文字段落 + cite -->
+      <div class="sec-label">👍 值得入手 / ⚠️ 要想清楚</div>
+      <div class="comp-note cite">正文角标 = cite</div>
+      <div class="lead">
+        GoPro Hero 13 的最大优势在于配件生态——防水壳、稳定架、水下灯一整套，是目前运动相机里最成熟的<cite style="--conf:89">”</cite>。画质方面，5.3K60 白天水下表现扎实，后期剪辑余量大<cite style="--conf:82">”</cite>，加上 HyperSmooth 6 在陆上水下切换时防抖过渡很稳<cite style="--conf:76">”</cite>，日常潜水记录基本不需要额外后期。
+      </div>
+      <div class="lead">
+        不过 1/1.9” 的传感器面积偏小，深潜到 15 米以下光线不足时噪点会比较明显<cite style=”--conf:71”>”</cite>。另外默认色调偏冷，水下容易发蓝，想出好看的色彩需要后期调色<cite style=”--conf:58”>”</cite>。电池续航也是老问题，连续录制大概 90 分钟就需要换电池。
+      </div>
+
+      <!-- cite 半层示意 -->
+      <div class="sec-label">🔍 点击角标 <cite style="--conf:89">”</cite> 展开半层</div>
+      <div class="comp-note cite">cite 弹出半层示意</div>
+      <div class="cite-panel">
+        <div class="cp-head">
+          <span class="cp-idx">1</span>
+          <div class="cp-title">生态最全 · 配件系统成熟</div>
+        </div>
+        <div class="cp-conf">
+          <div>
+            <div class="num">89<span style="font-size:14px">%</span></div>
+            <div class="lbl">置信度</div>
+          </div>
+          <div class="stats">
+            基于 <b>147 篇笔记 · 312 条评论</b><br>
+            支持 89% · 中立 8% · 反对 3%
+            <div class="bar">
+              <div class="p" style="flex:89"></div>
+              <div class="m" style="flex:8"></div>
+              <div class="n" style="flex:3"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cp-src">相关内容 · 部分展示</div>
+        <div class="cp-note">
+          <div class="av">康</div>
+          <div class="body">
+            <div class="u">@水下摄影师-老康 · 笔记 · 1.2k 赞<span class="tg p">支持</span></div>
+            <div class="t">GoPro 从 5 代开始的配件基本都能用，我柜子里堆的稳定架、水下灯、快装板全兼容 13</div>
+          </div>
+        </div>
+        <div class="cp-note">
+          <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">M</div>
+          <div class="body">
+            <div class="u">@潜水日记Mo · 评论 · 342 赞<span class="tg p">支持</span></div>
+            <div class="t">配件生态没得说，某鱼上二手配件一大堆，比 DJI 好淘</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户原声 quote -->
+      <div class="sec-label">💬 大家怎么说</div>
+      <div class="comp-note quote">引用块 = quote</div>
+      <div class="voice">
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>
+            <div class="nm">Mo潜水日记</div>
+            <div class="lk">♡ 2,387</div>
+          </div>
+          <div class="tx"><span class="q">"</span>带去菲律宾薄荷岛，白天拍鲨鱼稳的一批，剪出来发朋友圈根本不像手持<span class="q">"</span></div>
+        </div>
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>
+            <div class="nm">夜潜爱好者</div>
+            <div class="lk">♡ 1,204</div>
+          </div>
+          <div class="tx"><span class="q">"</span>18 米以下暗，噪点吃得挺明显，得配灯或者换 DJI<span class="q">"</span></div>
+        </div>
+      </div>
+
+      <!-- 高亮块 -->
+      <div class="sec-label">🧭 是否值得入</div>
+      <div class="comp-note mark">高亮块</div>
+      <div class="scene">
+        <div class="scene-row">
+          <div class="cond"><b>白天浮潜 / OW 深度</b></div>
+          <div class="arrow">→</div>
+          <div class="pick a">值得入</div>
+        </div>
+        <div class="scene-row">
+          <div class="cond"><b>之后想玩夜潜 / 洞穴</b></div>
+          <div class="arrow">→</div>
+          <div class="pick b">加价上 DJI</div>
+        </div>
+      </div>
+
+      <div class="comp-note follow">追问</div>
+      <div class="follow">
+        <button class="fbtn">和 DJI Osmo Action 5 Pro 比呢？</button>
+        <button class="fbtn">水下配件需要买哪些？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     第三轮 · 对比决策
+     ================================================================ -->
+<div class="col versus">
+  <div class="col-tag">对比决策</div>
+  <div class="col-title">GoPro vs DJI 该选哪个？</div>
+  <div class="col-sub">对比表格 + 决定性维度分析 + 引用块</div>
+
+  <div class="phone">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="userq"><span>那和 DJI Osmo Action 5 Pro 比呢？该选哪个</span></div>
+
+    <div class="answer">
+      <div class="ref">
+        <div class="avs"><i></i><i></i><i></i></div>
+        <span>综合 <b style="color:var(--t62)">92 篇</b>双机对比笔记</span>
+      </div>
+
+      <div class="lead">
+        <span class="hl">白天浮潜 + 陆水混拍选 GoPro；夜潜 + 低光 + 长续航选 DJI</span>。两家在潜水场景其实是"生态 vs 传感器"的分水岭。
+      </div>
+
+      <!-- 对比表格 -->
+      <div class="sec-label">📊 参数对比</div>
+      <div class="comp-note table">对比表格 · 点表头进详情</div>
+      <div class="comp-table">
+        <table>
+          <tr>
+            <th></th>
+            <th class="link">GoPro Hero 13</th>
+            <th class="link">DJI Action 5 Pro</th>
+          </tr>
+          <tr><td class="dim">传感器</td><td>1/1.9"</td><td class="win">1/1.3"</td></tr>
+          <tr><td class="dim">最高视频</td><td class="win">5.3K60</td><td>4K120</td></tr>
+          <tr><td class="dim">原生防水</td><td>10 米</td><td class="win">20 米</td></tr>
+          <tr><td class="dim">电池续航</td><td>约 90 分钟</td><td class="win">约 240 分钟</td></tr>
+          <tr><td class="dim">低光表现</td><td>一般</td><td class="win">强</td></tr>
+          <tr><td class="dim">配件生态</td><td class="win">最丰富</td><td>较丰富</td></tr>
+          <tr><td class="dim">参考价格</td><td>¥2,800–3,200</td><td class="win">¥2,300–2,600</td></tr>
+        </table>
+      </div>
+
+      <div class="lead">
+        真正拉开差距的其实就 <b>两点</b>：<b>传感器大小</b>（决定水下低光）和 <b>生态成熟度</b>（决定配件复用）。其他维度差异都在感知阈值内<cite style="--conf:85">"</cite>。
+      </div>
+
+      <!-- 引用块 quote -->
+      <div class="comp-note quote">引用块</div>
+      <div class="voice">
+        <div class="v">
+          <div class="f">
+            <div class="avv" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>
+            <div class="nm">水下摄影贼强</div>
+            <div class="lk">♡ 3,102</div>
+          </div>
+          <div class="tx"><span class="q">"</span>同样开 4K，Action 5 Pro 在 20 米深暗礁石上还能看清鱼身花纹，GoPro 就是一团黑<span class="q">"</span></div>
+        </div>
+      </div>
+
+      <!-- 高亮块 -->
+      <div class="sec-label">🧭 该怎么选</div>
+      <div class="comp-note mark">高亮块</div>
+      <div class="scene">
+        <div class="scene-row">
+          <div class="cond"><b>OW 新手 · 白天浮潜 / 开放水域</b></div>
+          <div class="arrow">→</div>
+          <div class="pick a">GoPro 13</div>
+        </div>
+        <div class="scene-row">
+          <div class="cond"><b>之后进阶夜潜或洞穴</b></div>
+          <div class="arrow">→</div>
+          <div class="pick b">DJI 5 Pro</div>
+        </div>
+      </div>
+
+      <div class="comp-note follow">追问</div>
+      <div class="follow">
+        <button class="fbtn">帮我配一套水下拍摄配件</button>
+        <button class="fbtn">Insta360 Ace Pro 2 是不是更适合我？</button>
+      </div>
+
+      <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     第四列 · 商品详情页
+     ================================================================ -->
+<div class="col single">
+  <div class="col-tag">商品详情页</div>
+  <div class="col-title">DJI Osmo Action 5 Pro</div>
+  <div class="col-sub">完整商品详情页 · AI 总结 + 观点 Tab + 相关笔记</div>
+
+  <div class="phone">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="detail" style="margin:0; border:none; border-radius:0;">
+      <div class="detail-gallery">
+        <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+        <div class="cnt">1 / 5</div>
+        <div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div>
+      </div>
+      <div class="detail-thumbs">
+        <div class="thumb on"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+        <div class="thumb"><img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt=""></div>
+        <div class="thumb"><img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt=""></div>
+        <div class="thumb"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+        <div class="thumb"><img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt=""></div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-top">
+          <div class="detail-title">DJI Osmo Action 5 Pro</div>
+          <div class="detail-price"><span class="lbl">参考价</span>¥2,300–2,600</div>
+        </div>
+
+        <div class="ai-sum">
+          <div class="head">
+            <span class="score"><span class="n">4.6</span><span class="mx">/ 5</span><span class="st">★★★★★</span></span>
+            <span class="lbl">AI 总结</span>
+          </div>
+          <div class="text">用户普遍认可<b>低光画质</b>和<b>超长续航</b>，夜潜暗部细节优于同价位。主要吐槽<b>第三方配件少</b>和长时间录制发热。</div>
+          <div class="from">基于 892 篇小红书笔记 · 2,340 条评论综合</div>
+        </div>
+
+        <div class="detail-sec">基本介绍</div>
+        <div class="detail-intro">
+          大疆 2024 下半年发布的旗舰运动相机，主打 1/1.3" 大底传感器和低光表现，裸机 20 米防水 + 240 分钟续航是同价位段的天花板。适合夜潜、暗光洞穴、长时间跟拍场景。
+        </div>
+        <div class="detail-params">
+          <div class="row"><span>传感器</span><span>1/1.3" CMOS</span></div>
+          <div class="row"><span>最高视频</span><span>4K120</span></div>
+          <div class="row"><span>原生防水</span><span>20 米</span></div>
+          <div class="row"><span>加壳防水</span><span>60 米</span></div>
+          <div class="row"><span>电池</span><span>1950 mAh · 约 240 min</span></div>
+          <div class="row"><span>重量</span><span>146 g</span></div>
+          <div class="row"><span>屏幕</span><span>前 1.4" + 后 2.5" 双屏</span></div>
+        </div>
+        <button class="params-toggle" onclick="toggleParams(this)"><span class="arrow">▾</span></button>
+
+        <div class="detail-sec">用户评价</div>
+        <div class="op-tabs">
+          <button class="op-tab pos on" onclick="switchTab(this,'dp1')">低光画质强<span class="pct">92%</span></button>
+          <button class="op-tab pos" onclick="switchTab(this,'dp2')">续航惊喜<span class="pct">88%</span></button>
+          <button class="op-tab pos" onclick="switchTab(this,'dp3')">色彩自然<span class="pct">81%</span></button>
+          <button class="op-tab neg" onclick="switchTab(this,'dp4')">配件少<span class="pct">68%</span></button>
+          <button class="op-tab neg" onclick="switchTab(this,'dp5')">机身发热<span class="pct">54%</span></button>
+        </div>
+
+        <div class="op-panel on" id="dp1">
+          <div class="op-desc">1/1.3" 大底暗部细节好，夜潜 20 米下还能看清鱼身花纹</div>
+          <div class="op-versus">
+            <div class="side pro on" style="flex:92" onclick="switchSide(this,'pro')">支持 92%</div>
+            <div class="side con" style="flex:8" onclick="switchSide(this,'con')">8%</div>
+          </div>
+          <div class="op-cmts pro-cmts on">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">康</div>
+              <div class="body">
+                <div class="u">@水下摄影师-老康 · 笔记 · 1.2k 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                </div>
+                <div class="t">20 米深暗礁石上还能看清鱼身花纹，同行朋友的 GoPro 就是一团黑，差距肉眼可见...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">潜</div>
+              <div class="body">
+                <div class="u">@塞班夜潜队 · 评论 · 876 赞</div>
+                <div class="t">蓝洞夜潜实测，手电关掉只靠环境光也能出片，大底确实是硬实力...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">深</div>
+              <div class="body">
+                <div class="u">@深潜30米 · 评论 · 643 赞</div>
+                <div class="t">对比过好几台机器，暗光下 Action 5 Pro 的噪点控制确实是这个价位最好的...</div>
+              </div>
+            </div>
+          </div>
+          <div class="op-cmts con-cmts">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">杨</div>
+              <div class="body">
+                <div class="u">@潜水小白杨 · 笔记 · 134 赞</div>
+                <div class="imgs">
+                  <img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt="">
+                  <img src="images/GoPro_Hero_9_Black_-_Front.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                </div>
+                <div class="t">感觉和手机拍的差别没宣传那么大，可能我不太会调参数，直出看着一般...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">老</div>
+              <div class="body">
+                <div class="u">@器材老炮儿 · 评论 · 98 赞</div>
+                <div class="t">跟专业潜水相机比还是差远了，大底也只是相对运动相机来说...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">水</div>
+              <div class="body">
+                <div class="u">@水摄新手 · 评论 · 56 赞</div>
+                <div class="t">25 米以下还是不行，得配外挂补光灯才能看...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="op-panel" id="dp2">
+          <div class="op-desc">单块电池能撑完整个 fun dive，不用中途更换</div>
+          <div class="op-versus">
+            <div class="side pro on" style="flex:88" onclick="switchSide(this,'pro')">支持 88%</div>
+            <div class="side con" style="flex:12" onclick="switchSide(this,'con')">12%</div>
+          </div>
+          <div class="op-cmts pro-cmts on">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">林</div>
+              <div class="body">
+                <div class="u">@Action用户小林 · 笔记 · 1.5k 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                </div>
+                <div class="t">从香港到马代拍了一圈，单块电池能撑完整个 fun dive 不用换，完胜 GoPro...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">鱼</div>
+              <div class="body">
+                <div class="u">@海岛摄影鱼哥 · 评论 · 523 赞</div>
+                <div class="t">连续录了 3 小时延时还有电，以前 GoPro 得带三块电池轮换...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">晨</div>
+              <div class="body">
+                <div class="u">@晨潜日记 · 评论 · 312 赞</div>
+                <div class="t">两潜之间不用充电，直接下水，这续航太省心了...</div>
+              </div>
+            </div>
+          </div>
+          <div class="op-cmts con-cmts">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">K</div>
+              <div class="body">
+                <div class="u">@器材党小K · 笔记 · 87 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                </div>
+                <div class="t">开 4K120 的话其实也就两个小时出头，没官方说的那么夸张...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">测</div>
+              <div class="body">
+                <div class="u">@数码测评君 · 评论 · 65 赞</div>
+                <div class="t">低温环境下掉电很快，冬天户外拍大概只有标称的六成...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">浮</div>
+              <div class="body">
+                <div class="u">@浮潜爱好者 · 评论 · 43 赞</div>
+                <div class="t">充电速度太慢了，充满要两个多小时，不如多买块电池换着用...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="op-panel" id="dp3">
+          <div class="op-desc">默认色调比 GoPro 更接近实际观感，后期空间也够</div>
+          <div class="op-versus">
+            <div class="side pro on" style="flex:81" onclick="switchSide(this,'pro')">支持 81%</div>
+            <div class="side con" style="flex:19" onclick="switchSide(this,'con')">19%</div>
+          </div>
+          <div class="op-cmts pro-cmts on">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">阿</div>
+              <div class="body">
+                <div class="u">@水下调色师阿杰 · 笔记 · 980 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                </div>
+                <div class="t">直出颜色就挺准，水下蓝绿色还原自然，不用像 GoPro 那样大幅拉色温...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">海</div>
+              <div class="body">
+                <div class="u">@海底世界vlog · 评论 · 456 赞</div>
+                <div class="t">珊瑚的颜色基本还原了肉眼所见，发朋友圈都不用修图...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">摄</div>
+              <div class="body">
+                <div class="u">@摄影师小周 · 评论 · 287 赞</div>
+                <div class="t">D-Log M 模式后期空间很大，10bit 调色不容易断层...</div>
+              </div>
+            </div>
+          </div>
+          <div class="op-cmts con-cmts">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">V</div>
+              <div class="body">
+                <div class="u">@Vlog新手村 · 笔记 · 62 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                  <img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                </div>
+                <div class="t">阴天拍出来偏灰，还是得后期调，不算开箱即用...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">G</div>
+              <div class="body">
+                <div class="u">@GoPro老用户 · 评论 · 45 赞</div>
+                <div class="t">习惯了 GoPro 的鲜艳风格，DJI 的颜色总觉得寡淡...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">新</div>
+              <div class="body">
+                <div class="u">@新手潜水员 · 评论 · 31 赞</div>
+                <div class="t">深水区还是偏蓝，说好的色彩自然也就浅水区管用...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="op-panel" id="dp4">
+          <div class="op-desc">相比 GoPro 十年生态，第三方选择少一档</div>
+          <div class="op-versus">
+            <div class="side pro on" style="flex:68" onclick="switchSide(this,'pro')">✓ 认同 68%</div>
+            <div class="side con" style="flex:32" onclick="switchSide(this,'con')">32%</div>
+          </div>
+          <div class="op-cmts pro-cmts on">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">M</div>
+              <div class="body">
+                <div class="u">@潜水日记Mo · 笔记 · 342 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                  <img src="images/GoPro_Hero_9_Black_-_Front.jpg" alt="">
+                  <img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt="">
+                </div>
+                <div class="t">想买个第三方的冷靴灯臂，某宝只有两三家在做，GoPro 的随便挑...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">装</div>
+              <div class="body">
+                <div class="u">@装备控老赵 · 评论 · 198 赞</div>
+                <div class="t">防水壳只有官方一款，价格贵不说还经常缺货...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">潜</div>
+              <div class="body">
+                <div class="u">@潜水装备群 · 评论 · 156 赞</div>
+                <div class="t">闲鱼上 GoPro 配件一大堆，DJI 的几乎没人出二手...</div>
+              </div>
+            </div>
+          </div>
+          <div class="op-cmts con-cmts">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">大</div>
+              <div class="body">
+                <div class="u">@大疆铁粉老王 · 笔记 · 256 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                </div>
+                <div class="t">官方配件质量比第三方强太多了，宁可少不要烂，DJI 的壳子做工好很多...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">J</div>
+              <div class="body">
+                <div class="u">@JustDive · 评论 · 134 赞</div>
+                <div class="t">其实常用的也就那几样，官方都有，第三方多不代表质量好...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">科</div>
+              <div class="body">
+                <div class="u">@科技圈小蜜 · 评论 · 87 赞</div>
+                <div class="t">DJI 生态在快速补齐，今年比去年多了不少第三方适配...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="op-panel" id="dp5">
+          <div class="op-desc">4K120 长时间录制机身温度偏高，夏天户外注意散热</div>
+          <div class="op-versus">
+            <div class="side pro on" style="flex:54" onclick="switchSide(this,'pro')">✓ 认同 54%</div>
+            <div class="side con" style="flex:46" onclick="switchSide(this,'con')">46%</div>
+          </div>
+          <div class="op-cmts pro-cmts on">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">热</div>
+              <div class="body">
+                <div class="u">@极限运动老张 · 笔记 · 214 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                </div>
+                <div class="t">夏天骑行开 4K120 录了 40 分钟就烫手，水下倒还好，水能散热...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">测</div>
+              <div class="body">
+                <div class="u">@数码实验室 · 评论 · 167 赞</div>
+                <div class="t">实测机身温度最高 52°C，虽然不会自动关机但手持体验确实差...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">户</div>
+              <div class="body">
+                <div class="u">@户外达人阿飞 · 评论 · 98 赞</div>
+                <div class="t">三亚 7 月拍了半天，中间得歇两次等它降温才能继续...</div>
+              </div>
+            </div>
+          </div>
+          <div class="op-cmts con-cmts">
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">阿</div>
+              <div class="body">
+                <div class="u">@潜水装备阿飞 · 笔记 · 178 赞</div>
+                <div class="imgs">
+                  <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt="">
+                  <img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt="">
+                </div>
+                <div class="t">水下用根本不发热，这个问题只在陆上才有，潜水党完全不用担心...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">4</div>
+              <div class="body">
+                <div class="u">@4K够用党 · 评论 · 112 赞</div>
+                <div class="t">不开 4K120 就没这问题，4K60 录一个小时也不怎么热...</div>
+              </div>
+            </div>
+            <div class="op-cmt">
+              <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">冬</div>
+              <div class="body">
+                <div class="u">@冬季滑雪客 · 评论 · 76 赞</div>
+                <div class="t">冬天户外反而是优点，手握着暖和，完全没有过热问题...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-sec">购买渠道</div>
+        <div class="shop-list">
+          <a class="shop-item" href="#" onclick="return false">
+            <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+            <div class="mid">
+              <div class="nm">DJI 大疆官方旗舰店</div>
+              <div class="price">¥2,399</div>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+          <a class="shop-item" href="#" onclick="return false">
+            <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_01.jpg" alt=""></div>
+            <div class="mid">
+              <div class="nm">大疆创新京东自营店</div>
+              <div class="price">¥2,349</div>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+          <a class="shop-item" href="#" onclick="return false">
+            <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_top_view.jpg" alt=""></div>
+            <div class="mid">
+              <div class="nm">大疆天猫官方旗舰店</div>
+              <div class="price">¥2,399</div>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+  </div>
+</div>
+
+<!-- ================================================================
+     第五列 · Cite 侧边栏交互演示
+     ================================================================ -->
+<div class="col interactive">
+  <div class="col-tag">Cite 交互</div>
+  <div class="col-title">点击角标，拉开引用侧栏</div>
+  <div class="col-sub">正文角标 + 置信度环 + 点击展开侧边栏</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+
+        <div class="lead">
+          GoPro Hero 13 的最大优势在于配件生态——防水壳、稳定架、水下灯一整套，是目前运动相机里最成熟的<cite style="--conf:89" onclick="openSidebar(this)" data-sb="sb-eco">"</cite>。画质方面，5.3K60 白天水下表现扎实，后期剪辑余量大，加上 HyperSmooth 6 在陆上水下切换时防抖过渡很稳，日常潜水记录基本不需要额外后期。
+        </div>
+        <div class="lead">
+          不过 1/1.9" 的传感器面积偏小，深潜到 15 米以下光线不足时噪点会比较明显<cite style="--conf:71" onclick="openSidebar(this)" data-sb="sb-sensor">"</cite>。另外默认色调偏冷，水下容易发蓝，想出好看的色彩需要后期调色<cite style="--conf:58" onclick="openSidebar(this)" data-sb="sb-color">"</cite>。电池续航也是老问题，连续录制大概 90 分钟就需要换电池。
+        </div>
+
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+
+    <!-- 侧边栏遮罩 -->
+    <div class="cite-overlay" onclick="closeSidebar(this)"></div>
+
+    <!-- 半屏：配件生态 -->
+    <div class="cite-sidebar" id="sb-eco">
+      <div class="sb-handle"></div>
+      <div class="sb-top">
+        <div class="sb-title">生态最全 · 配件系统成熟</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>147 篇笔记 · 312 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:89" onclick="switchStance(this,'pro')">支持 89%</div>
+          <div class="sb-seg mid" style="flex:8" onclick="switchStance(this,'mid')">8%</div>
+          <div class="sb-seg neg" style="flex:3" onclick="switchStance(this,'neg')">3%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">康</div>
+            <div class="body">
+              <div class="u">@水下摄影师-老康 · 笔记 · 1.2k 赞<span class="tg p">支持</span></div>
+              <div class="t">GoPro 从 5 代开始的配件基本都能用，我柜子里堆的稳定架、水下灯、快装板全兼容 13</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">M</div>
+            <div class="body">
+              <div class="u">@潜水日记Mo · 评论 · 342 赞<span class="tg p">支持</span></div>
+              <div class="t">配件生态没得说，某鱼上二手配件一大堆，比 DJI 好淘</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">装</div>
+            <div class="body">
+              <div class="u">@装备控老赵 · 笔记 · 876 赞<span class="tg p">支持</span></div>
+              <div class="t">第三方配件随便挑，冷靴灯臂、滤镜、浮力棒都有十几个品牌在做</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">鱼</div>
+            <div class="body">
+              <div class="u">@海岛摄影鱼哥 · 笔记 · 2.3k 赞<span class="tg p">支持</span></div>
+              <div class="t">去年在仙本那用了全套 GoPro 配件，稳定架 + 红色滤镜 + 浮力棒，总共才花了 300 块</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">潜</div>
+            <div class="body">
+              <div class="u">@潜水装备群 · 评论 · 156 赞<span class="tg m">中立</span></div>
+              <div class="t">配件多是多，但很多质量参差不齐，买之前还是要做功课</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">新</div>
+            <div class="body">
+              <div class="u">@新手潜水员 · 评论 · 98 赞<span class="tg n">反对</span></div>
+              <div class="t">配件多归多，新手根本分不清买哪个好，选择太多反而是负担</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 半屏：传感器 -->
+    <div class="cite-sidebar" id="sb-sensor">
+      <div class="sb-handle"></div>
+      <div class="sb-top">
+        <div class="sb-title">深潜噪点明显</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>64 篇笔记 · 178 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:71" onclick="switchStance(this,'pro')">支持 71%</div>
+          <div class="sb-seg mid" style="flex:15" onclick="switchStance(this,'mid')">15%</div>
+          <div class="sb-seg neg" style="flex:14" onclick="switchStance(this,'neg')">14%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av">夜</div>
+            <div class="body">
+              <div class="u">@夜潜爱好者 · 笔记 · 1.2k 赞<span class="tg p">支持</span></div>
+              <div class="t">18 米以下暗，噪点吃得挺明显，得配灯或者换 DJI</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">深</div>
+            <div class="body">
+              <div class="u">@深潜30米 · 评论 · 643 赞<span class="tg p">支持</span></div>
+              <div class="t">对比过好几台机器，暗光下 GoPro 的噪点控制确实是短板</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">洞</div>
+            <div class="body">
+              <div class="u">@洞穴潜水老刘 · 笔记 · 987 赞<span class="tg p">支持</span></div>
+              <div class="t">洞穴里完全没法用，光线稍微暗一点画面就全是噪点，后期降噪也救不回来</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">补</div>
+            <div class="body">
+              <div class="u">@补光灯研究所 · 评论 · 432 赞<span class="tg m">中立</span></div>
+              <div class="t">配了 2000 流明的补光灯后好很多，但加上灯的钱都能买 DJI 了</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">白</div>
+            <div class="body">
+              <div class="u">@白天潜水够用 · 评论 · 234 赞<span class="tg n">反对</span></div>
+              <div class="t">OW 深度配个红色滤镜完全够，大部分休闲潜水根本到不了 15 米</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">薄</div>
+            <div class="body">
+              <div class="u">@薄荷岛潜水记 · 笔记 · 321 赞<span class="tg n">反对</span></div>
+              <div class="t">白天 10 米以内画质完全够用，大部分人潜水也就这个深度，别被极端场景吓到</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 半屏：色调 -->
+    <div class="cite-sidebar" id="sb-color">
+      <div class="sb-handle"></div>
+      <div class="sb-top">
+        <div class="sb-title">默认色调偏冷 · 水下偏蓝</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-stats">基于 <b>42 篇笔记 · 134 条评论</b></div>
+        <div class="sb-versus">
+          <div class="sb-seg pro on" style="flex:58" onclick="switchStance(this,'pro')">支持 58%</div>
+          <div class="sb-seg mid" style="flex:24" onclick="switchStance(this,'mid')">24%</div>
+          <div class="sb-seg neg" style="flex:18" onclick="switchStance(this,'neg')">18%</div>
+        </div>
+        <div class="sb-notes">
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">调</div>
+            <div class="body">
+              <div class="u">@水下调色师阿杰 · 笔记 · 980 赞<span class="tg p">支持</span></div>
+              <div class="t">GoPro 直出水下确实偏蓝偏冷，需要后期拉色温，不像 DJI 那么暖</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">海</div>
+            <div class="body">
+              <div class="u">@海底世界vlog · 评论 · 234 赞<span class="tg p">支持</span></div>
+              <div class="t">浅水区还好，5 米以下开始偏蓝，10 米以下不调色基本没法看</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">后</div>
+            <div class="body">
+              <div class="u">@后期调色师小周 · 笔记 · 567 赞<span class="tg p">支持</span></div>
+              <div class="t">每次拍完都要花大量时间校正白平衡，DJI 直出的颜色就准很多，省太多后期了</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="pro">
+            <div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">专</div>
+            <div class="body">
+              <div class="u">@专业水摄团队 · 笔记 · 1.4k 赞<span class="tg p">支持</span></div>
+              <div class="t">GoPro 的冷色调是老毛病了，从 Hero 10 到 13 都没改，想拍暖色珊瑚就得手动调</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="mid">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">马</div>
+            <div class="body">
+              <div class="u">@马代浮潜日记 · 评论 · 189 赞<span class="tg m">中立</span></div>
+              <div class="t">浮潜拍珊瑚颜色还行啊，可能深潜才有这个问题，我在 3-5 米拍出来颜色挺好看的</div>
+            </div>
+          </div>
+          <div class="cp-note" data-stance="neg">
+            <div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">滤</div>
+            <div class="body">
+              <div class="u">@滤镜党小王 · 评论 · 456 赞<span class="tg n">反对</span></div>
+              <div class="t">装个红色潜水滤镜就解决了，十几块钱的事，根本不算缺点</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(btn,id){
+  btn.parentElement.querySelectorAll('.op-tab').forEach(function(t){t.classList.remove('on')});
+  btn.classList.add('on');
+  var container=btn.closest('.detail-body');
+  container.querySelectorAll('.op-panel').forEach(function(p){p.classList.remove('on')});
+  document.getElementById(id).classList.add('on');
+}
+function switchSide(el,side){
+  var panel=el.closest('.op-panel');
+  panel.querySelectorAll('.op-versus .side').forEach(function(s){s.classList.remove('on')});
+  el.classList.add('on');
+  panel.querySelectorAll('.op-cmts').forEach(function(c){c.classList.remove('on')});
+  panel.querySelector(side==='pro'?'.pro-cmts':'.con-cmts').classList.add('on');
+}
+function openSidebar(citeEl){
+  var phone=citeEl.closest('.phone');
+  var targetId=citeEl.getAttribute('data-sb');
+  phone.querySelectorAll('.cite-sidebar').forEach(function(s){s.classList.remove('open')});
+  phone.querySelector('.cite-overlay').classList.add('open');
+  document.getElementById(targetId).classList.add('open');
+}
+function closeSidebar(el){
+  var phone=el.closest('.phone');
+  phone.querySelector('.cite-overlay').classList.remove('open');
+  phone.querySelectorAll('.cite-sidebar').forEach(function(s){s.classList.remove('open')});
+}
+function switchStance(el,stance){
+  var bar=el.closest('.sb-versus');
+  bar.querySelectorAll('.sb-seg').forEach(function(s){s.classList.remove('on')});
+  el.classList.add('on');
+  var notes=el.closest('.sb-body').querySelectorAll('.cp-note[data-stance]');
+  notes.forEach(function(n){
+    n.style.display=n.getAttribute('data-stance')===stance?'':'none';
+  });
+}
+function toggleParams(btn){
+  var params=btn.previousElementSibling;
+  params.classList.toggle('expanded');
+  btn.classList.toggle('on');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>购物回答示例 · 多品类</title>
+<style>
+:root{
+  --green:#34B39D;--green-deep:#3B887C;--green-bg:rgba(86,209,191,0.10);--green-line:rgba(52,179,157,0.4);--green-hl:rgba(131,242,223,0.28);
+  --pink:#E88DA0;--pink-deep:#C4677A;--pink-bg:rgba(232,141,160,0.08);--pink-line:rgba(232,141,160,0.35);--pink-hl:rgba(232,141,160,0.18);
+  --blue:#5A9AFF;--blue-deep:#3A6FCC;--blue-bg:rgba(90,154,255,0.10);--blue-line:rgba(90,154,255,0.35);--blue-hl:rgba(90,154,255,0.18);
+  --t80:rgba(0,0,0,0.80);--t62:rgba(0,0,0,0.62);--t45:rgba(0,0,0,0.45);--t27:rgba(0,0,0,0.27);
+  --line:rgba(48,48,52,0.10);--line2:rgba(48,48,52,0.06);
+  --gold:#E8A33D;--red:#D9534F;--red-bg:rgba(255,90,90,0.06);
+  --purple:#5C4680;--purple-bg:rgba(122,95,160,0.10);--purple-line:rgba(122,95,160,0.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;background:#F2F2F7;color:var(--t80);padding:40px 16px 60px;display:flex;flex-direction:column;align-items:center;min-height:100vh;}
+.page-header{text-align:center;margin-bottom:20px;}
+.page-header h1{font-size:28px;font-weight:800;color:var(--t80);margin-bottom:6px;letter-spacing:-0.02em;}
+.page-header p{font-size:13px;color:var(--t45);}
+.selector-row{display:flex;gap:4px;margin-bottom:12px;background:#fff;border-radius:14px;padding:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.selector-row button{font-family:inherit;font-size:13px;font-weight:600;padding:10px 22px;border-radius:11px;border:none;cursor:pointer;background:transparent;color:var(--t45);transition:all .25s cubic-bezier(.4,0,.2,1);}
+.selector-row button:hover{background:rgba(0,0,0,0.03);}
+.selector-row button.active{color:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.12);}
+.selector-row button[data-cat="3c"].active{background:var(--green);}
+.selector-row button[data-cat="beauty"].active{background:var(--pink);}
+.selector-row button[data-cat="outdoor"].active{background:var(--blue);}
+.selector-row button[data-intent="rec"].active{background:var(--green);}
+.selector-row button[data-intent="single"].active{background:var(--blue);}
+.selector-row button[data-intent="versus"].active{background:var(--gold);}
+.selector-row button[data-intent="guide"].active{background:var(--purple);}
+.case-panel{display:none;width:393px;flex-direction:column;align-items:center;gap:16px;}
+.case-panel.active{display:flex;}
+.col-head{align-self:stretch;background:#fff;border-radius:16px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.05);border:0.5px solid rgba(0,0,0,0.06);}
+.col-tag{font-size:11px;font-weight:600;border-radius:100px;padding:3px 10px;display:inline-block;}
+.cat-3c .col-tag{color:var(--green-deep);background:rgba(86,209,191,0.16);}
+.cat-beauty .col-tag{color:var(--pink-deep);background:rgba(232,141,160,0.16);}
+.cat-outdoor .col-tag{color:var(--blue-deep);background:rgba(90,154,255,0.14);}
+.col-query{font-size:15px;font-weight:600;color:var(--t80);line-height:1.45;margin-top:6px;}
+.phone{align-self:stretch;position:relative;width:393px;background:#F7F7F6;border-radius:48px;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,0.14);display:flex;flex-direction:column;max-height:844px;}
+.phone .nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:52px 16px 8px;flex-shrink:0;}
+.phone .nav .av{width:18px;height:18px;border-radius:50%;border:0.5px solid #fff;}
+.cat-3c .nav .av{background:linear-gradient(135deg,#7EE8D4,#34B39D);}
+.cat-beauty .nav .av{background:linear-gradient(135deg,#F7B4C4,#E88DA0);}
+.cat-outdoor .nav .av{background:linear-gradient(135deg,#B5C7F7,#5A9AFF);}
+.phone .nav .nm{font-size:16px;font-weight:500;color:var(--t80);}
+.chat-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.chat-body::-webkit-scrollbar{width:0;}
+.userq{padding:8px 20px 18px;text-align:right;}
+.userq span{display:inline-block;background:#E8E9E8;border:0.5px solid #FAFAFA;color:#242424;padding:12px 16px;border-radius:22px;font-size:16px;line-height:24px;letter-spacing:0.04em;max-width:280px;text-align:left;}
+.answer{margin:0 18px 18px;background:#fff;border:0.5px solid rgba(0,0,0,0.08);border-radius:34px;padding:20px 6px 16px;box-shadow:0 4px 16px rgba(0,0,0,0.05);}
+.ref{display:flex;align-items:center;gap:6px;padding:2px 14px 4px;color:var(--t45);font-size:13px;}
+.ref .avs{display:flex;}
+.ref .avs i{width:18px;height:18px;border-radius:50%;border:1.5px solid #fff;display:inline-block;margin-left:-6px;}
+.ref .avs i:first-child{margin-left:0;background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+.ref .avs i:nth-child(2){background:linear-gradient(135deg,#B5C7F7,#5A9AFF);}
+.ref .avs i:nth-child(3){background:linear-gradient(135deg,#7EE8D4,#34B39D);}
+.sec-label{display:flex;align-items:center;gap:6px;font-size:16.5px;color:var(--t80);font-weight:700;margin:16px 18px 10px;}
+.lead{padding:6px 14px 12px;font-size:15px;line-height:1.66;color:#141414;letter-spacing:0.01em;}
+.lead + .lead{padding-top:0;margin-top:-6px;}
+.lead .hl,.blist .hl{border-radius:2px;padding:0 2px;font-weight:500;}
+.cat-3c .lead .hl,.cat-3c .blist .hl{background:var(--green-hl);}
+.cat-beauty .lead .hl,.cat-beauty .blist .hl{background:var(--pink-hl);}
+.cat-outdoor .lead .hl,.cat-outdoor .blist .hl{background:var(--blue-hl);}
+.lead b{font-weight:500;}
+.blist{margin:2px 14px 12px;padding:0;list-style:none;}
+.blist li{position:relative;padding-left:16px;font-size:15px;line-height:1.66;color:#141414;letter-spacing:0.01em;margin-bottom:9px;}
+.blist li:last-child{margin-bottom:0;}
+.blist li::before{content:"";position:absolute;left:3px;top:10px;width:5px;height:5px;border-radius:50%;background:var(--green);}
+.cat-beauty .blist li::before{background:var(--pink-deep);}
+.cat-outdoor .blist li::before{background:var(--blue-deep);}
+.blist b{font-weight:600;}
+.blist .blist{margin:4px 0 6px 4px;}
+.blist .blist li{font-size:13px;margin-bottom:4px;color:var(--t62);}
+.blist .blist li::before{width:4px;height:4px;top:10px;background:var(--t27);}
+.item-title{font-size:15px;font-weight:700;color:var(--t80);margin:6px 14px 8px;display:flex;align-items:baseline;gap:7px;}
+.item-title .tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px;flex-shrink:0;}
+.cat-3c .item-title .tag{color:var(--green-deep);background:rgba(86,209,191,0.16);}
+.cat-beauty .item-title .tag{color:var(--pink-deep);background:rgba(232,141,160,0.16);}
+.cat-outdoor .item-title .tag{color:var(--blue-deep);background:rgba(90,154,255,0.16);}
+.blead{margin:0 18px 10px;font-size:13px;line-height:1.6;color:var(--t62);}
+.rich{margin:0 14px 4px;border-radius:16px;padding:10px 14px 12px;}
+.cat-3c .rich{border:0.5px solid var(--green-line);background:linear-gradient(180deg,rgba(86,209,191,0.08),rgba(86,209,191,0.02));}
+.cat-beauty .rich{border:0.5px solid var(--pink-line);background:linear-gradient(180deg,rgba(232,141,160,0.08),rgba(232,141,160,0.01));}
+.cat-outdoor .rich{border:0.5px solid var(--blue-line);background:linear-gradient(180deg,rgba(90,154,255,0.08),rgba(90,154,255,0.01));}
+.rich-item{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:0.5px solid var(--line2);}
+.rich-item:last-child{border-bottom:0;}
+.rich-item .img{width:58px;height:58px;border-radius:8px;overflow:hidden;background:#EEE;flex-shrink:0;}
+.rich-item .img img{width:100%;height:100%;object-fit:cover;}
+.rich-item .mid{flex:1;min-width:0;}
+.rich-item .nm{font-size:14px;font-weight:600;color:var(--t80);margin-bottom:3px;line-height:1.35;}
+.rich-item .desc{font-size:11px;color:var(--t45);line-height:1.4;margin-bottom:5px;}
+.rich-item .pbottom{display:flex;align-items:baseline;gap:14px;}
+.rich-item .price{color:var(--t62);font-weight:500;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.rich-item .stars-line{font-size:13px;color:var(--t80);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;display:flex;align-items:baseline;}
+.rich-item .stars-line .s{color:var(--gold);font-size:13px;margin-right:3px;}
+.rich-item .stars-line .cnt{color:var(--t45);font-size:10px;font-weight:400;margin-left:6px;}
+.pcard{margin:12px 14px;background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02));border:0.5px solid var(--green-line);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:stretch;}
+.pcard .img{width:64px;height:64px;align-self:center;border-radius:8px;overflow:hidden;background:#EEE;flex-shrink:0;}
+.pcard .img img{width:100%;height:100%;object-fit:cover;}
+.pcard .body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;}
+.pcard .nm{font-size:14px;font-weight:600;color:var(--t80);line-height:1.35;}
+.pcard .features{font-size:11.5px;color:var(--t62);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pcard .pbottom{display:flex;align-items:baseline;gap:14px;margin-top:-3px;}
+.pcard .price{color:var(--t62);font-weight:500;font-size:12.5px;font-variant-numeric:tabular-nums;}
+.pcard .stars-line{font-size:14px;color:var(--t80);font-weight:700;font-variant-numeric:tabular-nums;display:flex;align-items:baseline;}
+.pcard .stars-line .s{color:var(--gold);font-size:16px;margin-right:3px;}
+.pcard .stars-line .unit{font-size:11px;font-weight:600;margin-left:1px;}
+.pcard .stars-line .cnt{color:var(--t45);font-size:10px;font-weight:400;margin-left:6px;}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:4px 14px 4px;}
+.shots figure{margin:0;min-width:0;}
+.shots img{width:100%;height:104px;border-radius:12px;object-fit:cover;background:#EEE;display:block;}
+.shots-cap{font-size:10px;color:var(--t45);margin-top:6px;text-align:center;}
+.voice{margin:12px 14px 4px;display:flex;flex-direction:column;gap:8px;}
+.voice .v{background:#FAFAFB;border-radius:12px;padding:11px 12px;}
+.voice .f{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.voice .avv{width:22px;height:22px;border-radius:50%;flex-shrink:0;}
+.voice .nm{font-size:12.5px;color:var(--t62);}
+.voice .lk{margin-left:auto;font-size:11px;color:var(--t45);}
+.voice .tx{font-size:13px;line-height:1.55;color:var(--t80);}
+.voice .tx .q{color:rgba(48,48,52,0.25);font-weight:700;}
+.pc{margin:0 14px 4px;display:flex;flex-direction:column;gap:10px;}
+.pc-block{border-radius:14px;padding:16px 16px 12px;}
+.pc-block.pro{background:rgba(52,179,157,0.08);}
+.pc-block.con{background:rgba(232,160,61,0.08);}
+.pc-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--line2);}
+.pc-hd .tag{font-size:14px;font-weight:700;}
+.pc-hd .tag::before{margin-right:4px;}
+.pc-block.pro .pc-hd .tag{color:var(--green-deep);}
+.pc-block.pro .pc-hd .tag::before{content:"✦";color:var(--green);}
+.pc-block.con .pc-hd .tag{color:#C67A1A;}
+.pc-block.con .pc-hd .tag::before{content:"⚠";color:#E8A33D;}
+.pc-hd .cnt{font-size:12px;font-weight:500;cursor:pointer;}
+.pc-block.pro .pc-hd .cnt{color:var(--green);}
+.pc-block.con .pc-hd .cnt{color:#C67A1A;}
+.pc-item{position:relative;padding-left:14px;font-size:13px;line-height:1.65;color:var(--t80);margin-bottom:10px;}
+.pc-item:last-child{margin-bottom:0;}
+.pc-item::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;border-radius:50%;}
+.pc-block.pro .pc-item::before{background:var(--green);}
+.pc-block.con .pc-item::before{background:#C67A1A;}
+.comp-table{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;overflow:hidden;}
+.comp-table table{width:100%;border-collapse:collapse;}
+.comp-table th,.comp-table td{padding:9px 12px;font-size:12px;border-bottom:0.5px solid var(--line2);text-align:left;}
+.comp-table th{background:#FAFAFB;font-weight:600;color:var(--t45);font-size:11px;}
+.comp-table td.dim{color:var(--t45);width:30%;font-size:11px;}
+.comp-table td.win{color:var(--green-deep);font-weight:700;}
+.comp-table td.win::before{content:"★ ";color:var(--gold);}
+.comp-table tr:last-child td{border-bottom:0;}
+.scene{margin:0 14px 4px;background:linear-gradient(180deg,rgba(232,163,61,0.10),rgba(232,163,61,0.02));border:0.5px solid rgba(232,163,61,0.4);border-radius:16px;padding:14px 15px;}
+.scene-row{font-size:13px;line-height:1.65;margin-bottom:8px;color:var(--t80);}
+.scene-row:last-child{margin-bottom:0;}
+.scene-row b{color:var(--t80);font-weight:600;}
+.tips{margin:2px 14px 4px;background:#FFF9EC;border:0.5px solid rgba(230,180,70,0.35);border-radius:14px;padding:13px 15px;}
+.tips-item{position:relative;padding-left:16px;font-size:14px;line-height:1.62;color:#3a3a3a;margin-bottom:8px;letter-spacing:0.01em;}
+.tips-item:last-child{margin-bottom:0;}
+.tips-item::before{content:"";position:absolute;left:4px;top:9px;width:5px;height:5px;border-radius:50%;background:#E0A83D;}
+.tips-item b{font-weight:600;color:#B8860B;}
+.ai-sum{margin:0 14px 4px;border-radius:12px;padding:12px 14px;}
+.cat-3c .ai-sum{background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02));border:0.5px solid var(--green-line);}
+.cat-beauty .ai-sum{background:linear-gradient(180deg,rgba(232,141,160,0.10),rgba(232,141,160,0.02));border:0.5px solid var(--pink-line);}
+.cat-outdoor .ai-sum{background:linear-gradient(180deg,rgba(90,154,255,0.10),rgba(90,154,255,0.02));border:0.5px solid var(--blue-line);}
+.ai-sum .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.ai-sum .lbl{display:inline-flex;align-items:center;gap:4px;font-size:10px;letter-spacing:0.08em;font-weight:700;}
+.cat-3c .ai-sum .lbl{color:var(--green-deep);}
+.cat-beauty .ai-sum .lbl{color:var(--pink-deep);}
+.cat-outdoor .ai-sum .lbl{color:var(--blue-deep);}
+.ai-sum .lbl::before{content:"✦";}
+.ai-sum .score{display:flex;align-items:baseline;gap:4px;font-variant-numeric:tabular-nums;}
+.ai-sum .score .n{font-size:22px;font-weight:800;color:var(--t80);line-height:1;}
+.ai-sum .score .mx{font-size:11px;color:var(--t45);}
+.ai-sum .score .st{color:var(--gold);font-size:11px;margin-left:4px;}
+.ai-sum .text{font-size:12.5px;color:var(--t80);line-height:1.7;}
+.ai-sum .text b{font-weight:600;}
+.ai-sum .from{font-size:10px;color:var(--t45);margin-top:8px;}
+.follow{margin:6px 14px 4px;display:flex;flex-direction:column;gap:6px;}
+.follow .fbtn{background:#fff;border:0.5px solid var(--line);border-radius:100px;padding:8px 14px;font-size:12.5px;color:var(--t80);text-align:left;cursor:pointer;font-family:inherit;}
+.cat-3c .follow .fbtn::before{content:"→ ";color:var(--green-deep);margin-right:4px;}
+.cat-beauty .follow .fbtn::before{content:"→ ";color:var(--pink-deep);margin-right:4px;}
+.cat-outdoor .follow .fbtn::before{content:"→ ";color:var(--blue-deep);margin-right:4px;}
+.foot-info{padding:14px 18px 20px;text-align:center;color:var(--t27);font-size:10px;}
+.input-bar{display:flex;align-items:center;gap:10px;padding:10px 16px 32px;background:#fff;border-top:0.5px solid var(--line);flex-shrink:0;}
+.input-bar .ib-voice{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;background:#fff;font-size:14px;cursor:pointer;flex-shrink:0;}
+.cat-3c .input-bar .ib-voice{color:var(--green);}
+.cat-beauty .input-bar .ib-voice{color:var(--pink);}
+.cat-outdoor .input-bar .ib-voice{color:var(--blue);}
+.input-bar .ib-ph{flex:1;font-size:14px;color:var(--t27);}
+.input-bar .ib-icon{font-size:20px;color:var(--t45);cursor:pointer;flex-shrink:0;line-height:1;}
+.buzz{margin:0 14px 4px;display:flex;flex-direction:column;gap:10px;}
+.buzz-prod{background:#FAFAFB;border-radius:12px;padding:11px 13px;}
+.buzz-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;}
+.buzz-nm{font-size:13px;font-weight:600;color:var(--t80);}
+.buzz-cnt{font-size:11px;color:var(--t45);}
+.buzz-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.buzz-tag{font-size:11.5px;padding:4px 10px;border-radius:100px;line-height:1.3;background:#fff;border:0.5px solid var(--line);color:var(--t62);}
+.buzz-tag.hot{font-weight:600;color:var(--t80);}
+.cat-3c .buzz-tag.hot{background:var(--green-bg);border-color:var(--green-line);}
+.cat-beauty .buzz-tag.hot{background:var(--pink-bg);border-color:var(--pink-line);}
+.cat-outdoor .buzz-tag.hot{background:var(--blue-bg);border-color:var(--blue-line);}
+.buzz-tag.warn{color:var(--red);background:var(--red-bg);border-color:rgba(217,83,79,0.25);}
+.placeholder-box{align-self:stretch;background:#fff;border-radius:16px;padding:40px 20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.05);border:1px dashed var(--line);}
+.placeholder-box .emoji{font-size:32px;margin-bottom:8px;}
+.placeholder-box .msg{font-size:13px;color:var(--t45);}
+.slink{color:var(--blue-deep);text-decoration:none;border-bottom:none;cursor:pointer;white-space:nowrap;font-weight:600;padding-bottom:0;}
+.slink::after{content:"";display:inline-block;width:14px;height:14px;margin-left:3px;vertical-align:-1px;background:var(--blue-deep);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z'/%3E%3Cline x1='3' y1='6' x2='21' y2='6'/%3E%3Cpath d='M16 10a4 4 0 01-8 0'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z'/%3E%3Cline x1='3' y1='6' x2='21' y2='6'/%3E%3Cpath d='M16 10a4 4 0 01-8 0'/%3E%3C/svg%3E") center/contain no-repeat;}
+/* 商品标题卡 */
+.ptitle{display:flex;align-items:center;gap:6px;margin:8px 14px;font-size:15px;font-weight:600;color:var(--blue-deep);cursor:pointer;}
+.ptitle .rating{display:inline-flex;align-items:center;gap:1px;background:rgba(52,179,157,0.12);border-radius:4px;padding:1px 6px;margin-left:2px;}
+.ptitle .star{color:var(--gold);font-size:15px;}
+.ptitle .score{font-size:14px;font-weight:700;color:var(--t80);font-variant-numeric:tabular-nums;}
+/* 内联 quote — 用户评论 */
+.iq{margin:4px 24px 12px;font-size:13px;color:var(--t62);line-height:1.6;border-left:3px solid #ccc;padding-left:10px;overflow:hidden;}
+.iq .av{width:18px;height:18px;border-radius:50%;float:left;margin:1px 5px 0 0;}
+.blist .iq{margin:6px 0 2px -2px;}
+/* cite — 内联引用标记 */
+.cite{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,0.15);font-size:10px;color:#fff;margin-left:3px;vertical-align:middle;font-family:Georgia,serif;line-height:1;}
+.ann{display:inline-block;font-size:9px;font-weight:700;letter-spacing:0.04em;border-radius:100px;padding:2px 7px;margin-left:4px;vertical-align:middle;opacity:0.85;}
+.ann.dm{background:rgba(90,154,255,0.14);color:var(--blue-deep);}
+.ann.dh{background:rgba(52,179,157,0.14);color:var(--green-deep);}
+.ann.zs{background:rgba(217,83,79,0.12);color:var(--red);}
+.ann.yp{background:rgba(122,95,160,0.14);color:var(--purple);}
+.sec-label .ann{vertical-align:baseline;}
+.phone .ann{display:none;}
+.case-panel{overflow:visible;position:relative;}
+.ann-layer{position:absolute;pointer-events:none;z-index:2;overflow:visible;}
+.side-ann{position:absolute;display:flex;gap:3px;align-items:center;white-space:nowrap;transition:opacity .15s;}
+.side-ann::before{content:'';width:14px;border-top:1px dotted rgba(0,0,0,0.13);flex-shrink:0;}
+.phone.has-sidebar{height:844px;}
+.cite-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.18);z-index:9;opacity:0;pointer-events:none;transition:opacity .3s;border-radius:48px;}
+.cite-overlay.open{opacity:1;pointer-events:auto;}
+.cite-sidebar{position:absolute;bottom:0;left:0;right:0;height:90%;background:#fff;box-shadow:0 -4px 20px rgba(0,0,0,0.08);transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:10;display:flex;flex-direction:column;border-radius:16px 16px 0 0;}
+.cite-sidebar.open{transform:translateY(0);}
+.sb-handle{width:36px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 0;flex-shrink:0;cursor:pointer;padding:6px 0;}
+.sb-top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--line);flex-shrink:0;}
+.sb-close{width:26px;height:26px;border-radius:50%;background:#F2F2F2;border:none;cursor:pointer;font-size:12px;color:var(--t62);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;}
+.sb-title{font-size:14px;font-weight:600;color:var(--t80);line-height:1.4;flex:1;}
+.sb-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.detail{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:16px;overflow:hidden;}
+.detail-gallery{position:relative;background:#EEE;aspect-ratio:4/3;overflow:hidden;}
+.detail-gallery img{width:100%;height:100%;object-fit:cover;}
+.detail-gallery .cnt{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.5);color:#fff;font-size:10px;padding:2px 8px;border-radius:100px;letter-spacing:0.04em;}
+.detail-gallery .dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:4px 8px;background:rgba(0,0,0,0.4);border-radius:100px;}
+.detail-gallery .dots .d{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.5);}
+.detail-gallery .dots .d.on{background:#fff;}
+.detail-body{padding:14px 16px;}
+.detail-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px;}
+.detail-title{font-size:15px;font-weight:600;color:var(--t80);flex:1;min-width:0;}
+.detail-price{color:var(--t45);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0;}
+.detail-price .lbl{color:var(--t45);font-weight:400;font-size:10px;margin-right:6px;letter-spacing:0.04em;}
+.detail-sec{font-size:13px;font-weight:700;color:var(--t80);margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line2);}
+.detail-intro{font-size:12.5px;color:var(--t62);line-height:1.7;margin-bottom:8px;}
+.detail-params{background:#FAFAFB;border-radius:10px;padding:10px 14px;}
+.detail-params .row{display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;font-variant-numeric:tabular-nums;}
+.detail-params .row + .row{border-top:1px dashed var(--line2);}
+.detail-params .row span:first-child{color:var(--t45);letter-spacing:0.02em;}
+.detail-params .row span:last-child{font-weight:500;color:var(--t80);}
+.ai-sum .pct{font-size:11px;color:var(--t45);font-variant-numeric:tabular-nums;}
+.ai-sum .pct b{font-size:18px;font-weight:800;color:var(--t80);margin-left:2px;}
+.ai-sum .body{display:flex;gap:14px;align-items:center;margin-bottom:10px;}
+.ai-sum .badge{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:72px;}
+.ai-sum .badge .rank{font-size:22px;font-weight:900;color:var(--gold);white-space:nowrap;}
+.ai-sum .badge .cnt{font-size:10px;color:var(--t45);white-space:nowrap;cursor:pointer;}
+.ai-sum .bars{flex:1;display:flex;flex-direction:column;gap:6px;}
+.ai-sum .bar-row{display:flex;align-items:center;gap:6px;}
+.ai-sum .bar-row .dim{font-size:11px;color:var(--t45);width:24px;flex-shrink:0;}
+.ai-sum .bar-row .track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
+.ai-sum .bar-row .fill{height:100%;border-radius:3px;}
+.ai-sum .bar-row .fill.pro{background:var(--green);}
+.ai-sum .bar-row .fill.mid{background:var(--t27);}
+.ai-sum .bar-row .fill.neg{background:var(--red);}
+.ai-sum .bar-row .val{font-size:10px;color:var(--t45);width:26px;text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0;}
+.ai-sum .tags{display:flex;flex-wrap:wrap;gap:6px;}
+.ai-sum .tag{font-size:11px;padding:3px 10px;border-radius:100px;font-weight:500;border:0.5px solid var(--line);background:transparent;color:var(--t62);}
+.shop-list{display:flex;flex-direction:column;}
+.shop-item{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:0.5px solid var(--line2);cursor:pointer;text-decoration:none;color:inherit;}
+.shop-item:last-child{border-bottom:0;}
+.shop-item .img{width:44px;height:44px;border-radius:8px;overflow:hidden;background:#EEE;flex-shrink:0;}
+.shop-item .img img{width:100%;height:100%;object-fit:cover;}
+.shop-item .mid{flex:1;min-width:0;}
+.shop-item .nm{font-size:13px;font-weight:600;color:var(--t80);line-height:1.35;margin-bottom:2px;}
+.shop-item .price{font-size:13px;font-weight:700;color:var(--red);font-variant-numeric:tabular-nums;}
+.shop-item .arrow{color:var(--t27);font-size:14px;flex-shrink:0;}
+.op-tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;margin-top:14px;}
+.op-tabs::-webkit-scrollbar{display:none;}
+.op-tab{flex-shrink:0;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--t62);white-space:nowrap;transition:all 0.15s;font-family:inherit;line-height:1.3;}
+.op-tab .pct{font-weight:700;margin-left:3px;font-variant-numeric:tabular-nums;}
+.op-tab.pos.on{background:var(--green-bg);border-color:var(--green-line);color:var(--green-deep);}
+.op-tab.neg.on{background:var(--red-bg);border-color:rgba(217,83,79,0.4);color:var(--red);}
+.op-panel{display:none;flex-direction:column;gap:8px;}
+.op-panel.on{display:flex;}
+.op-versus{display:flex;align-items:center;gap:0;height:22px;border-radius:6px;overflow:hidden;cursor:pointer;}
+.op-versus .side{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:600;height:100%;transition:opacity 0.15s;padding:0 8px;white-space:nowrap;}
+.op-versus .side:hover{opacity:0.85;}
+.op-versus .side.pro{background:var(--green);color:#fff;}
+.op-versus .side.con{background:var(--red);color:#fff;}
+.op-versus .side.on{opacity:1;font-weight:700;}
+.op-versus .side:not(.on){opacity:0.35;font-weight:500;}
+.op-cmts{display:none;flex-direction:column;gap:6px;}
+.op-cmts.on{display:flex;}
+.op-cmt{display:flex;gap:8px;padding:9px 11px;background:#FAFAFB;border-radius:8px;font-size:12px;}
+.op-cmt .av{width:20px;height:20px;border-radius:50%;color:#fff;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.op-cmt .body{flex:1;min-width:0;}
+.op-cmt .u{font-size:10px;color:var(--t45);margin-bottom:2px;}
+.op-cmt .t{color:var(--t80);line-height:1.5;font-size:11.5px;}
+.detail-actions{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:11;}
+.act-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .15s;box-shadow:0 2px 12px rgba(0,0,0,0.10);white-space:nowrap;}
+.act-btn.fav{background:#D7F0EB;color:var(--green-deep);border:1px solid #D7F0EB;}
+.act-btn.fav .star{font-size:14px;color:var(--green);}
+.act-btn.fav.on{background:#D7F0EB;color:var(--green-deep);border-color:#D7F0EB;}
+.act-btn.fav.on .star{color:var(--green);}
+.act-btn.ask{background:#D7F0EB;color:var(--green-deep);border:1px solid #D7F0EB;}
+.detail-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:70px;background:rgba(0,0,0,0.78);color:#fff;font-size:12px;font-weight:500;padding:7px 14px;border-radius:100px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);z-index:12;white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;}
+.detail-toast.show{opacity:1;}
+.detail-toast .tst-arrow{font-size:14px;opacity:0.7;}
+.quote-area{position:relative;flex-shrink:0;display:none;}
+.quote-area.show{display:block;}
+.quote-area::before{content:'';position:absolute;top:-24px;left:0;right:0;height:24px;background:linear-gradient(to bottom,transparent,#F7F7F6);pointer-events:none;}
+.quote-ref{display:flex;gap:8px;padding:8px 16px;background:#fff;align-items:center;border-bottom:0.5px solid var(--line2);}
+.quote-ref .qt{color:var(--green);font-size:16px;font-weight:700;flex-shrink:0;line-height:1;}
+.quote-ref .qimg{display:none;}
+.quote-ref .qnm{font-size:13px;font-weight:500;color:var(--t80);line-height:1.3;flex:1;min-width:0;}
+.quote-ref .qclose{font-size:12px;color:var(--t27);cursor:pointer;flex-shrink:0;}
+.ib-input{flex:1;font-size:14px;color:var(--t80);border:none;outline:none;background:transparent;font-family:inherit;}
+.plus-menu{position:absolute;bottom:62px;right:14px;background:#fff;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.16);padding:6px 0;z-index:10;min-width:150px;display:none;}
+.plus-menu.show{display:block;}
+.pm-item{display:flex;align-items:center;gap:10px;padding:11px 18px;font-size:14px;color:var(--t80);cursor:pointer;}
+.pm-item:first-child{border-radius:14px 14px 0 0;}
+.pm-item:last-child{border-radius:0 0 14px 14px;}
+.pm-item:hover{background:rgba(0,0,0,0.04);}
+.pm-item .pm-ico{font-size:18px;width:22px;text-align:center;}
+.pm-item.pm-hl{color:var(--green-deep);font-weight:600;}
+.fav-overlay{position:absolute;inset:0;bottom:54px;background:rgba(0,0,0,0.35);z-index:9;border-radius:48px 48px 0 0;display:none;}
+.fav-overlay.show{display:block;}
+.fav-sheet{position:absolute;bottom:54px;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,0.14);z-index:12;max-height:60%;display:none;flex-direction:column;overflow:hidden;}
+.fav-sheet.show{display:flex;}
+.fav-sheet .fs-head{padding:12px 18px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--line);flex-shrink:0;}
+.fav-sheet .fs-title{font-size:14px;font-weight:600;color:var(--t80);}
+.fav-sheet .fs-close{font-size:18px;color:var(--t45);cursor:pointer;line-height:1;}
+.fav-sheet .fs-list{padding:8px 12px 8px;overflow-y:auto;flex:1;}
+.fl-card{display:flex;gap:12px;padding:12px;background:#fff;border:0.5px solid var(--line);border-radius:14px;margin-bottom:10px;align-items:center;}
+.fav-sheet .fl-card{margin-bottom:6px;padding:8px 10px;cursor:pointer;border:none;}
+.fav-sheet .fl-card:hover{background:#F5FAF9;}
+.fl-card .img{width:40px;height:40px;border-radius:8px;overflow:hidden;background:#EEE;flex-shrink:0;}
+.fl-card .img img{width:100%;height:100%;object-fit:cover;}
+.fl-card .mid{flex:1;min-width:0;}
+.fl-card .nm{font-size:12.5px;font-weight:600;color:var(--t80);margin-bottom:3px;line-height:1.35;}
+.fl-card .info-row{display:flex;align-items:baseline;gap:8px;font-size:11px;}
+.fl-card .price{color:var(--t45);font-weight:700;font-variant-numeric:tabular-nums;}
+.fl-card .score{color:var(--t45);font-variant-numeric:tabular-nums;}
+.fl-card .score .s{color:var(--gold);}
+.fl-card .fl-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s;font-size:10px;color:transparent;}
+.fl-card .fl-check.on{background:var(--green);border-color:var(--green);color:#fff;}
+.fs-bar{display:none;padding:8px 14px;border-top:0.5px solid var(--line);align-items:center;gap:8px;flex-shrink:0;}
+.fs-bar.show{display:flex;}
+.fs-sel{flex:1;display:flex;gap:6px;overflow-x:auto;min-width:0;}
+.fs-sel-item{display:flex;align-items:center;gap:4px;background:#F0F5F3;border-radius:8px;padding:4px 8px;font-size:11px;color:var(--t80);white-space:nowrap;}
+.fs-sel-item img{width:20px;height:20px;border-radius:4px;object-fit:cover;}
+.fs-ask{background:var(--green);color:#fff;border:none;border-radius:16px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;white-space:nowrap;}
+.pk-card{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:14px;overflow:hidden;}
+.pk-scores{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:0.5px solid var(--line2);}
+.pk-side{flex:1;min-width:0;}
+.pk-side .nm{font-size:11px;color:var(--t62);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pk-side .score-row{display:flex;align-items:center;gap:6px;}
+.pk-side .num{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;}
+.pk-side.win .num{color:var(--green-deep);}
+.pk-side:not(.win) .num{color:var(--t45);}
+.pk-stars{position:relative;display:inline-block;line-height:1;}
+.pk-stars .s-empty{color:var(--line);letter-spacing:1px;font-size:13px;}
+.pk-stars .s-fill{position:absolute;top:0;left:0;overflow:hidden;color:var(--gold);white-space:nowrap;letter-spacing:1px;font-size:13px;}
+.pk-vs{font-size:10px;font-weight:800;color:var(--t27);flex-shrink:0;width:20px;text-align:center;}
+.pk-params{margin-bottom:10px;}
+.pk-params .pk-row{display:flex;align-items:baseline;font-size:11px;padding:5px 0;border-bottom:0.5px dashed var(--line2);}
+.pk-params .pk-row:last-child{border-bottom:none;}
+.pk-params .pk-val{flex:1;min-width:0;color:var(--t80);font-weight:500;font-variant-numeric:tabular-nums;}
+.pk-params .pk-val.win{color:var(--green-deep);font-weight:600;}
+.pk-params .pk-dim{width:52px;flex-shrink:0;text-align:center;color:var(--t45);font-size:10px;}
+.pk-params .pk-val:last-child{text-align:right;}
+.pk-params .pk-val .sub{display:block;font-size:10px;color:var(--t45);font-weight:400;margin-top:1px;}
+.pk-voices{display:flex;gap:6px;margin-top:2px;align-items:center;}
+.pk-vmid{font-size:10px;font-weight:700;color:var(--t45);flex-shrink:0;white-space:nowrap;}
+.pk-ventry{flex:1;display:flex;align-items:center;gap:4px;padding:7px 8px;background:#FAFAFB;border-radius:10px;min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+.pk-ventry:active{background:#F0F0F2;}
+.pk-avatars{display:flex;flex-shrink:0;}
+.pk-avatars i{width:14px;height:14px;border-radius:50%;border:1.5px solid #fff;display:block;margin-left:-5px;background-size:cover;background-position:center;}
+.pk-avatars i:first-child{margin-left:0;}
+.pk-avatars i:nth-child(1){background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+.pk-avatars i:nth-child(2){background:linear-gradient(135deg,#B4D8FB,#5A9AFF);}
+.pk-avatars i:nth-child(3){background:linear-gradient(135deg,#D4FBE4,#34B39D);}
+.pk-vlabel{flex:1;min-width:0;font-size:10px;font-weight:500;color:var(--t45);}
+.pk-vlabel b{color:var(--green-deep);font-weight:600;}
+.pk-varrow{flex-shrink:0;font-size:14px;color:var(--t27);}
+.pk-explain{padding:6px 14px 12px;font-size:15px;color:#141414;line-height:1.66;letter-spacing:0.01em;}
+.pk-explain b{color:#141414;font-weight:500;}
+</style>
+</head>
+<body>
+<div class="page-header"><h1>购物回答示例</h1><p>3 品类 × 4 意图 · 点击切换查看</p></div>
+<div class="selector-row" id="catSelector">
+  <button class="active" data-cat="3c" onclick="switchCat(this)">3C·运动相机</button>
+  <button data-cat="beauty" onclick="switchCat(this)">美妆·眼线笔</button>
+  <button data-cat="outdoor" onclick="switchCat(this)">户外·雪板</button>
+</div>
+<div class="selector-row" id="intentSelector">
+  <button class="active" data-intent="rec" onclick="switchIntent(this)">选品推荐</button>
+  <button data-intent="single" onclick="switchIntent(this)">单品评估</button>
+  <button data-intent="versus" onclick="switchIntent(this)">对比决策</button>
+  <button data-intent="guide" onclick="switchIntent(this)">攻略咨询</button>
+</div>
+
+<!-- 3C · 选品推荐 -->
+<div class="case-panel active cat-3c" data-cat="3c" data-intent="rec">
+<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">我想学潜水，想买个运动相机，推荐一下</div></div>
+<div class="phone has-sidebar"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>我想学潜水，想买个运动相机，推荐一下</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i></i><i></i><i></i></div><span>综合 <b style="color:var(--t62)">87 篇</b>潜水装备笔记</span></div>
+<div class="lead">你学潜水，选相机主要看三点：</div>
+<ul class="blist">
+<li><b>下水靠不靠谱</b>：防水深度决定你用不用套壳，套壳就多了漏水风险和额外花销。</li>
+<li><b>拍出来颜色正不正</b>：不用后期调就好看。</li>
+<li><b>好不好上手</b>：别买回来发现操作复杂不会用。</li>
+</ul>
+<div class="lead">防抖、续航这些主流机型都够用，不用专门比。下面按适合潜水初学者的程度，给你介绍 3 款。<span class="ann dm">懂我</span><span class="ann dh">懂行</span></div>
+<div class="sec-label">⭐ 新手首选，一台全能 <span class="ann dh">懂行</span><span class="ann yp">有判断</span></div>
+<div class="ptitle" onclick="openSidebar(this)" data-sb="sb-action5pro">DJI Osmo Action 5 Pro <span class="rating"><span class="star">★</span><span class="score">4.8</span></span></div>
+<div class="lead"><b>新手闭眼入，最省心的一台。</b></div>
+<ul class="blist">
+<li><span class="hl">裸机防水 20 米，不用买壳直接下水</span><span class="cite">"</span>，绕开进水这个头号风险，深度也够绝大多数休闲潜水。
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"带 Action 去马尔代夫，裸机直接下水，20 米完全没问题，省了买防水壳的钱和漏水的担心"</div></li>
+<li><span class="hl">防抖、续航同价位最强</span><span class="cite">"</span>，装上电池开机就能拍，不用折腾。</li>
+<li>唯一短板是<span class="hl">水下直出偏蓝绿</span><span class="cite">"</span>，水质一般时得简单后期，App 一拉基本就回来了。
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div>"新手第一台就买它，开机即拍不用折腾，防抖很稳。水下发蓝用 App 拉一下就回来了，我发圈基本不用细修"</div></li>
+</ul>
+<div class="lead">放几张 Action 5 Pro 的水下实拍给你参考，直出大概是这个观感（都没后期）：<span class="ann zs">真实</span></div>
+<div class="shots">
+<figure><img src="images/dive_shot_1.jpg"></figure>
+<figure><img src="images/dive_shot_2.jpg"></figure>
+<figure><img src="images/dive_shot_3.jpg"></figure>
+</div>
+<div class="sec-label">🎬 还想拍别的？看这两台 <span class="ann dh">懂行</span></div>
+<div class="lead">除了潜水还有别的侧重，这两台各有更擅长的场景，也各有一条短板：</div>
+<div class="ptitle">Insta360 Ace Pro 2 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
+<div class="lead">亮点是<b>徕卡调色直出好看、不用后期</b>，翻转屏方便水面自拍，除了潜水还能当旅行 vlog 机；短板是<b>裸机只 12 米，往深潜必须加壳</b>。</div>
+<div class="ptitle">GoPro Hero 13 Black <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="lead">亮点是<b>全球潜店配件好买好换、坏了好修</b>，出国最省心；短板是<b>裸机只 10 米，深潜必配壳，色彩偏冷要后期</b>。</div>
+<div class="sec-label">🎯 其他可以了解的 <span class="ann dh">懂行</span></div>
+<div class="lead">下面这几款有各自的特点和适配的特定需求，感兴趣的可以了解：</div>
+<ul class="blist">
+<li><b>更强低光画质</b>：<a class="slink">DJI Action 6</a>，1/1.1" 大底、8K，愿意加预算就上。裸机 20m，¥2,998。</li>
+<li><b>360° 全景</b>：<a class="slink">Insta360 X4/X5</a>，8K 360° 自由构图。裸机浅，水肺要配壳。</li>
+<li><b>微距小生物</b>：<a class="slink">OM System TG-7</a>，1cm 微距、三防，拍海兔神器。裸机 15m，暗光弱。</li>
+<li><b>预算够用就行</b>：<a class="slink">上代 Action 4</a>，裸机 18m，现价约 ¥1,300，性价比高。</li>
+</ul>
+<div class="sec-label">📌 一句话总结 <span class="ann dm">懂我</span><span class="ann yp">有判断</span></div>
+<div class="scene">
+<div class="scene-row">纯潜水、图省心 → <b>Action 5 Pro</b>，闭眼入。</div>
+<div class="scene-row">还想拍 vlog 或常出国潜 → <b>Ace Pro 2 / GoPro Hero 13</b>。</div>
+<div class="scene-row">有微距、360°、超低预算等特殊玩法 → 看上面对应款。</div>
+</div>
+<div class="lead"><b>你主要浮潜还是水肺？</b><span class="ann dm">懂我</span></div>
+<div class="follow"><button class="fbtn">预算 3000 能配齐一套吗？</button><button class="fbtn">浮潜和水肺对相机要求有什么区别？</button><button class="fbtn">360 全景相机适合潜水吗？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人潜水装备笔记</div>
+</div></div>
+<div class="quote-area" id="qa-action5pro">
+<div class="quote-ref">
+<span class="qt">"</span>
+<div class="qimg"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+<div class="qnm">DJI Osmo Action 5 Pro</div>
+<span class="qt">"</span>
+<div class="qclose" onclick="closeQuote(this)">✕</div>
+</div>
+</div>
+<div class="fav-overlay" id="fov-action5pro" onclick="closeFavSheet(this)"></div>
+<div class="fav-sheet" id="fs-action5pro">
+<div class="fs-head">
+<span class="fs-title">我的收藏</span>
+<span class="fs-close" onclick="closeFavSheet(this)">✕</span>
+</div>
+<div class="fs-list">
+<div class="fl-card" onclick="toggleFavCheck(this)">
+<div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+<div class="mid">
+<div class="nm">DJI Osmo Action 5 Pro</div>
+<div class="info-row">
+<span class="price">¥2,199-2,599</span>
+<span class="score"><span class="s">★</span>4.8 (892)</span>
+</div>
+</div>
+<span class="fl-check">✓</span>
+</div>
+<div class="fl-card" onclick="toggleFavCheck(this)">
+<div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
+<div class="mid">
+<div class="nm">GoPro Hero 13 Black</div>
+<div class="info-row">
+<span class="price">¥2,498-3,198</span>
+<span class="score"><span class="s">★</span>4.6 (2.3k)</span>
+</div>
+</div>
+<span class="fl-check">✓</span>
+</div>
+<div class="fl-card" onclick="toggleFavCheck(this)">
+<div class="img"><img src="images/Insta360_Ace_Pro.jpg" alt=""></div>
+<div class="mid">
+<div class="nm">Insta360 Ace Pro 2</div>
+<div class="info-row">
+<span class="price">¥2,299-2,799</span>
+<span class="score"><span class="s">★</span>4.7 (940)</span>
+</div>
+</div>
+<span class="fl-check">✓</span>
+</div>
+</div>
+<div class="fs-bar" id="fsbar-action5pro">
+<div class="fs-sel"></div>
+<span class="fs-ask" onclick="askFavSelected(this)">追问</span>
+</div>
+</div>
+<div class="input-bar" id="ib-action5pro" style="position:relative;z-index:11;"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon" onclick="togglePlus(this)">＋</span></div>
+<div class="plus-menu" id="pm-action5pro">
+<div class="pm-item"><span class="pm-ico">📷</span>拍照</div>
+<div class="pm-item"><span class="pm-ico">🖼</span>相册</div>
+<div class="pm-item pm-hl" onclick="openFavSheet(this)"><span class="pm-ico">⭐</span>收藏</div>
+<div class="pm-item"><span class="pm-ico">📍</span>位置</div>
+</div>
+<div class="cite-overlay" onclick="closeSidebar(this)"></div>
+<div class="cite-sidebar" id="sb-action5pro">
+<div class="sb-handle" onclick="closeSidebar(this)"></div>
+<div class="sb-top"><div class="sb-title">DJI Osmo Action 5 Pro</div><button class="sb-close" onclick="closeSidebar(this)">✕</button></div>
+<div class="sb-body" style="padding:0;">
+<div class="detail" style="margin:0;border:none;border-radius:0;">
+<div class="detail-gallery">
+<img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+<div class="cnt">1 / 5</div>
+<div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div>
+</div>
+<div class="detail-body">
+<div class="detail-top">
+<div class="detail-title">DJI Osmo Action 5 Pro</div>
+<div class="detail-price"><span class="lbl">参考价</span>¥2,199-2,599</div>
+</div>
+<div class="ai-sum">
+<div class="head"><span class="pct">推荐值<b>90.2%</b></span><span class="lbl">AI 总结</span></div>
+<div class="body">
+<div class="badge"><div class="rank">仙品</div><div class="cnt">892 人点评 ›</div></div>
+<div class="bars">
+<div class="bar-row"><span class="dim">推荐</span><div class="track"><div class="fill pro" style="width:89%"></div></div><span class="val">89%</span></div>
+<div class="bar-row"><span class="dim">一般</span><div class="track"><div class="fill mid" style="width:8%"></div></div><span class="val">8%</span></div>
+<div class="bar-row"><span class="dim">不行</span><div class="track"><div class="fill neg" style="width:3%"></div></div><span class="val">3%</span></div>
+</div>
+</div>
+<div class="tags">
+<span class="tag pos">低光画质强(126)</span>
+<span class="tag pos">超长续航(89)</span>
+<span class="tag neg">第三方配件少(34)</span>
+<span class="tag neg">长时间发热(21)</span>
+</div>
+</div>
+<div class="detail-sec">基本介绍</div>
+<div class="detail-intro">大疆 2024 下半年发布的旗舰运动相机，主打 1/1.3" 大底传感器和低光表现，裸机 20 米防水 + 240 分钟续航是同价位段的天花板。</div>
+<div class="detail-params">
+<div class="row"><span>传感器</span><span>1/1.3" CMOS</span></div>
+<div class="row"><span>最高视频</span><span>4K120</span></div>
+<div class="row"><span>原生防水</span><span>20 米</span></div>
+<div class="row"><span>电池</span><span>1950 mAh · 约 240 min</span></div>
+</div>
+<div class="detail-sec">用户评价</div>
+<div class="op-tabs">
+<button class="op-tab pos on" onclick="switchTab(this,'dj1')">低光画质强<span class="pct">88%</span></button>
+<button class="op-tab pos" onclick="switchTab(this,'dj2')">超长续航<span class="pct">92%</span></button>
+<button class="op-tab neg" onclick="switchTab(this,'dj3')">第三方配件少<span class="pct">65%</span></button>
+<button class="op-tab neg" onclick="switchTab(this,'dj4')">长时间发热<span class="pct">57%</span></button>
+</div>
+<div class="op-panel on" id="dj1">
+<div class="op-versus">
+<div class="side pro on" style="flex:88" onclick="switchSide(this,'pro')">支持 88%</div>
+<div class="side con" style="flex:12" onclick="switchSide(this,'con')">12%</div>
+</div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">夜</div>
+<div class="body">
+<div class="u">@夜骑党 · 笔记 · 1.4k 赞</div>
+<div class="t">晚上骑车拍视频完全够用，1/1.3 大底不是盖的，路灯下画面很干净，噪点控制比 GoPro 强太多了</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">潜</div>
+<div class="body">
+<div class="u">@潜水日志 · 评论 · 876 赞</div>
+<div class="t">水下 10 米光线弱的环境拍出来的画面清晰度真的惊到我了，颜色也很准</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">星</div>
+<div class="body">
+<div class="u">@星空延时 · 笔记 · 723 赞</div>
+<div class="t">拿来拍星空延时，ISO 拉到 6400 画面还能用，运动相机里真的独一档</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#D4A5F7,#8B5CF6)">室</div>
+<div class="body">
+<div class="u">@室内运动 · 评论 · 543 赞</div>
+<div class="t">在室内篮球馆拍也很清楚，之前用 GoPro 12 拍出来全是噪点糊成一片</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#F7A5B5,#E8547A)">日</div>
+<div class="body">
+<div class="u">@日落追光 · 笔记 · 412 赞</div>
+<div class="t">黄昏拍冲浪那个宽容度太舒服了，暗部细节拉回来一点不费劲</div>
+</div>
+</div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">对</div>
+<div class="body">
+<div class="u">@对比评测 · 评论 · 134 赞</div>
+<div class="t">比 GoPro 好一点但也别神话，极暗环境还是得上大相机</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">像</div>
+<div class="body">
+<div class="u">@像素控 · 评论 · 98 赞</div>
+<div class="t">大底带来低光好但也带来了果冻效应，高速运动场景偶尔会有晃动变形</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#D4A5F7,#8B5CF6)">白</div>
+<div class="body">
+<div class="u">@白天够用 · 评论 · 76 赞</div>
+<div class="t">白天画质差距其实很小，低光场景我也很少用到，这个卖点对我没意义</div>
+</div>
+</div>
+</div>
+</div>
+<div class="op-panel" id="dj2">
+<div class="op-versus">
+<div class="side pro on" style="flex:92" onclick="switchSide(this,'pro')">支持 92%</div>
+<div class="side con" style="flex:8" onclick="switchSide(this,'con')">8%</div>
+</div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">骑</div>
+<div class="body">
+<div class="u">@骑行 200km · 笔记 · 987 赞</div>
+<div class="t">4K30 实测拍了将近 4 小时还有电，长途骑行一块电池撑一天完全没问题</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">滑</div>
+<div class="body">
+<div class="u">@滑雪 vlog · 评论 · 654 赞</div>
+<div class="t">零下 15 度雪场也能撑 2 小时+，低温续航比上一代强很多</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">摩</div>
+<div class="body">
+<div class="u">@摩旅记录 · 笔记 · 543 赞</div>
+<div class="t">川藏线全程挂车头拍，一块电池从早拍到午饭，1950mAh 真的够大</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#D4A5F7,#8B5CF6)">钓</div>
+<div class="body">
+<div class="u">@钓鱼佬 · 评论 · 378 赞</div>
+<div class="t">挂竿上拍一下午完全没问题，比之前用的 Action 4 多撑一个多小时</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#F7A5B5,#E8547A)">徒</div>
+<div class="body">
+<div class="u">@徒步三天 · 笔记 · 267 赞</div>
+<div class="t">带了三块电池走了三天重装徒步，全程录延时加 vlog 电量绰绰有余</div>
+</div>
+</div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">充</div>
+<div class="body">
+<div class="u">@充电焦虑 · 评论 · 87 赞</div>
+<div class="t">续航长但充电也慢，满充要一个半小时，多买块电池换着用</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">高</div>
+<div class="body">
+<div class="u">@高帧率党 · 评论 · 65 赞</div>
+<div class="t">4K120 录的话一个小时就没电了，高帧率下续航缩水很厉害</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">冬</div>
+<div class="body">
+<div class="u">@冬天拍摄 · 评论 · 54 赞</div>
+<div class="t">零下 20 度以下还是不行，电量掉得特别快，得贴暖宝宝</div>
+</div>
+</div>
+</div>
+</div>
+<div class="op-panel" id="dj3">
+<div class="op-versus">
+<div class="side pro on" style="flex:65" onclick="switchSide(this,'pro')">认同 65%</div>
+<div class="side con" style="flex:35" onclick="switchSide(this,'con')">35%</div>
+</div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">配</div>
+<div class="body">
+<div class="u">@配件党 · 笔记 · 342 赞</div>
+<div class="t">想买个兔笼都没几家做，只能用大疆自家的，贵还选择少</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">潜</div>
+<div class="body">
+<div class="u">@潜水装备 · 评论 · 234 赞</div>
+<div class="t">潜水壳选择太少了，GoPro 随便一搜一大堆，DJI 的就两三款还贵</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">车</div>
+<div class="body">
+<div class="u">@车载玩家 · 笔记 · 189 赞</div>
+<div class="t">想买个吸盘支架都得等第三方慢慢出，GoPro 的生态真的没法比</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#D4A5F7,#8B5CF6)">头</div>
+<div class="body">
+<div class="u">@头盔固定 · 评论 · 156 赞</div>
+<div class="t">磁吸底座虽然方便但第三方做的太少，只有官方的选择</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#F7A5B5,#E8547A)">自</div>
+<div class="body">
+<div class="u">@自行车架 · 评论 · 112 赞</div>
+<div class="t">自行车固定夹只有大疆官方一款，淘宝找了好久才找到个山寨的</div>
+</div>
+</div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">转</div>
+<div class="body">
+<div class="u">@转接达人 · 评论 · 256 赞</div>
+<div class="t">买个 GoPro 转接件就行了，GoPro 的配件基本都能用，几十块钱搞定</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">官</div>
+<div class="body">
+<div class="u">@官方够用 · 评论 · 178 赞</div>
+<div class="t">大疆官方出的几个配件质量都很好，够用了不需要那么多花里胡哨的</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">3D</div>
+<div class="body">
+<div class="u">@3D 打印 · 评论 · 134 赞</div>
+<div class="t">自己建模打印就行了，网上开源模型越来越多，完全不是问题</div>
+</div>
+</div>
+</div>
+</div>
+<div class="op-panel" id="dj4">
+<div class="op-versus">
+<div class="side pro on" style="flex:57" onclick="switchSide(this,'pro')">认同 57%</div>
+<div class="side con" style="flex:43" onclick="switchSide(this,'con')">43%</div>
+</div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">热</div>
+<div class="body">
+<div class="u">@热到烫手 · 笔记 · 189 赞</div>
+<div class="t">夏天 4K60 录半小时就烫得不行，自动降帧了好几次</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">沙</div>
+<div class="body">
+<div class="u">@沙漠越野 · 笔记 · 167 赞</div>
+<div class="t">新疆 40 度沙漠拍了 20 分钟就过热保护了，直接关机，耽误事</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">跑</div>
+<div class="body">
+<div class="u">@跑步记录 · 评论 · 134 赞</div>
+<div class="t">夏天戴头上跑步录 4K 半小时机身特别烫，有点担心安全</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#D4A5F7,#8B5CF6)">车</div>
+<div class="body">
+<div class="u">@车内记录 · 评论 · 98 赞</div>
+<div class="t">放车里当行车记录仪，夏天太阳直晒 10 分钟就过热了，不实用</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#F7A5B5,#E8547A)">延</div>
+<div class="body">
+<div class="u">@延时摄影 · 笔记 · 76 赞</div>
+<div class="t">拍延时需要长时间运行，夏天户外必发热降帧，只能等冬天拍</div>
+</div>
+</div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)">正</div>
+<div class="body">
+<div class="u">@正常使用 · 评论 · 145 赞</div>
+<div class="t">4K30 正常拍完全不热，只有 4K120 长时间才会，日常够用</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">水</div>
+<div class="body">
+<div class="u">@水下不热 · 评论 · 112 赞</div>
+<div class="t">潜水的时候水本身就散热，完全不存在过热问题，水下随便录</div>
+</div>
+</div>
+<div class="op-cmt">
+<div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)">固</div>
+<div class="body">
+<div class="u">@固件更新 · 评论 · 87 赞</div>
+<div class="t">最新固件优化过了好很多，之前确实烫，现在 4K60 撑 40 分钟没问题</div>
+</div>
+</div>
+</div>
+</div>
+<div class="detail-sec">购买渠道</div>
+<div class="shop-list">
+<a class="shop-item" href="#" onclick="return false">
+<div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+<div class="mid"><div class="nm">DJI 大疆官方旗舰店</div><div class="price">¥2,399</div></div>
+<div class="arrow">›</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="detail-actions">
+<button class="act-btn fav" onclick="toggleFav(this)"><span class="star">☆</span>收藏</button>
+<button class="act-btn ask" onclick="askAbout(this,'qa-action5pro','ib-action5pro')">追问</button>
+</div>
+<div class="detail-toast" id="toast-action5pro">⭐ 已加入决赛圈<span class="tst-arrow">›</span></div>
+</div>
+</div></div>
+
+<!-- 3C · 单品评估 -->
+<div class="case-panel cat-3c" data-cat="3c" data-intent="single">
+<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">DJI Action 5 Pro 潜水用值得入手吗</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>DJI Action 5 Pro 潜水用值得入手吗？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i></i><i></i><i></i></div><span>综合 <b style="color:var(--t62)">124 篇</b>真人水下实拍帖</span></div>
+<div class="lead"><b>值得，尤其如果你买它就是为了潜水。</b><span class="ann dh">懂行</span><span class="ann yp" data-reason="第一句直接回答值不值，不绕弯子">有判断</span></div>
+<div class="pcard"><div class="img"><img src="images/dji-action5-pro.png"></div><div class="body"><div class="nm">DJI Osmo Action 5 Pro</div><div class="features">裸机防水 20m · 防抖强 · 续航 160min</div><div class="pbottom"><div class="price">¥1,999–2,299</div><div class="stars-line"><span class="s">★</span>4.8<span class="cnt">124 人评价</span></div></div></div></div>
+<div class="lead">如果你的需求是浮潜、休闲水肺（20 米内）、旅行记录，Action 5 Pro 依然是目前最省心的运动相机之一。</div>
+<div class="lead">它真正值得买，不是因为参数全面领先，而是<span class="hl">把潜水最容易遇到的几个问题都解决了</span>。<span class="ann dm" data-reason="从用户「潜水用」的场景出发讲价值，不堆参数">懂我</span></div>
+<div class="sec-label">不用先买潜水壳 <span class="ann dh" data-reason="把「裸机防水 20m」翻译成实际使用体验">懂行</span></div>
+<ul class="blist">
+<li>裸机防水 20 米，大多数浮潜和休闲水肺都够用</li>
+<li>少一件装备，也少一个最容易出问题的环节，出门带着就能下水</li>
+</ul>
+<div class="sec-label">水下边游边拍，画面依然稳 <span class="ann dh" data-reason="结合潜水时的实际晃动场景解释防抖">懂行</span></div>
+<ul class="blist">
+<li>防抖一直是 DJI Action 系列的优势之一</li>
+<li>不用刻意放慢动作，正常游动、跟拍同伴、记录海底环境，画面都比较稳定</li>
+</ul>
+<div class="sec-label">一块电池基本够拍</div>
+<ul class="blist">
+<li>相比上一代续航提升很明显</li>
+<li>大多数人不用每潜都换电池，旅行时也不用准备太多备用电池</li>
+</ul>
+<div class="sec-label">光线一般也比较能拍</div>
+<ul class="blist">
+<li>下潜以后光线越来越弱很正常</li>
+<li>Action 5 Pro 低光表现不错，阴天、水下十几米或者沉船、礁石附近，也更容易保住画面细节</li>
+</ul>
+<div class="sec-label">真正需要注意的只有两件事 <span class="ann zs" data-reason="主动讲短板，不只说好话">真实</span></div>
+<div class="lead"><b>① 水下直出会偏蓝偏绿</b></div>
+<ul class="blist">
+<li>几乎所有运动相机都有这个问题，Action 5 Pro 也一样</li>
+<li>好在比较容易调整，用 DJI Mimo 或 Lightroom 简单拉一下白平衡，大多数场景都能恢复得不错</li>
+</ul>
+<div class="lead"><b>② 超过 20 米还是建议配潜水壳</b></div>
+<ul class="blist">
+<li>官方标称裸机防水 20 米</li>
+<li>如果经常深潜或者希望留更多安全余量，官方潜水壳依然更稳妥</li>
+</ul>
+<div class="sec-label">放几张水下实拍给你参考 <span class="ann zs" data-reason="放真人实拍样张，不用官方美化图">真实</span></div>
+<div class="shots">
+<figure><img src="images/dive_shot_1.jpg"></figure>
+<figure><img src="images/dive_shot_2.jpg"></figure>
+<figure><img src="images/dive_shot_3.jpg"></figure>
+</div>
+<div class="lead">Action 5 Pro 水下实拍样张，直出效果，没有做复杂调色。</div>
+<div class="sec-label">📊 124 篇真人使用帖，大家怎么评价 <span class="ann zs" data-reason="从 124 篇帖子中提炼真实满意点和吐槽">真实</span></div>
+<div class="lead">除了潜水表现，大家反复提到的更多是这些日常体验：</div>
+<div class="pc">
+<div class="pc-block pro"><div class="pc-hd"><span class="tag">好评</span><span class="cnt">98人表示赞同 ›</span></div>
+<div class="pc-item"><b>开机就能拍：</b>不用折腾设置，默认参数直接上手</div>
+<div class="pc-item"><b>防抖依旧很稳：</b>走着拍、骑车拍都不晃，水下也稳</div>
+<div class="pc-item"><b>续航不焦虑：</b>一天拍下来不用换电池，1950mAh 够用</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div>"续航是最惊喜的，一天拍下来不用换电池。拍完几分钟手机里就能剪，发圈很方便"</div>
+<div class="pc-item"><b>系统稳定：</b>基本没遇到卡顿死机，比上代靠谱</div>
+<div class="pc-item"><b>导素材方便：</b>DJI Mimo 拍完几分钟就能剪，发圈很快</div>
+</div>
+<div class="pc-block con"><div class="pc-hd"><span class="tag">差评</span><span class="cnt">26人吐槽过 ›</span></div>
+<div class="pc-item"><b>直出偏色：</b>水下和阴天直出颜色偏蓝偏绿，需要简单调色</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"默认设置就很好用了，大多数时候直接开机就能拍。水下偏蓝绿是真的，但 App 一拉白平衡就回来了，不算大问题"</div>
+</div></div>
+<div class="sec-label">如果它不完全适合你，也可以看看这些 <span class="ann dh" data-reason="主动补替代品，避免信息差">懂行</span></div>
+<ul class="blist">
+<li><b>预算更高、追求画质</b>：Action 6，大底、低光表现进一步提升，还支持 8K。</li>
+<li><b>经常自拍、拍 Vlog</b>：Insta360 Ace Pro 2，翻转屏体验更好。</li>
+<li><b>已经有 GoPro 全套配件</b>：Hero 13 的迁移成本更低。</li>
+</ul>
+<div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按用户场景收口，给明确建议">懂我</span><span class="ann yp">有判断</span></div>
+<div class="lead">如果你的主要用途就是潜水，Action 5 Pro 依然值得买。最大的优势不是某一项参数特别突出，而是从准备、拍摄到导出都比较省心。</div>
+<div class="scene">
+<div class="scene-row">冲着潜水、图省心 → <b>闭眼入 Action 5 Pro</b>。</div>
+<div class="scene-row">第一次潜水、还没确定会不会继续 → <b>先租一台体验一次</b>，花一两百块拍一潜比看评测更有用。<span class="ann dm" data-reason="识别出新手可能还没确定要不要入坑，不催下单">懂我</span><span class="ann dh" data-reason="「先租再买」是潜水圈的共识，避免冲动消费">懂行</span></div>
+</div>
+<div class="follow"><button class="fbtn">和 GoPro Hero 13 比呢？</button><button class="fbtn">潜水壳买官方的还是第三方？</button><button class="fbtn">水下拍视频还是拍照好？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人水下实拍</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 3C · 对比决策 -->
+<div class="case-panel cat-3c" data-cat="3c" data-intent="versus">
+<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i></i><i></i><i></i></div><span>综合 <b style="color:var(--t62)">156 篇</b>真人对比实测</span></div>
+<div class="lead"><span class="hl">潜水为主，选 DJI Action 5 Pro。</span><span class="ann dm" data-reason="锚定用户说的「潜水拍摄」，直接给答案">懂我</span><span class="ann yp">有判断</span></div>
+<div class="lead">原因主要有以下几点：</div>
+<div class="sec-label">1. 原生防水更强 <span class="ann dh" data-reason="用裸机防水深度对比，一目了然">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">DJI Action 5 Pro</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:95%">★★★★★</span></div>
+</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side">
+<div class="nm">Insta360 Ace Pro 2</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:55%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">20 米</div>
+<div class="pk-dim">裸机防水</div>
+<div class="pk-val" style="text-align:right">12 米</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">不需要</div>
+<div class="pk-dim">浮潜配壳</div>
+<div class="pk-val" style="text-align:right">建议配壳</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">安全余量大</div>
+<div class="pk-dim">水肺潜</div>
+<div class="pk-val" style="text-align:right">必须配壳</div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>52人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>18人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+浮潜两台都够用，但自由潜或水肺潜时 DJI 的 <b>20 米裸机防水安全余量更大</b>。Insta360 超过 12 米就必须配壳，壳装不到位有漏水风险。
+</div>
+<div class="sec-label">2. 水下色彩更稳定 <span class="ann dh" data-reason="从实测角度对比，不是念参数">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">DJI Action 5 Pro</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:85%">★★★★★</span></div>
+</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side">
+<div class="nm">Insta360 Ace Pro 2</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:68%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">稳定准确</div>
+<div class="pk-dim">白平衡</div>
+<div class="pk-val" style="text-align:right">偶尔偏色</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">自然真实</div>
+<div class="pk-dim">色彩风格</div>
+<div class="pk-val" style="text-align:right">徕卡鲜艳<span class="sub">直出好看</span></div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">高</div>
+<div class="pk-dim">一致性</div>
+<div class="pk-val" style="text-align:right">一般</div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>41人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>28人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画面一致性好，后期调色轻松不少。Insta360 徕卡调色直出好看，但水下偶尔偏色。
+</div>
+<div class="sec-label">3. 防抖表现优秀 <span class="ann dh" data-reason="结合潜水时的实际晃动场景解释">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">DJI Action 5 Pro</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:88%">★★★★★</span></div>
+</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side">
+<div class="nm">Insta360 Ace Pro 2</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:72%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">RockSteady 3.0+<span class="sub">地平线增稳</span></div>
+<div class="pk-dim">技术</div>
+<div class="pk-val" style="text-align:right">FlowState<span class="sub">360° 锁定</span></div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">第一梯队</div>
+<div class="pk-dim">水下表现</div>
+<div class="pk-val" style="text-align:right">够用</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">游泳·下潜·跟拍</div>
+<div class="pk-dim">适用场景</div>
+<div class="pk-val" style="text-align:right">日常水下</div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>38人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>24人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+潜水时人一直在漂浮、摆动，DJI 的 <b>水下防抖属于第一梯队</b>，游泳、下潜、跟拍鱼群画面都很稳。Insta360 FlowState 陆地更强，但水下大动作偶尔抖。
+</div>
+<div class="sec-label">4. 续航更长 <span class="ann dh" data-reason="指出水下不能换电池这个硬约束">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">DJI Action 5 Pro</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:92%">★★★★★</span></div>
+</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side">
+<div class="nm">Insta360 Ace Pro 2</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:58%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">1950 mAh<span class="sub">约 240 分钟</span></div>
+<div class="pk-dim">电池</div>
+<div class="pk-val" style="text-align:right">1800 mAh<span class="sub">约 150 分钟</span></div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">温</div>
+<div class="pk-dim">散热</div>
+<div class="pk-val" style="text-align:right">偏热</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">Type-C 快充<span class="sub">边充边录</span></div>
+<div class="pk-dim">充电</div>
+<div class="pk-val" style="text-align:right">Type-C<span class="sub">不支持边充边录</span></div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>52人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>19人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+潜水不像骑车，不能随时换电池。DJI <b>续航碾压——240 分钟 vs 150 分钟</b>，多出 60%。还支持边充边录，长时间固定机位拍摄更实用。Insta360 散热问题在 4K60 以上长时间录制时比较明显。
+</div>
+<div class="sec-label">Ace Pro 2 也有优势</div>
+<ul class="blist">
+<li><b>夜景、低光略胜</b>：Leica 调校加上算法，在傍晚、阴天、洞穴、船舱等低光环境下细节通常比 DJI 更好。如果你很多时候在能见度较差、水比较暗的环境拍摄，它有一定优势。</li>
+<li><b>翻转屏</b>：自拍、Vlog 非常方便，但潜水时其实翻转屏使用频率没有陆地高。</li>
+</ul>
+<div class="sec-label">👥 好多人也是这么选的 <span class="ann zs" data-reason="用真人选择经验验证建议">真实</span></div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"两台都买过，Ace Pro 2 陆地上确实好用，但水下还是 Action 5 Pro 省心太多，裸机直接下不用想壳的事"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div>"学员问我推荐哪台，我统一说 DJI。不是说 Insta360 不好，是壳这个东西新手容易装不到位，漏水了相机直接报废"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F4C58F,#E8A04D)"></div>"店里租赁机全换成 Action 5 Pro 了，续航长、防水深、客人自己就会用，售后问题少了一大半"</div>
+<div class="sec-label">🧭 按你的情况选 <span class="ann dm" data-reason="分场景路由，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
+<div class="scene">
+<div class="scene-row"><span class="cond">新手潜水、想<b>省心不折腾</b>，或预算有限只浮潜</span><span class="arrow">→</span><span class="pick a">Action 5 Pro</span></div>
+<div class="scene-row"><span class="cond">喜欢自拍 vlog、重视<b>暗光画质</b></span><span class="arrow">→</span><span class="pick b">Ace Pro 2</span></div>
+</div>
+<div class="follow"><button class="fbtn">两个各配什么配件比较合理？</button><button class="fbtn">有没有两全的方案？</button><button class="fbtn">Insta360 官方壳靠谱吗？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人对比实测</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 3C · 攻略咨询 -->
+<div class="case-panel cat-3c" data-cat="3c" data-intent="guide">
+<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">潜水用的运动相机怎么选？</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>潜水用的运动相机怎么选？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i></i><i></i><i></i></div><span>综合 <b style="color:var(--t62)">94 篇</b>潜水摄影攻略</span></div>
+<div class="lead">选潜水运动相机，其实只需要按这三个问题一步步选：<span class="ann dh" data-reason="把复杂决策简化成三步，降低理解门槛">懂行</span></div>
+<div class="sec-label">① 你潜多深？决定看防水能力和续航 <span class="ann dm" data-reason="从用户行为出发选参数，不是反过来">懂我</span></div>
+<div class="lead"><b>裸机防水深度</b> <span class="ann zs" data-reason="引用潜店教练的真实漏水事故经历">真实</span></div>
+<ul class="blist">
+<li><b>10–12 米左右</b>：日常浮潜和浅水自由潜够用。但如果要做水肺潜水往更深的地方去，就需要额外配防水壳，购买时除了看相机，也要关注壳的密封圈和可靠性——真正进水的大多数情况都发生在防水壳，而不是相机本身。</li>
+<li><b>20 米左右</b>：覆盖浮潜、自由潜和大多数休闲水肺潜水，裸机直接下水不用额外装壳，既减少了漏水风险，入水也更轻便。</li>
+</ul>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div>"带学员时见过好几次防水壳没装好进水的，相机直接报废。能裸机 20 米的就别折腾壳了，少一个环节少一个风险"</div>
+<div class="lead"><b>续航能力</b> <span class="ann zs" data-reason="新手亲历水下没电，只能干看着">真实</span></div>
+<ul class="blist">
+<li>一次潜水通常 40–60 分钟，建议选择一块电池能够拍完整趟潜水的机型。</li>
+<li>如果续航不足，中途无法在水下更换电池，只能提前结束拍摄；开启 4K、高帧率、防抖等功能后，实际续航通常还会进一步缩短。</li>
+</ul>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"第一次带运动相机下水，拍到第 35 分钟没电了，后半段全程干看着。后来换了续航长的，一块电池拍完整趟完全没压力"</div>
+<div class="sec-label">② 你拍什么？决定看镜头、对焦和画质 <span class="ann dm" data-reason="先问用途再讲配置，不堆参数">懂我</span></div>
+<div class="lead"><b>拍大场景</b>（珊瑚礁、沉船、鲸鲨、海底地形）</div>
+<div class="lead">重点关注：</div>
+<ul class="blist">
+<li><b>广角够不够广</b>：水下需要尽量靠近主体才能保证清晰度，广角越大，越容易同时拍下主体和环境。</li>
+<li><b>防抖够不够稳</b>：海流、呼吸和踢腿都会造成晃动，优秀的防抖能让视频更平稳、更有沉浸感。</li>
+<li><b>高分辨率</b>：4K60 甚至更高规格，更方便后期裁切和二次创作。</li>
+</ul>
+<div class="lead"><b>拍小生物</b>（海兔、小丑鱼、虾蟹、海马） <span class="ann zs" data-reason="玩家分享微距对焦前后的拍摄差距">真实</span></div>
+<div class="lead">重点关注：</div>
+<ul class="blist">
+<li><b>最近对焦距离</b>：能否靠近拍摄，决定主体能不能拍得够大、够清晰。</li>
+<li><b>微距能力</b>：支持微距模式或外接微距镜，才能拍出丰富细节。</li>
+<li><b>传感器尺寸</b>：大底传感器在水下暗光环境下噪点更少，细节和色彩保留更好。</li>
+</ul>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F4C58F,#E8A04D)"></div>"之前拍海兔用广角镜头，回来一看全糊了。后来换了能近距离对焦的，贴到 5 厘米拍，细节完全不一样"</div>
+<div class="sec-label">③ 你会不会后期？决定看视频格式 <span class="ann dm" data-reason="匹配用户能力，不推超出能力的方案">懂我</span></div>
+<div class="lead"><b>不想花时间剪辑调色</b></div>
+<ul class="blist">
+<li>优先选择直出色彩好的机型。</li>
+<li>拍完基本就能分享到朋友圈、小红书或视频平台，省时省力。</li>
+</ul>
+<div class="lead"><b>会后期调色</b></div>
+<ul class="blist">
+<li>优先选择支持 Log 视频、RAW 照片的机型。</li>
+<li>虽然直出画面会偏灰，但能保留更多高光、暗部和色彩信息，后期可调空间更大，更容易获得专业级画面。</li>
+</ul>
+<div class="lead"><b>如果你大概知道自己的潜水方式和预算，我可以根据你的需求具体帮你选选：</b><span class="ann dm" data-reason="主动收集需求，进一步精准推荐">懂我</span></div>
+<div class="follow"><button class="fbtn">主要浮潜，预算 2000 左右</button><button class="fbtn">想拍珊瑚和小鱼特写</button><button class="fbtn">不会后期，拍完直接发朋友圈</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人潜水摄影攻略</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 美妆 · 选品推荐 -->
+<div class="case-panel cat-beauty" data-cat="beauty" data-intent="rec">
+<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">学生党有哪些平价好用的眼线笔？</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>学生党有哪些平价好用的眼线笔？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">213 篇</b>学生党眼妆笔记</span></div>
+<div class="lead">学生党选眼线笔核心看<span class="hl">持妆时长</span>和<span class="hl">新手友好度</span>，价格差异不大，关键是画不画得好、撑不撑得住一天课。</div>
+<div class="sec-label">🎯 学生党最值得入的 4 支</div>
+<div class="rich">
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#FFD6E0,#E88DA0);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">橘朵眼线胶笔</div><div class="desc">胶笔质地 · 顺滑不拉扯 · 新手最友好</div><div class="pbottom"><div class="price">¥29.9</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">3.2k 人推荐</span></div></div></div></div>
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#FFE8CC,#E8A33D);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">Kissme 奇士美眼线液笔</div><div class="desc">极细笔头 · 持妆 12h · 温水可卸</div><div class="pbottom"><div class="price">¥79</div><div class="stars-line"><span class="s">★</span>4.8<span class="cnt">5.1k 人推荐</span></div></div></div></div>
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#D4E8FF,#5A9AFF);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">花知晓眼线液笔</div><div class="desc">速干不晕 · 颜色选择多 · 性价比高</div><div class="pbottom"><div class="price">¥49</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">1.8k 人推荐</span></div></div></div></div>
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#E8D4FF,#9B6ED0);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">UZU 眼线液笔</div><div class="desc">日本殿堂级 · 笔触精准 · 不飞水</div><div class="pbottom"><div class="price">¥128</div><div class="stars-line"><span class="s">★</span>4.9<span class="cnt">2.4k 人推荐</span></div></div></div></div>
+</div>
+<div class="sec-label">💬 用过的人怎么说</div>
+<div class="voice">
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">大油田大学生</div><div class="lk">♡ 4,230</div></div><div class="tx"><span class="q">"</span>橘朵胶笔 29 块钱，画内眼线特别顺滑，新手闭眼入。唯一缺点是持妆一般，下午会稍微淡一点<span class="q">"</span></div></div>
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">早八人的眼妆</div><div class="lk">♡ 2,670</div></div><div class="tx"><span class="q">"</span>Kissme 用了三年了，从早八到晚十不晕。温水就能卸，不用专门买眼唇卸妆<span class="q">"</span></div></div>
+</div>
+<div class="sec-label">🧭 按需求直接选</div>
+<div class="scene">
+<div class="scene-row">新手第一支、追求好画，选 <b>橘朵胶笔</b>——滑得像蜡笔，30 块试错成本低。</div>
+<div class="scene-row">油皮、要撑一整天课，选 <b>Kissme</b>——持妆能力天花板，温水可卸不伤眼周。</div>
+<div class="scene-row">想画精致细线、喜欢日系妆感，选 <b>UZU</b>——笔头最精准，画眼尾不飞水。</div>
+<div class="scene-row">预算 50 以内想要液笔，选 <b>花知晓</b>——速干不晕，性价比最高的液笔。</div>
+</div>
+<div class="lead" style="color:var(--t62);font-size:13px;"><b>新手小建议</b>：第一次画眼线建议从胶笔/铅笔型开始（好控制），等手稳了再换液笔画细线。</div>
+<div class="lead"><b>你是油皮还是干皮？</b></div>
+<div class="follow"><button class="fbtn">内双适合画什么样的眼线？</button><button class="fbtn">棕色和黑色哪个更日常？</button><button class="fbtn">有没有不脱妆的画法技巧？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人眼妆测评笔记</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 美妆 · 单品评估 -->
+<div class="case-panel cat-beauty" data-cat="beauty" data-intent="single">
+<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">kissme眼线液笔容易晕妆吗</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>kissme眼线液笔容易晕妆吗？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">347 篇</b>真人持妆实测</span></div>
+<div class="lead"><b>不容易晕，这是它最大的卖点。</b>大多数人反馈<span class="hl">日常通勤 8–12 小时不晕</span>，即使出汗出油也能撑住。但有几个特殊情况需要注意。</div>
+<div class="pcard"><div class="img" style="background:linear-gradient(135deg,#FFE8CC,#E8A33D);display:flex;align-items:center;justify-content:center;font-size:26px;">🖊</div><div class="body"><div class="nm">Kissme 奇士美眼线液笔</div><div class="features">极细 0.1mm 笔头 · 持妆 12h · 温水可卸 · 防水防汗</div><div class="pbottom"><div class="price">¥79</div><div class="stars-line"><span class="s">★</span>4.8<span class="unit">分</span><span class="cnt">5.1k 人推荐</span></div></div></div></div>
+<div class="sec-label">📊 大家怎么评价</div>
+<div class="pc">
+<div class="pc-block pro"><div class="pc-hd"><span class="num">4</span><span class="lbl">个值得入手的理由</span></div>
+<div class="pc-item"><span class="ic">✓</span>持妆能力强，日常 8–12h 基本不晕<span class="heat">🔥 提及 91%</span></div>
+<div class="pc-item"><span class="ic">✓</span>温水可卸，不需要专门的眼唇卸妆<span class="heat">🔥 提及 85%</span></div>
+<div class="pc-item"><span class="ic">✓</span>笔头极细（0.1mm），能画出毛流感<span class="heat">提及 72%</span></div>
+<div class="pc-item"><span class="ic">✓</span>不结块、不断水，出墨均匀<span class="heat">提及 63%</span></div>
+</div>
+<div class="pc-block con"><div class="pc-hd"><span class="num">3</span><span class="lbl">个要注意的地方</span></div>
+<div class="pc-item"><span class="ic">✗</span>大油皮 + 不定妆，下午内眼线可能微晕<span class="heat">提及 34%</span></div>
+<div class="pc-item"><span class="ic">✗</span>笔头偏软，新手画粗线不太好控制<span class="heat">提及 28%</span></div>
+<div class="pc-item"><span class="ic">✗</span>棕色款颜色偏浅，存在感不够强<span class="heat">提及 19%</span></div>
+</div></div>
+<div class="sec-label">⚠️ 什么情况下会晕</div>
+<div class="voice">
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">混油皮实测</div><div class="lk">♡ 3,120</div></div><div class="tx"><span class="q">"</span>日常通勤完全不晕。但有一次去蹦迪，出了巨多汗，内眼线有一点点化。外眼线和眼尾完全没事<span class="q">"</span></div></div>
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">用了两年的老粉</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>内眼线如果不定妆确实会淡一点，但不会晕成熊猫眼。外眼线真的铁，哭完还在<span class="q">"</span></div></div>
+</div>
+<div class="ai-sum"><div class="head"><span class="score"><span class="n">8.5</span><span class="mx">/ 10</span><span class="st">★★★★☆</span></span><span class="lbl">AI 总结</span></div><div class="text">持妆能力是同价位<b>天花板级别</b>。日常场景几乎不会晕，温水可卸省心省钱。唯一要注意：大油皮画内眼线建议<b>先用眼部打底定妆</b>，外眼线放心画。</div><div class="from">基于 347 篇小红书真人持妆实测 · 580 条评论综合</div></div>
+<div class="scene">
+<div class="scene-row">日常通勤、上课——<b>放心买</b>，8 小时以上不晕。</div>
+<div class="scene-row">大油皮画内眼线——<b>先用眼部打底</b>，或者用棉签蘸散粉压一下。</div>
+<div class="scene-row">运动、蹦迪等大量出汗——外眼线没问题，内眼线可能微淡。</div>
+<div class="scene-row">追求完全不晕——可以看看 <b>UZU</b>，持妆更极端但价格翻倍。</div>
+</div>
+<div class="follow"><button class="fbtn">和 UZU 比持妆谁更强？</button><button class="fbtn">黑色和棕色选哪个好？</button><button class="fbtn">有没有让它更持久的画法？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人持妆实测</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 美妆 · 对比决策 -->
+<div class="case-panel cat-beauty" data-cat="beauty" data-intent="versus">
+<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">橘朵和kissme眼线液笔选哪个？油皮</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>橘朵和kissme眼线液笔选哪个？油皮</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">189 篇</b>真人对比测评</span></div>
+<div class="lead"><span class="hl">油皮出门用 Kissme，在家练手用橘朵。</span></div>
+<div class="sec-label">🔍 本质差异就一点</div>
+<div class="lead"><b>成膜型 vs 蜡基——决定油皮能撑多久</b><br>Kissme 是<b>成膜型液笔</b>，画完干了之后在皮肤上形成一层薄膜，油脂渗不进去，油皮能撑 8–12 小时。橘朵是<b>蜡基胶笔</b>，质地顺滑好画，但蜡会被皮脂慢慢溶掉，油皮下午就开始糊。</div>
+<div class="sec-label">💬 买家口碑</div>
+<div class="buzz">
+<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">橘朵眼线胶笔</span><span class="buzz-cnt">89 人讨论</span></div><div class="buzz-tags">
+<span class="buzz-tag hot">顺滑好画 🔥94%</span><span class="buzz-tag hot">便宜试错 82%</span><span class="buzz-tag warn">下午会糊 56%</span><span class="buzz-tag warn">油皮不持久 48%</span>
+</div></div>
+<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">Kissme 眼线液笔</span><span class="buzz-cnt">127 人讨论</span></div><div class="buzz-tags">
+<span class="buzz-tag hot">持妆铁 🔥91%</span><span class="buzz-tag hot">温水可卸 85%</span><span class="buzz-tag">笔头极细 68%</span><span class="buzz-tag warn">新手难控制 32%</span>
+</div></div>
+</div>
+<div class="sec-label">📊 详细对比</div>
+<div class="comp-table"><table>
+<tr><th></th><th>橘朵眼线胶笔</th><th>Kissme 眼线液笔</th></tr>
+<tr><td class="dim">类型</td><td>胶笔（旋转式）</td><td>液笔（毛笔头）</td></tr>
+<tr><td class="dim">新手友好</td><td class="win">★★★★★</td><td>★★★☆☆</td></tr>
+<tr><td class="dim">持妆（油皮）</td><td>4–6 小时</td><td class="win">8–12 小时</td></tr>
+<tr><td class="dim">线条精细度</td><td>粗线为主</td><td class="win">极细 0.1mm</td></tr>
+<tr><td class="dim">卸妆</td><td>需要卸妆液</td><td class="win">温水即卸</td></tr>
+<tr><td class="dim">价格</td><td class="win">¥29.9</td><td>¥79</td></tr>
+</table></div>
+<div class="sec-label">🧭 按你的情况选</div>
+<div class="scene">
+<div class="scene-row"><span class="cond">油皮、需要<b>撑一整天不晕</b></span><span class="arrow">→</span><span class="pick b">Kissme</span></div>
+<div class="scene-row"><span class="cond">新手、还在<b>学画眼线</b></span><span class="arrow">→</span><span class="pick a">橘朵</span></div>
+<div class="scene-row"><span class="cond">油皮 + 新手</span><span class="arrow">→</span><span class="pick a">先橘朵练手，再上 Kissme</span></div>
+<div class="scene-row"><span class="cond">预算够、不想纠结</span><span class="arrow">→</span><span class="pick yes">两个都买，各管各的</span></div>
+</div>
+<div class="follow"><button class="fbtn">油皮用橘朵有没有办法延长持妆？</button><button class="fbtn">Kissme 新手有什么画法技巧？</button><button class="fbtn">还有没有其他油皮友好的平价选择？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人对比测评</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 美妆 · 攻略咨询 -->
+<div class="case-panel cat-beauty" data-cat="beauty" data-intent="guide">
+<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">油皮怎么选眼线笔</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>油皮怎么选眼线笔？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">276 篇</b>油皮眼妆攻略</span></div>
+<div class="lead">油皮选眼线笔的核心：<span class="hl">成膜型 vs 非成膜型</span>。选对类型持妆解决 80%，剩下 20% 靠定妆手法。</div>
+<div class="sec-label">🧠 三种类型，油皮的选择逻辑</div>
+<div class="lead"><b>眼线液笔：成膜防油，油皮首选</b><br><b>成膜型</b>，画完形成防水薄膜，油脂渗不进去。比如 Kissme、UZU 都是这类</div>
+<div class="lead"><b>眼线胶笔：好画但怕皮脂，必须搭定妆</b><br><b>蜡基质地</b>，顺滑好画但容易被皮脂溶掉。比如橘朵、3CE</div>
+<div class="lead"><b>眼线膏：持妆最强，但上手门槛高</b><br><b>膏体 + 刷子</b>，持妆最强但上手难度最高。适合化妆手法熟练的人</div>
+<div class="sec-label">⚠️ 油皮必须知道的 3 个真相</div>
+<div class="lead"><b>第一，"防水"不等于"防油"。</b>很多标"防水"的笔遇到皮脂照样晕。要看<b>"防水防汗防皮脂"三项全标</b>的。</div>
+<div class="lead"><b>第二，内眼线比外眼线更容易晕。</b>内眼线接触泪液和油脂，再好的笔也可能淡化。画完用<b>棉签蘸少量散粉轻压一下</b>就行。</div>
+<div class="lead"><b>第三，定妆手法比选笔更重要。</b>哪怕是胶笔，画完用散粉或眼部打底定住，油皮也能撑一整天。</div>
+<div class="sec-label">💬 油皮姐妹在讨论什么</div>
+<div class="buzz">
+<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">高频讨论话题</span><span class="buzz-cnt">276 篇笔记</span></div>
+<div class="buzz-tags">
+<span class="buzz-tag hot">成膜型液笔</span>
+<span class="buzz-tag hot">散粉定妆法</span>
+<span class="buzz-tag">眼部打底</span>
+<span class="buzz-tag">内眼线防晕</span>
+<span class="buzz-tag warn">胶笔油皮晕妆</span>
+<span class="buzz-tag">防水≠防油</span>
+<span class="buzz-tag">温水可卸</span>
+<span class="buzz-tag">棕色更自然</span>
+</div></div>
+</div>
+<div class="lead"><b>你日常通勤多还是经常运动出汗？</b></div>
+<div class="follow"><button class="fbtn">眼部打底用什么好？</button><button class="fbtn">油皮画眼线有什么手法技巧？</button><button class="fbtn">棕色和黑色哪个更不容易显晕？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人油皮眼妆攻略</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 户外 · 选品推荐 -->
+<div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="rec">
+<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">单板滑雪买雪板，有哪些值得买的入门款？</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>单板滑雪买雪板，有哪些值得买的入门款？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">156 篇</b>入门雪板测评笔记</span></div>
+<div class="lead">入门板核心一个字：<span class="hl">软</span>。软板容错率高、摔了不容易受伤、转弯轻松。<span class="hl">新手用硬板练不出来还容易伤膝盖</span>。</div>
+<div class="sec-label">🎯 入门雪板 TOP 4</div>
+<div class="rich">
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Burton Ripcord</div><div class="desc">Flat Top 板型 · 偏软弹性好 · 全山入门经典</div><div class="pbottom"><div class="price">¥2,800</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div></div></div></div>
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Ride Agenda</div><div class="desc">Twin 对称板 · 公园全山两用 · 性价比之王</div><div class="pbottom"><div class="price">¥2,200</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">890 人推荐</span></div></div></div></div>
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#7EE8D4,#34B39D);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Rossignol Sawblade</div><div class="desc">AmpTek Rocker · 极软好转弯 · 最便宜的大牌入门</div><div class="pbottom"><div class="price">¥1,800</div><div class="stars-line"><span class="s">★</span>4.5<span class="cnt">670 人推荐</span></div></div></div></div>
+<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Salomon Pulse</div><div class="desc">Rocker 板型 · 中软 · 偏全山 · 做工扎实</div><div class="pbottom"><div class="price">¥2,500</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">540 人推荐</span></div></div></div></div>
+</div>
+<div class="sec-label">💬 过来人怎么说</div>
+<div class="voice">
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div><div class="nm">滑了三季的老手</div><div class="lk">♡ 2,450</div></div><div class="tx"><span class="q">"</span>我第一块板就是 Ripcord，从连续落叶飘练到换刃，用了两个雪季才换板。入门板不需要好，需要"不打击信心"<span class="q">"</span></div></div>
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">教练的建议</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>新手买板最常犯的错就是一步到位买进阶板。硬板确实高速更稳，但你还没到需要"稳"的阶段，先学会转弯再说<span class="q">"</span></div></div>
+</div>
+<div class="sec-label">🧭 按需求选</div>
+<div class="scene">
+<div class="scene-row">纯新手、刚学会刹车，选 <b>Rossignol Sawblade</b>——最软最便宜，摔了不心疼。</div>
+<div class="scene-row">想滑全山、偶尔走走小跳台，选 <b>Burton Ripcord</b>——全能型入门，两个雪季够用。</div>
+<div class="scene-row">想往公园方向发展、喜欢玩花活，选 <b>Ride Agenda</b>——Twin 对称板正反滑都行。</div>
+<div class="scene-row">不确定自己会不会坚持——<b>先租一季</b>，确认喜欢了再买不迟。</div>
+</div>
+<div class="lead" style="color:var(--t62);font-size:13px;"><b>入门必知</b>：板的长度 = 下巴到鼻子之间（体重偏重选长一点）。固定器和雪鞋比板更影响脚感，别把预算全花在板上。</div>
+<div class="lead"><b>你现在什么水平？</b></div>
+<div class="follow"><button class="fbtn">固定器和雪鞋怎么选？</button><button class="fbtn">二手板值得买吗？</button><button class="fbtn">入门全套预算大概多少？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人雪板测评笔记</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 户外 · 单品评估 -->
+<div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="single">
+<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">Burton Ripcord怎么样？适合从初级往进阶过渡吗</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>Burton Ripcord怎么样？适合从初级往进阶过渡吗？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">98 篇</b>真人使用反馈</span></div>
+<div class="lead"><b>入门到初级进阶完全够用，但别指望它陪你到高级。</b>Ripcord 的定位就是<span class="hl">「学会滑雪」这个阶段的最佳搭档</span>，换刃、连续弯、简单小跳台都没问题，但高速大回转会明显感觉板子软、抓不住雪。</div>
+<div class="pcard"><div class="img" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF);display:flex;align-items:center;justify-content:center;font-size:26px;">🏂</div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">Flat Top 板型 · 偏软 · 全山入门 · 木芯减震</div><div class="pbottom"><div class="price">¥2,800</div><div class="stars-line"><span class="s">★</span>4.7<span class="unit">分</span><span class="cnt">1.2k 人推荐</span></div></div></div></div>
+<div class="sec-label">📊 大家怎么评价</div>
+<div class="pc">
+<div class="pc-block pro"><div class="pc-hd"><span class="num">4</span><span class="lbl">个值得入手的理由</span></div>
+<div class="pc-item"><span class="ic">✓</span>Flat Top 板型容错高，换刃学习曲线平滑<span class="heat">🔥 提及 88%</span></div>
+<div class="pc-item"><span class="ic">✓</span>软硬适中偏软，摔了不容易伤膝盖<span class="heat">🔥 提及 82%</span></div>
+<div class="pc-item"><span class="ic">✓</span>Burton 品牌，固定器兼容性好、二手保值<span class="heat">提及 65%</span></div>
+<div class="pc-item"><span class="ic">✓</span>能覆盖从零基础到中级的全过程<span class="heat">提及 58%</span></div>
+</div>
+<div class="pc-block con"><div class="pc-hd"><span class="num">2</span><span class="lbl">个要注意的地方</span></div>
+<div class="pc-item"><span class="ic">✗</span>高速（40km/h+）时板头会抖，刃感不足<span class="heat">提及 45%</span></div>
+<div class="pc-item"><span class="ic">✗</span>想玩公园 jib 的话偏硬了，不够弹<span class="heat">提及 30%</span></div>
+</div></div>
+<div class="sec-label">🔄 什么时候该换板</div>
+<div class="lead">判断标准很简单：<b>如果你在中高级道上觉得"板子跟不上我了"</b>——高速刃感不足、颠簸路段弹不回来——就是该换的时候了。大多数人用 Ripcord <b>1.5–2 个雪季</b>会到这个临界点。</div>
+<div class="voice">
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div><div class="nm">用了两季换板的人</div><div class="lk">♡ 1,670</div></div><div class="tx"><span class="q">"</span>第一季从落叶飘到换刃，第二季开始走黑道，明显感觉板子软了。换了 Custom 之后高速稳太多了。Ripcord 完成了它的使命<span class="q">"</span></div></div>
+</div>
+<div class="ai-sum"><div class="head"><span class="score"><span class="n">8</span><span class="mx">/ 10</span><span class="st">★★★★☆</span></span><span class="lbl">AI 总结</span></div><div class="text"><b>入门到初级进阶最稳的选择。</b>容错高、品牌靠谱、二手好出。不要期待它是"一步到位"的板，它的价值就是帮你<b>用最低的试错成本学会滑雪</b>。学会了再按自己的风格选进阶板。</div><div class="from">基于 98 篇小红书真人使用反馈 · 210 条评论综合</div></div>
+<div class="scene">
+<div class="scene-row">从零开始学单板——<b>放心入</b>，1–2 季内你不会嫌它差。</div>
+<div class="scene-row">已经会换刃、想学刻滑——<b>还能再用一季</b>，但高速时会觉得软。</div>
+<div class="scene-row">已经滑黑道了——<b>该换了</b>，看看 Burton Custom 或 Process。</div>
+<div class="scene-row">不确定自己会不会坚持——Ripcord 的二手残值不错，<b>不亏</b>。</div>
+</div>
+<div class="follow"><button class="fbtn">进阶换什么板比较好？</button><button class="fbtn">155 和 157 选哪个长度？</button><button class="fbtn">搭配什么固定器合适？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人使用反馈</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 户外 · 对比决策 -->
+<div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="versus">
+<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">Burton Ripcord和Ride Agenda选哪个？主要玩全山</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>Burton Ripcord和Ride Agenda选哪个？主要玩全山</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">112 篇</b>真人对比体验</span></div>
+<div class="lead"><span class="hl">主要玩全山选 Ripcord，想往公园发展选 Agenda。</span></div>
+<div class="sec-label">🔍 本质差异就一点</div>
+<div class="lead"><b>方向性 vs 对称——决定你怎么滑</b><br>Ripcord 是<b>方向性板</b>，板头比板尾长，天生适合往一个方向冲。全山巡航更稳，刻滑入弯更顺——但反脚滑会别扭。Agenda 是<b>对称板</b>，正反完全一样，Switch 和正常滑手感一致。公园里正反切换、落地 fakie 需要这种板——但高速巡航比方向性板差一点。</div>
+<div class="sec-label">💬 买家口碑</div>
+<div class="buzz">
+<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">Burton Ripcord</span><span class="buzz-cnt">78 人讨论</span></div><div class="buzz-tags">
+<span class="buzz-tag hot">换刃顺畅 🔥87%</span><span class="buzz-tag hot">全山稳 82%</span><span class="buzz-tag">品牌保值 60%</span><span class="buzz-tag warn">高速偏软 45%</span>
+</div></div>
+<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">Ride Agenda</span><span class="buzz-cnt">56 人讨论</span></div><div class="buzz-tags">
+<span class="buzz-tag hot">Switch自如 🔥90%</span><span class="buzz-tag hot">公园好玩 84%</span><span class="buzz-tag">性价比高 72%</span><span class="buzz-tag warn">巡航差一点 38%</span>
+</div></div>
+</div>
+<div class="sec-label">📊 详细参数对比</div>
+<div class="comp-table"><table>
+<tr><th></th><th>Burton Ripcord</th><th>Ride Agenda</th></tr>
+<tr><td class="dim">板型</td><td class="win">Flat Top（方向性）</td><td>Twin（对称）</td></tr>
+<tr><td class="dim">全山适配</td><td class="win">★★★★★</td><td>★★★★☆</td></tr>
+<tr><td class="dim">公园玩法</td><td>★★★☆☆</td><td class="win">★★★★★</td></tr>
+<tr><td class="dim">高速稳定性</td><td class="win">中等偏上</td><td>中等</td></tr>
+<tr><td class="dim">反滑</td><td>一般</td><td class="win">优秀</td></tr>
+<tr><td class="dim">参考价</td><td>¥2,800</td><td class="win">¥2,200</td></tr>
+</table></div>
+<div class="sec-label">🧭 按你的情况选</div>
+<div class="scene">
+<div class="scene-row"><span class="cond">主要<b>全山巡航、练刻滑</b></span><span class="arrow">→</span><span class="pick a">Ripcord</span></div>
+<div class="scene-row"><span class="cond">想学<b>公园、跳台、反脚滑</b></span><span class="arrow">→</span><span class="pick b">Agenda</span></div>
+<div class="scene-row"><span class="cond">全山为主、偶尔进公园</span><span class="arrow">→</span><span class="pick b">Agenda 省 ¥600</span></div>
+<div class="scene-row"><span class="cond">不确定自己喜欢什么</span><span class="arrow">→</span><span class="pick a">Ripcord 适用面更广</span></div>
+</div>
+<div class="follow"><button class="fbtn">全山板以后想进公园可以吗？</button><button class="fbtn">固定器配什么好？</button><button class="fbtn">这两个二手哪个更好出？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人对比体验</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<!-- 户外 · 攻略咨询 -->
+<div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="guide">
+<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">买雪板最易踩的坑是什么？</div></div>
+<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="userq"><span>买雪板最易踩的坑是什么？</span></div>
+<div class="answer">
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">203 篇</b>买板踩坑帖</span></div>
+<div class="lead">新手买板最大的误区：<span class="hl">以为"贵的=好的"，其实是"合适的=好的"</span>。大部分踩坑都是觉得省了钱或一步到位了，其实花了冤枉钱。</div>
+<div class="sec-label">🧠 先建立 3 个核心认知</div>
+<div class="lead"><b>新手别碰硬板，"进阶"不是"更好"</b><br>进阶板不是"更好"，是"更硬"。<b>新手用硬板学不出来，还容易受伤</b>。等滑够 20 天再考虑换板</div>
+<div class="lead"><b>鞋和固定器比板重要，别把预算全砸在板上</b><br>脚感 70% 来自鞋和固定器，板只占 30%。<b>预算全砸在板上、鞋买最便宜的</b>是最常见的错误</div>
+<div class="lead"><b>买错板型比买错牌子影响大</b><br>Camber、Rocker、Flat 各有用途。新手选 Flat 或 Rocker，别碰 Camber</div>
+<div class="sec-label">⚠️ 五大经典坑</div>
+<div class="lead"><b>一步到位买进阶板</b><br>比如 Burton Custom 这类硬板，新手根本压不住，每次换刃都打滑</div>
+<div class="lead"><b>只看板、忽略鞋和固定器</b><br>合理比例是板 40% + 固定器 25% + 鞋 35%</div>
+<div class="lead"><b>按身高选长度</b><br>体重才是关键。同样 175cm，55kg 和 70kg 的人板长差 5cm</div>
+<div class="lead"><b>二手捡漏来路不明的板</b><br>看不出芯材断裂和暗伤，省了几百块可能一个赛季就报废</div>
+<div class="lead"><b>不了解板型就下单</b><br>新手选 Flat 或 Rocker（比如 Burton Ripcord），别碰 Camber，卡刃容易摔</div>
+<div class="sec-label">💬 买板圈在聊什么</div>
+<div class="buzz">
+<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">高频讨论话题</span><span class="buzz-cnt">203 篇笔记</span></div>
+<div class="buzz-tags">
+<span class="buzz-tag hot">入门选软板</span>
+<span class="buzz-tag hot">鞋比板重要</span>
+<span class="buzz-tag">板型科普</span>
+<span class="buzz-tag">按体重选长度</span>
+<span class="buzz-tag warn">进阶板新手翻车</span>
+<span class="buzz-tag warn">二手暗伤板</span>
+<span class="buzz-tag">预算分配比例</span>
+<span class="buzz-tag">租板 vs 买板</span>
+</div></div>
+</div>
+<div class="lead"><b>你打算板 + 固定器 + 鞋一共花多少？</b></div>
+<div class="follow"><button class="fbtn">入门全套预算大概多少合理？</button><button class="fbtn">Camber 和 Rocker 到底啥区别？</button><button class="fbtn">二手板怎么验有没有暗伤？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人买板踩坑经验</div>
+</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+
+<script>
+let currentCat='3c',currentIntent='rec';
+function switchCat(btn){document.querySelectorAll('#catSelector button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentCat=btn.dataset.cat;showPanel();}
+function switchIntent(btn){document.querySelectorAll('#intentSelector button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentIntent=btn.dataset.intent;showPanel();}
+function showPanel(){document.querySelectorAll('.case-panel').forEach(p=>p.classList.remove('active'));const t=document.querySelector(`.case-panel[data-cat="${currentCat}"][data-intent="${currentIntent}"]`);if(t)t.classList.add('active');initAnnotations();}
+
+function initAnnotations(){
+  document.querySelectorAll('.ann-layer').forEach(l=>l.remove());
+  const panel=document.querySelector('.case-panel.active');
+  if(!panel) return;
+  const phone=panel.querySelector('.phone');
+  const chatBody=panel.querySelector('.chat-body');
+  if(!phone||!chatBody) return;
+
+  const layer=document.createElement('div');
+  layer.className='ann-layer';
+  layer.style.top=phone.offsetTop+'px';
+  layer.style.left=(phone.offsetLeft+phone.offsetWidth+14)+'px';
+  layer.style.width='110px';
+  layer.style.height=phone.offsetHeight+'px';
+  panel.appendChild(layer);
+
+  const groups=new Map();
+  phone.querySelectorAll('.ann').forEach(el=>{
+    const p=el.parentElement;
+    if(!groups.has(p)) groups.set(p,[]);
+    groups.get(p).push({cls:el.className,txt:el.textContent});
+  });
+
+  const items=[];
+  groups.forEach((anns,source)=>{
+    const div=document.createElement('div');
+    div.className='side-ann';
+    anns.forEach(a=>{
+      const s=document.createElement('span');
+      s.className=a.cls;
+      s.textContent=a.txt;
+      div.appendChild(s);
+    });
+    layer.appendChild(div);
+    items.push({el:div,source});
+  });
+
+  function update(){
+    const phoneRect=phone.getBoundingClientRect();
+    const navH=60;
+    const barH=56;
+    items.forEach(({el,source})=>{
+      const r=source.getBoundingClientRect();
+      const midY=(r.top+r.bottom)/2;
+      const relY=midY-phoneRect.top;
+      if(relY>navH&&relY<phoneRect.height-barH){
+        el.style.top=relY+'px';
+        el.style.transform='translateY(-50%)';
+        el.style.opacity='0.75';
+        el.style.display='flex';
+      } else {
+        el.style.display='none';
+      }
+    });
+  }
+  update();
+  chatBody.addEventListener('scroll',update,{passive:true});
+}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(initAnnotations,100));
+
+function openSidebar(el){
+  var phone=el.closest('.phone');
+  var targetId=el.getAttribute('data-sb');
+  phone.querySelectorAll('.cite-sidebar').forEach(function(s){s.classList.remove('open')});
+  phone.querySelector('.cite-overlay').classList.add('open');
+  document.getElementById(targetId).classList.add('open');
+}
+function closeSidebar(el){
+  var phone=el.closest('.phone');
+  phone.querySelector('.cite-overlay').classList.remove('open');
+  phone.querySelectorAll('.cite-sidebar').forEach(function(s){s.classList.remove('open')});
+}
+function switchTab(btn,id){
+  btn.parentElement.querySelectorAll('.op-tab').forEach(function(t){t.classList.remove('on')});
+  btn.classList.add('on');
+  var container=btn.closest('.detail-body')||btn.closest('.sb-body');
+  container.querySelectorAll('.op-panel').forEach(function(p){p.classList.remove('on')});
+  document.getElementById(id).classList.add('on');
+}
+function switchSide(el,side){
+  var panel=el.closest('.op-panel');
+  panel.querySelectorAll('.side').forEach(function(s){s.classList.remove('on')});
+  el.classList.add('on');
+  panel.querySelectorAll('.op-cmts').forEach(function(c){c.classList.remove('on')});
+  panel.querySelector(side==='pro'?'.pro-cmts':'.con-cmts').classList.add('on');
+}
+function toggleFav(btn){
+  var sidebar=btn.closest('.cite-sidebar');
+  var isOn=btn.classList.toggle('on');
+  btn.querySelector('.star').textContent=isOn?'★':'☆';
+  var toast=sidebar.querySelector('.detail-toast');
+  if(isOn){
+    toast.textContent='';
+    toast.innerHTML='⭐ 已加入决赛圈<span class="tst-arrow">›</span>';
+    toast.classList.add('show');
+    setTimeout(function(){toast.classList.remove('show');},1800);
+  }else{
+    toast.textContent='已取消收藏';
+    toast.classList.add('show');
+    setTimeout(function(){toast.classList.remove('show');},1800);
+  }
+}
+function askAbout(btn,quoteId,inputId){
+  var phone=btn.closest('.phone');
+  closeSidebar(btn);
+  setTimeout(function(){
+    var qa=document.getElementById(quoteId);
+    qa.classList.add('show');
+    var ib=document.getElementById(inputId);
+    var ph=ib.querySelector('.ib-ph');
+    if(ph){
+      var inp=document.createElement('input');
+      inp.className='ib-input';
+      inp.type='text';
+      inp.value='这个和 GoPro 13 比哪个更适合潜水？';
+      inp.readOnly=true;
+      ph.parentNode.replaceChild(inp,ph);
+      var icons=ib.querySelectorAll('.ib-icon');
+      icons.forEach(function(ic){ic.style.display='none';});
+      var send=document.createElement('span');
+      send.className='ib-icon';
+      send.style.cssText='color:var(--green);display:block;';
+      send.textContent='↑';
+      ib.appendChild(send);
+    }
+  },350);
+}
+function closeQuote(el){
+  var qa=el.closest('.quote-area');
+  qa.classList.remove('show');
+  var phone=qa.closest('.phone');
+  var ib=phone.querySelector('.input-bar');
+  var inp=ib.querySelector('.ib-input');
+  if(inp){
+    var ph=document.createElement('span');
+    ph.className='ib-ph';
+    ph.textContent='发消息或按住说话...';
+    inp.parentNode.replaceChild(ph,inp);
+    var icons=ib.querySelectorAll('.ib-icon');
+    icons.forEach(function(ic){ic.remove();});
+    var ico1=document.createElement('span');
+    ico1.className='ib-icon';
+    ico1.textContent='📷';
+    var ico2=document.createElement('span');
+    ico2.className='ib-icon';
+    ico2.textContent='＋';
+    ico2.onclick=function(){togglePlus(ico2);};
+    ib.appendChild(ico1);
+    ib.appendChild(ico2);
+  }
+}
+function togglePlus(el){
+  var phone=el.closest('.phone');
+  var menu=phone.querySelector('.plus-menu');
+  if(menu) menu.classList.toggle('show');
+}
+function openFavSheet(el){
+  var phone=el.closest('.phone');
+  phone.querySelector('.plus-menu').classList.remove('show');
+  phone.querySelector('.fav-overlay').classList.add('show');
+  phone.querySelector('.fav-sheet').classList.add('show');
+}
+function closeFavSheet(el){
+  var phone=el.closest('.phone');
+  phone.querySelector('.fav-overlay').classList.remove('show');
+  phone.querySelector('.fav-sheet').classList.remove('show');
+}
+function toggleFavCheck(el){
+  var chk=el.querySelector('.fl-check');
+  chk.classList.toggle('on');
+  var sheet=el.closest('.fav-sheet');
+  var bar=sheet.querySelector('.fs-bar');
+  var sel=bar.querySelector('.fs-sel');
+  var cards=sheet.querySelectorAll('.fl-card');
+  sel.innerHTML='';
+  var n=0;
+  cards.forEach(function(card){
+    if(card.querySelector('.fl-check.on')){
+      n++;
+      var src=card.querySelector('.img img').src;
+      var nm=card.querySelector('.nm').textContent;
+      var d=document.createElement('div');
+      d.className='fs-sel-item';
+      d.innerHTML='<img src="'+src+'"><span>'+nm+'</span>';
+      sel.appendChild(d);
+    }
+  });
+  if(n>0) bar.classList.add('show'); else bar.classList.remove('show');
+}
+function askFavSelected(el){
+  var sheet=el.closest('.fav-sheet');
+  var checked=sheet.querySelectorAll('.fl-check.on');
+  if(!checked.length) return;
+  var names=[],imgSrc='';
+  checked.forEach(function(c,i){
+    var card=c.closest('.fl-card');
+    names.push(card.querySelector('.nm').textContent);
+    if(i===0) imgSrc=card.querySelector('.img img').src;
+  });
+  var displayName=names.join('、');
+  checked.forEach(function(c){c.classList.remove('on');});
+  sheet.querySelector('.fs-bar').classList.remove('show');
+  sheet.querySelector('.fs-bar .fs-sel').innerHTML='';
+  var phone=sheet.closest('.phone');
+  closeFavSheet(el);
+  var qa=phone.querySelector('.quote-area');
+  qa.querySelector('.qimg img').src=imgSrc;
+  qa.querySelector('.qnm').textContent=displayName;
+  qa.classList.add('show');
+  var ib=phone.querySelector('.input-bar');
+  var ph=ib.querySelector('.ib-ph');
+  if(ph){
+    var inp=document.createElement('input');
+    inp.className='ib-input';
+    inp.type='text';
+    inp.placeholder='针对「'+displayName+'」提问...';
+    ib.replaceChild(inp,ph);
+    var icons=ib.querySelectorAll('.ib-icon');
+    icons.forEach(function(ic){ic.style.display='none';});
+    var send=document.createElement('span');
+    send.className='ib-icon';
+    send.style.cssText='color:var(--green);display:block;';
+    send.textContent='↑';
+    ib.appendChild(send);
+  }
+}
+</script>
+</body>
+</html>

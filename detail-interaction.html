@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商详页交互流程 · 收藏 + 追问引用</title>
+<style>
+  :root{
+    --green:#34B39D; --green-deep:#3B887C; --green-bg:rgba(86,209,191,0.10); --green-line:rgba(52,179,157,0.4); --green-hl:rgba(131,242,223,0.28);
+    --t80:rgba(0,0,0,0.80); --t62:rgba(0,0,0,0.62); --t45:rgba(0,0,0,0.45); --t27:rgba(0,0,0,0.27);
+    --line:rgba(48,48,52,0.10); --line2:rgba(48,48,52,0.06);
+    --gold:#E8A33D; --red:#D9534F; --red-bg:rgba(255,90,90,0.06);
+    --blue:#5A9AFF; --blue-deep:#3A6FCC; --blue-bg:rgba(90,154,255,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-font-smoothing:antialiased;}
+  body{
+    font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    background:#E9E9EC;
+    color:var(--t80);
+    padding:32px 16px 60px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:24px;
+    min-width:1860px;
+    align-items:flex-start;
+  }
+
+  /* ============ 每列（手机 + 标题） ============ */
+  .col{display:flex; flex-direction:column; align-items:center; gap:6px; width:340px;}
+  .col-tag{
+    font-size:11px; font-weight:600; border-radius:100px; padding:3px 10px;
+    align-self:flex-start; margin-left:6px;
+  }
+  .col.single .col-tag{color:var(--blue-deep); background:rgba(90,154,255,0.14);}
+  .col-title{font-size:15px; color:var(--t80); font-weight:600; align-self:flex-start; margin-left:6px;}
+  .col-sub{font-size:12px; color:var(--t62); margin-bottom:6px; align-self:flex-start; margin-left:6px;}
+
+  /* ============ 手机 chrome ============ */
+  .phone{
+    position:relative; width:340px; height:720px;
+    background:#F7F7F6;
+    border-radius:40px;
+    overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,0.14);
+  }
+  .nav{display:flex; align-items:center; justify-content:center; gap:6px; padding:44px 14px 6px;}
+  .nav .av{width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); border:0.5px solid #fff;}
+  .nav .nm{font-size:16px; font-weight:500; color:var(--t80);}
+
+  /* ============ 回答气泡 ============ */
+  .answer{
+    margin:0 18px 18px;
+    background:#fff;
+    border:0.5px solid rgba(0,0,0,0.08);
+    border-radius:34px;
+    padding:20px 6px 16px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.05);
+  }
+  .ref{display:flex; align-items:center; gap:6px; padding:2px 14px 4px; color:var(--t45); font-size:13px;}
+  .ref .avs{display:flex;}
+  .ref .avs i{
+    width:18px; height:18px; border-radius:50%;
+    border:1.5px solid #fff; display:inline-block; margin-left:-6px;
+    background:linear-gradient(135deg,#7EE8D4,#34B39D);
+  }
+  .ref .avs i:first-child{margin-left:0; background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+  .ref .avs i:nth-child(2){background:linear-gradient(135deg,#B5C7F7,#5A9AFF);}
+  .lead{padding:6px 14px 12px; font-size:15px; line-height:1.66; color:#141414; letter-spacing:0.01em;}
+
+  /* 用户消息 */
+  .userq{padding:8px 20px 18px; text-align:right;}
+  .userq span{
+    display:inline-block; background:#E8E9E8; border:0.5px solid #FAFAFA;
+    color:#242424; padding:12px 16px; border-radius:22px;
+    font-size:16px; line-height:24px; letter-spacing:0.04em; max-width:280px; text-align:left;
+  }
+
+  /* 底部 footer */
+  .foot-info{padding:14px 18px 20px; text-align:center; color:var(--t27); font-size:10px;}
+
+  /* ============ 顶部标题 ============ */
+  .header{width:100%; text-align:center; margin-bottom:8px;}
+  .header h1{font-size:20px; font-weight:700; color:var(--t80); margin-bottom:6px;}
+  .header p{font-size:13px; color:var(--t62); max-width:640px; margin:0 auto;}
+
+  /* ============ 商品详情页 ============ */
+  .detail{
+    margin:0 14px 4px;
+    background:#fff; border:0.5px solid var(--line);
+    border-radius:16px; overflow:hidden;
+  }
+  .detail-gallery{position:relative; background:#EEE; aspect-ratio:4/3; overflow:hidden;}
+  .detail-gallery img{width:100%; height:100%; object-fit:cover;}
+  .detail-gallery .cnt{position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:2px 8px; border-radius:100px; letter-spacing:0.04em;}
+  .detail-gallery .dots{position:absolute; bottom:8px; left:50%; transform:translateX(-50%); display:flex; gap:4px; padding:4px 8px; background:rgba(0,0,0,0.4); border-radius:100px;}
+  .detail-gallery .dots .d{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.5);}
+  .detail-gallery .dots .d.on{background:#fff;}
+  .detail-body{padding:14px 16px;}
+  .detail-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:14px;}
+  .detail-title{font-size:15px; font-weight:600; color:var(--t80); flex:1; min-width:0;}
+  .detail-price{color:var(--t45); font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; flex-shrink:0;}
+  .detail-price .lbl{color:var(--t45); font-weight:400; font-size:10px; margin-right:6px; letter-spacing:0.04em;}
+  .detail-sec{font-size:13px; font-weight:700; color:var(--t80); margin:14px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line2);}
+  .detail-sec:first-child{margin-top:0;}
+  .detail-intro{font-size:12.5px; color:var(--t62); line-height:1.7; margin-bottom:8px;}
+  .detail-params{background:#FAFAFB; border-radius:10px; padding:10px 14px;}
+  .detail-params .row{display:flex; justify-content:space-between; font-size:11.5px; padding:4px 0; font-variant-numeric:tabular-nums;}
+  .detail-params .row + .row{border-top:1px dashed var(--line2);}
+  .detail-params .row span:first-child{color:var(--t45); letter-spacing:0.02em;}
+  .detail-params .row span:last-child{font-weight:500; color:var(--t80);}
+
+  /* AI 总结 · 微信读书风格 */
+  .ai-sum{background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02)); border:0.5px solid var(--green-line); border-radius:12px; padding:12px 14px;}
+  .ai-sum .head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:10px;}
+  .ai-sum .lbl{display:inline-flex; align-items:center; gap:4px; font-size:10px; letter-spacing:0.08em; color:var(--green-deep); font-weight:700; text-transform:uppercase;}
+  .ai-sum .lbl::before{content:"✦"; color:var(--green);}
+  .ai-sum .pct{font-size:11px; color:var(--t45); font-variant-numeric:tabular-nums;}
+  .ai-sum .pct b{font-size:18px; font-weight:800; color:var(--t80); margin-left:2px;}
+  .ai-sum .body{display:flex; gap:14px; align-items:center; margin-bottom:10px;}
+  .ai-sum .badge{display:flex; flex-direction:column; align-items:center; gap:2px; flex-shrink:0; min-width:72px;}
+  .ai-sum .badge .icon{font-size:26px; line-height:1; display:none;}
+  .ai-sum .badge .rank{font-size:22px; font-weight:900; color:var(--gold); white-space:nowrap;}
+  .ai-sum .badge .cnt{font-size:10px; color:var(--t45); white-space:nowrap; cursor:pointer;}
+  .ai-sum .bars{flex:1; display:flex; flex-direction:column; gap:6px;}
+  .ai-sum .bar-row{display:flex; align-items:center; gap:6px;}
+  .ai-sum .bar-row .dim{font-size:11px; color:var(--t45); width:24px; flex-shrink:0; text-align:justify;}
+  .ai-sum .bar-row .track{flex:1; height:6px; background:var(--line); border-radius:3px; overflow:hidden;}
+  .ai-sum .bar-row .fill{height:100%; border-radius:3px;}
+  .ai-sum .bar-row .fill.pro{background:var(--green);}
+  .ai-sum .bar-row .fill.mid{background:var(--t27);}
+  .ai-sum .bar-row .fill.neg{background:var(--red);}
+  .ai-sum .bar-row .val{font-size:10px; color:var(--t45); width:26px; text-align:right; font-variant-numeric:tabular-nums; flex-shrink:0;}
+  .ai-sum .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .ai-sum .tag{font-size:11px; padding:3px 10px; border-radius:100px; font-weight:500; border:0.5px solid var(--line); background:transparent; color:var(--t62);}
+  .ai-sum .tag.pos{border-color:var(--line);}
+  .ai-sum .tag.neg{border-color:var(--line);}
+
+  /* 购买渠道列表 */
+  .shop-list{display:flex; flex-direction:column;}
+  .shop-item{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:0.5px solid var(--line2); cursor:pointer; text-decoration:none; color:inherit;}
+  .shop-item:last-child{border-bottom:0;}
+  .shop-item .img{width:44px; height:44px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .shop-item .img img{width:100%; height:100%; object-fit:cover;}
+  .shop-item .mid{flex:1; min-width:0;}
+  .shop-item .nm{font-size:13px; font-weight:600; color:var(--t80); line-height:1.35; margin-bottom:2px;}
+  .shop-item .price{font-size:13px; font-weight:700; color:var(--red); font-variant-numeric:tabular-nums;}
+  .shop-item .arrow{color:var(--t27); font-size:14px; flex-shrink:0;}
+
+  /* ============ 商详悬浮操作按钮 ============ */
+  .detail-actions{position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:5;}
+  .act-btn{display:flex; align-items:center; justify-content:center; gap:5px; padding:10px 22px; border-radius:100px; font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; border:none; transition:all .15s; box-shadow:0 2px 12px rgba(0,0,0,0.10); white-space:nowrap;}
+  .act-btn.fav{background:#D7F0EB; color:var(--green-deep); border:1px solid #D7F0EB;}
+  .act-btn.fav .star{font-size:14px; color:var(--green);}
+  .act-btn.fav.on{background:#D7F0EB; color:var(--green-deep); border-color:#D7F0EB;}
+  .act-btn.fav.on .star{color:var(--green);}
+  .act-btn.ask{background:#D7F0EB; color:var(--green-deep); border:1px solid #D7F0EB;}
+
+  /* toast */
+  .detail-toast{position:absolute; left:50%; transform:translateX(-50%); bottom:80px; background:rgba(0,0,0,0.78); color:#fff; font-size:12px; font-weight:500; padding:7px 14px; border-radius:100px; display:flex; align-items:center; gap:8px; box-shadow:0 2px 10px rgba(0,0,0,0.15); z-index:6; white-space:nowrap;}
+  .detail-toast .tst-arrow{font-size:14px; opacity:0.7;}
+
+  /* ============ 决赛圈列表页 ============ */
+  .fl-nav{display:flex; align-items:center; gap:10px; padding:44px 14px 10px;}
+  .fl-back{font-size:18px; color:var(--t62); cursor:pointer; width:28px; text-align:center;}
+  .fl-title{font-size:17px; font-weight:600; color:var(--t80);}
+  .fl-badge{font-size:11px; font-weight:600; color:var(--green-deep); background:var(--green-bg); padding:2px 8px; border-radius:100px;}
+  .fl-body{padding:8px 14px 20px; flex:1; overflow-y:auto;}
+  .fl-card{display:flex; gap:12px; padding:12px; background:#fff; border:0.5px solid var(--line); border-radius:14px; margin-bottom:10px; align-items:center;}
+  .fl-card .img{width:56px; height:56px; border-radius:8px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .fl-card .img img{width:100%; height:100%; object-fit:cover;}
+  .fl-card .mid{flex:1; min-width:0;}
+  .fl-card .nm{font-size:14px; font-weight:600; color:var(--t80); margin-bottom:3px; line-height:1.35;}
+  .fl-card .info-row{display:flex; align-items:baseline; gap:8px; font-size:12px;}
+  .fl-card .price{color:var(--red); font-weight:700; font-variant-numeric:tabular-nums;}
+  .fl-card .score{color:var(--t45); font-variant-numeric:tabular-nums;}
+  .fl-card .score .s{color:var(--gold);}
+  .fl-card .remove{font-size:16px; color:var(--t27); cursor:pointer; flex-shrink:0; padding:4px;}
+  .fl-card .fl-check{width:22px; height:22px; border-radius:6px; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; transition:all .15s; font-size:13px; color:transparent;}
+  .fl-card .fl-check.on{background:var(--green); border-color:var(--green); color:#fff;}
+  .fl-action{position:absolute; bottom:20px; left:16px; right:16px; z-index:5;}
+  .fl-action .fl-btn{display:flex; align-items:center; justify-content:center; gap:6px; width:100%; padding:13px 0; border-radius:100px; background:var(--green); color:#fff; font-size:14px; font-weight:600; border:none; cursor:pointer; font-family:inherit; box-shadow:0 4px 16px rgba(52,179,157,0.3);}
+  .fl-action .fl-btn:disabled{background:var(--t27); box-shadow:none;}
+
+  /* ============ 追问引用卡片 ============ */
+  .quote-area{position:relative; flex-shrink:0;}
+  .quote-area::before{content:''; position:absolute; top:-24px; left:0; right:0; height:24px; background:linear-gradient(to bottom, transparent, #fff); pointer-events:none;}
+  .quote-ref{display:flex; gap:8px; padding:8px 16px; background:#fff; align-items:center; border-bottom:0.5px solid var(--line2);}
+  .quote-ref .qt{color:var(--green); font-size:16px; font-weight:700; flex-shrink:0; line-height:1;}
+  .quote-ref .img{width:28px; height:28px; border-radius:4px; overflow:hidden; background:#EEE; flex-shrink:0;}
+  .quote-ref .img img{width:100%; height:100%; object-fit:cover;}
+  .quote-ref .nm{font-size:13px; font-weight:500; color:var(--t80); line-height:1.3; flex:1; min-width:0;}
+  .quote-ref .close{font-size:12px; color:var(--t27); cursor:pointer; flex-shrink:0;}
+
+  /* ============ 商品名内联链接 ============ */
+  .plink{position:relative; color:var(--blue); text-decoration:none; border-bottom:none; cursor:pointer; white-space:nowrap; font-weight:600; padding-bottom:0;}
+  .plink::after{content:""; display:inline-block; width:14px; height:14px; margin-left:3px; vertical-align:-1px; background:var(--blue); -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z'/%3E%3Cline x1='3' y1='6' x2='21' y2='6'/%3E%3Cpath d='M16 10a4 4 0 01-8 0'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z'/%3E%3Cline x1='3' y1='6' x2='21' y2='6'/%3E%3Cpath d='M16 10a4 4 0 01-8 0'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+  /* ============ 场景入口链接 ============ */
+  .slink{color:var(--blue); text-decoration:none; border-bottom:none; cursor:pointer; font-weight:600; padding-bottom:0;}
+  .slink::after{content:""; display:inline-block; width:14px; height:14px; margin-left:3px; vertical-align:-1px; background:var(--blue); -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20V4'/%3E%3Cpath d='M5 7l7-5 7 5'/%3E%3Cpath d='M5 7L2 4'/%3E%3Cpath d='M19 7l3-3'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20V4'/%3E%3Cpath d='M5 7l7-5 7 5'/%3E%3Cpath d='M5 7L2 4'/%3E%3Cpath d='M19 7l3-3'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+  /* 场景分支条目 */
+  .scene-branches{margin:6px 0 4px; display:flex; flex-direction:column; gap:0;}
+  .scene-branch{position:relative; padding:10px 14px 10px 20px; border-left:1.5px solid var(--line); margin-left:6px;}
+  .scene-branch:last-child{border-left-color:transparent;}
+  .scene-branch::before{content:""; position:absolute; left:-5px; top:14px; width:8px; height:8px; border-radius:50%; background:var(--blue); border:2px solid #fff; box-shadow:0 0 0 1px var(--blue);}
+  .scene-branch .sc-title{font-size:13px; margin-bottom:4px;}
+  .scene-branch .sc-rec{font-size:12px; color:var(--t62); line-height:1.5;}
+  .scene-branch .sc-rec .plink{font-size:12px;}
+  .scene-branch.active{background:var(--blue-bg); border-radius:10px; border-left-color:transparent; margin-left:0; padding-left:26px;}
+  .scene-branch.active::before{left:8px;}
+
+  /* 场景选择树 · 树形分支布局 */
+  .scene-tree{margin:8px 14px; position:relative; display:flex; flex-direction:column; gap:0; padding-left:22px;}
+  /* 树内标题 — 左对齐到竖干位置 */
+  .scene-tree .sec-label{position:relative; margin:0 0 0 -22px; padding:0 0 2px 0;}
+  .scene-tree .sec-label::after{content:''; position:absolute; left:0; top:100%; width:3px; height:20px; background:#C5C5C8;}
+  .st-row{display:flex; align-items:center; gap:0; position:relative; min-height:44px;}
+  /* arm：╰── 从上方竖干圆角弯出为横线 */
+  .st-arm{position:absolute; left:-22px; top:0; bottom:50%; width:22px; border-left:3px solid #C5C5C8; border-bottom:3px solid #C5C5C8; border-bottom-left-radius:12px; border-right:none; border-top:none; box-sizing:border-box;}
+  /* 非末行：竖干从分支点继续向下 */
+  .st-row:not(:last-child)::after{content:''; position:absolute; left:-22px; top:50%; bottom:0; width:3px; background:#C5C5C8;}
+  /* 场景 chip — 紧凑，正常颜色 */
+  .st-scene{flex-shrink:0; background:#F2F2F4; border:1px solid #E0E0E3; border-radius:8px; padding:5px 8px; font-size:11.5px; font-weight:600; color:var(--t80) !important; cursor:pointer; transition:all .15s;}
+  .st-scene:hover{background:#EAEAED;}
+  /* 连接桥 — 粗线 */
+  .st-conn{width:14px; height:3px; background:#C5C5C8; border-radius:2px; flex-shrink:0; margin:0 4px;}
+  /* 推荐内容 — 卡片 */
+  .st-rec{flex:1; min-width:0; background:#fff; border:1px solid #E0E0E3; border-radius:10px; padding:8px 10px; font-size:12px; line-height:1.6; color:var(--t80);}
+  .st-rec .plink{font-size:12px;}
+  /* 选中态 */
+  .st-row.st-active .st-scene{background:var(--blue); border-color:var(--blue); color:#fff !important;}
+  .st-row.st-dim{opacity:0.35;}
+  /* 圆点交互 — 分支节点上的可点击圆点（蓝色=可单选） */
+  .st-dot{width:14px; height:14px; border-radius:50%; border:2.5px solid var(--blue); background:#fff; flex-shrink:0; cursor:pointer; transition:all .15s; margin-right:6px; position:relative; z-index:1;}
+  .st-dot:hover{transform:scale(1.15); box-shadow:0 0 0 3px rgba(90,154,255,0.12);}
+  .st-row.st-active .st-dot{background:var(--blue); box-shadow:0 0 0 3px rgba(90,154,255,0.18);}
+  /* 圆点竖线方案 — 极简节点列表 */
+  .dot-list{margin:8px 14px; position:relative; padding-left:0;}
+  .dot-list .sec-label{margin:0 0 4px 0; padding:0;}
+  .dot-list .dl-trunk{position:relative; padding-left:8px;}
+  .dot-list .dl-trunk::before{content:''; position:absolute; left:6px; top:0; bottom:0; width:3px; background:#C5C5C8; border-radius:2px;}
+  .dot-item{display:flex; align-items:center; gap:10px; padding:14px 0; position:relative; z-index:1; cursor:pointer;}
+  .dot-item .dot-node{width:16px; height:16px; border-radius:50%; border:3px solid #C5C5C8; background:#fff; flex-shrink:0; transition:all .15s;}
+  .dot-item:hover .dot-node{border-color:var(--blue); transform:scale(1.2);}
+  .dot-item:hover .dot-label{color:var(--blue);}
+  .dot-item .dot-label{font-size:14px; font-weight:600; color:var(--t80); transition:color .15s;}
+  .dot-item.dl-active .dot-node{border-color:var(--blue); background:var(--blue); box-shadow:0 0 0 4px rgba(90,154,255,0.18);}
+  .dot-item.dl-active .dot-label{color:var(--blue);}
+
+  /* 社会证据模块 */
+  .scene-proof{margin:8px 0 4px; padding:12px 14px; background:#FAFAFB; border-radius:12px;}
+  .scene-proof .sp-head{font-size:12px; color:var(--t45); margin-bottom:10px;}
+  .scene-proof .sp-head b{color:var(--t80);}
+  .scene-proof .sp-bars{display:flex; flex-direction:column; gap:6px; margin-bottom:10px;}
+  .scene-proof .sp-row{display:flex; align-items:center; gap:8px; font-size:12px;}
+  .scene-proof .sp-row .nm{flex:1; min-width:0; color:var(--t80); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .scene-proof .sp-row .track{width:80px; height:6px; background:var(--line); border-radius:3px; overflow:hidden; flex-shrink:0;}
+  .scene-proof .sp-row .fill{height:100%; border-radius:3px; background:var(--blue);}
+  .scene-proof .sp-row .val{font-size:11px; color:var(--t45); width:28px; text-align:right; font-variant-numeric:tabular-nums; flex-shrink:0;}
+  .scene-proof .sp-row:first-child .fill{background:var(--green);}
+
+  /* 段标题 */
+  .sec-label{display:flex; align-items:center; gap:6px; font-size:14px; color:var(--t80); font-weight:600; margin:14px 18px 10px;}
+
+  /* 引用评论条 */
+  .cp-note{display:flex; gap:8px; padding:8px 10px; background:#fff; border-radius:8px; margin-top:6px; font-size:11.5px;}
+  .cp-note .av{width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#7EE8D4,#34B39D); color:#fff; font-size:9px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .cp-note .body{flex:1; min-width:0;}
+  .cp-note .u{font-size:10px; color:var(--t45); margin-bottom:2px;}
+  .cp-note .t{color:var(--t80); line-height:1.5;}
+
+  /* ＋号弹出菜单 */
+  .plus-menu{position:absolute; bottom:62px; right:14px; background:#fff; border-radius:14px; box-shadow:0 4px 24px rgba(0,0,0,0.16); padding:6px 0; z-index:10; min-width:150px;}
+  .pm-item{display:flex; align-items:center; gap:10px; padding:11px 18px; font-size:14px; color:var(--t80); cursor:pointer;}
+  .pm-item:first-child{border-radius:14px 14px 0 0;}
+  .pm-item:last-child{border-radius:0 0 14px 14px;}
+  .pm-item:hover{background:rgba(0,0,0,0.04);}
+  .pm-item .pm-ico{font-size:18px; width:22px; text-align:center;}
+  .pm-item.pm-hl{color:var(--green-deep); font-weight:600;}
+
+  /* 收藏半屏浮层 — 悬浮在输入栏上方 */
+  .fav-overlay{position:absolute; inset:0; bottom:54px; background:rgba(0,0,0,0.35); z-index:9; border-radius:40px 40px 0 0;}
+  .fav-sheet{position:absolute; bottom:54px; left:0; right:0; background:#fff; border-radius:20px 20px 0 0; box-shadow:0 -4px 24px rgba(0,0,0,0.14); z-index:10; max-height:60%; display:flex; flex-direction:column;}
+  .fav-sheet .fs-head{padding:12px 18px 8px; display:flex; align-items:center; justify-content:space-between; border-bottom:0.5px solid var(--line); flex-shrink:0;}
+  .fav-sheet .fs-title{font-size:14px; font-weight:600; color:var(--t80);}
+  .fav-sheet .fs-close{font-size:18px; color:var(--t45); cursor:pointer; line-height:1;}
+  .fav-sheet .fs-list{padding:8px 12px 32px; overflow-y:auto; flex:1;}
+  .fav-sheet .fl-card{margin-bottom:6px; padding:8px 10px; cursor:pointer;}
+  .fav-sheet .fl-card:hover{background:#F5FAF9;}
+  .fav-sheet .fl-card .img{width:40px; height:40px;}
+  .fav-sheet .fl-card .nm{font-size:12.5px;}
+  .fav-sheet .fl-card .info-row{font-size:11px;}
+  .fav-sheet .fl-card .fl-check{width:20px; height:20px; font-size:10px;}
+
+  /* 分区标题 */
+  .section-header{width:100%; text-align:center; margin:32px 0 8px; padding-top:24px; border-top:1px solid var(--line);}
+  .section-header h2{font-size:18px; font-weight:700; color:var(--t80); margin-bottom:4px;}
+  .section-header p{font-size:13px; color:var(--t62); max-width:640px; margin:0 auto;}
+
+  /* ============ PK 对比组件 ============ */
+  .pk-card{margin:0 14px 4px; background:#fff; border:0.5px solid var(--line); border-radius:14px; padding:14px; overflow:hidden;}
+  .pk-title{font-size:13px; font-weight:700; color:var(--t80); margin-bottom:12px; display:flex; align-items:center; gap:6px;}
+  .pk-title .icon{font-size:14px;}
+  /* 双头得分条 */
+  .pk-scores{display:flex; align-items:center; gap:8px; margin-bottom:14px; padding-bottom:12px; border-bottom:0.5px solid var(--line2);}
+  .pk-side{flex:1; min-width:0;}
+  .pk-side .nm{font-size:11px; color:var(--t62); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pk-side .score-row{display:flex; align-items:center; gap:6px;}
+  .pk-side .num{font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1;}
+  .pk-side.win .num{color:var(--green-deep);}
+  .pk-side:not(.win) .num{color:var(--t45);}
+  .pk-side .bar{flex:1; height:6px; background:var(--line); border-radius:3px; overflow:hidden;}
+  .pk-side.win .bar .fill{background:var(--green);}
+  .pk-side:not(.win) .bar .fill{background:var(--t27);}
+  .pk-side .fill{height:100%; border-radius:3px;}
+  .pk-stars{position:relative; display:inline-block; line-height:1;}
+  .pk-stars .s-empty{color:var(--line); letter-spacing:1px; font-size:13px;}
+  .pk-stars .s-fill{position:absolute; top:0; left:0; overflow:hidden; color:var(--gold); white-space:nowrap; letter-spacing:1px; font-size:13px;}
+  .pk-vs{font-size:10px; font-weight:800; color:var(--t27); flex-shrink:0; width:20px; text-align:center;}
+  /* 参数行 */
+  .pk-params{margin-bottom:10px;}
+  .pk-params .pk-row{display:flex; align-items:baseline; font-size:11px; padding:5px 0; border-bottom:0.5px dashed var(--line2);}
+  .pk-params .pk-row:last-child{border-bottom:none;}
+  .pk-params .pk-val{flex:1; min-width:0; color:var(--t80); font-weight:500; font-variant-numeric:tabular-nums;}
+  .pk-params .pk-val.win{color:var(--green-deep); font-weight:600;}
+  .pk-params .pk-dim{width:52px; flex-shrink:0; text-align:center; color:var(--t45); font-size:10px;}
+  .pk-params .pk-val:last-child{text-align:right;}
+  .pk-params .pk-val .sub{display:block; font-size:10px; color:var(--t45); font-weight:400; margin-top:1px;}
+  /* 用户评价入口 */
+  .pk-voices{display:flex; gap:6px; margin-top:2px; align-items:center;}
+  .pk-vmid{font-size:10px; font-weight:700; color:var(--t45); flex-shrink:0; white-space:nowrap;}
+  .pk-ventry{flex:1; display:flex; align-items:center; gap:4px; padding:7px 8px; background:#FAFAFB; border-radius:10px; min-width:0; cursor:pointer; -webkit-tap-highlight-color:transparent; white-space:nowrap;}
+  .pk-ventry:active{background:#F0F0F2;}
+  .pk-vquote{font-size:11px; color:var(--t80); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .pk-vquote::before{content:'\201C'; color:var(--t27); font-weight:700;}
+  .pk-vquote::after{content:'\201D'; color:var(--t27); font-weight:700;}
+  .pk-vmeta{display:flex; align-items:center; gap:6px;}
+  .pk-avatars{display:flex; flex-shrink:0;}
+  .pk-avatars i{width:14px; height:14px; border-radius:50%; border:1.5px solid #fff; display:block; margin-left:-5px; background-size:cover; background-position:center;}
+  .pk-avatars i:first-child{margin-left:0;}
+  .pk-avatars i:nth-child(1){background:linear-gradient(135deg,#FBD3B4,#E8A33D);}
+  .pk-avatars i:nth-child(2){background:linear-gradient(135deg,#B4D8FB,#5A9AFF);}
+  .pk-avatars i:nth-child(3){background:linear-gradient(135deg,#D4FBE4,#34B39D);}
+  .pk-vlabel{flex:1; min-width:0; font-size:10px; font-weight:500; color:var(--t45);}
+  .pk-vlabel b{color:var(--green-deep); font-weight:600;}
+  .pk-varrow{flex-shrink:0; font-size:14px; color:var(--t27);}
+
+  /* 评论半屏浮窗 */
+  .pk-sheet-overlay{position:absolute; inset:0; background:rgba(0,0,0,0.35); z-index:20; border-radius:40px; display:flex; align-items:flex-end;}
+  .pk-sheet{width:100%; max-height:82%; background:#fff; border-radius:20px 20px 0 0; padding:0 0 20px; overflow-y:auto;}
+  .pk-sheet-bar{width:36px; height:4px; background:var(--t27); border-radius:2px; margin:10px auto 0;}
+  .pk-sheet-head{display:flex; align-items:center; gap:8px; padding:14px 18px 12px; border-bottom:0.5px solid var(--line2);}
+  .pk-sheet-head .pk-avatars i{width:26px; height:26px;}
+  .pk-sheet-title{font-size:15px; font-weight:600; color:var(--t80);}
+  .pk-sheet-list{padding:0 18px;}
+  .pk-comment{padding:14px 0; border-bottom:0.5px solid var(--line2);}
+  .pk-comment:last-child{border-bottom:none;}
+  .pk-c-head{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .pk-c-av{width:28px; height:28px; border-radius:50%; flex-shrink:0;}
+  .pk-c-name{font-size:12px; font-weight:600; color:var(--t80);}
+  .pk-c-tag{font-size:10px; color:var(--t45); margin-left:auto;}
+  .pk-c-imgs{display:flex; gap:4px; margin-bottom:6px;}
+  .pk-c-imgs span{flex:1; aspect-ratio:1; background:var(--line); border-radius:6px;}
+  .pk-c-text{font-size:12px; color:var(--t62); line-height:1.6;}
+  /* PK 解释文字 */
+  .pk-explain{padding:4px 14px 10px; font-size:12.5px; color:var(--t62); line-height:1.65;}
+  .pk-explain b{color:var(--t80); font-weight:600;}
+  /* 高亮块 */
+  .pk-conclusion{margin:6px 14px 4px; background:linear-gradient(180deg,rgba(52,179,157,0.08),rgba(52,179,157,0.02)); border:0.5px solid rgba(52,179,157,0.3); border-radius:14px; padding:14px 14px 6px;}
+  .pk-conclusion .row{display:flex; align-items:center; gap:8px; font-size:13px; line-height:1.5; margin-bottom:12px;}
+  .pk-conclusion .cond{flex:1; color:var(--t80); font-weight:400;}
+  .pk-conclusion .cond b{font-weight:700;}
+  .pk-conclusion .arrow{color:var(--t27); font-size:12px;}
+  .pk-conclusion .pick{flex-shrink:0; font-size:12px; font-weight:600; border-radius:100px; padding:5px 14px; white-space:nowrap; background:rgba(52,179,157,0.12); color:var(--green-deep);}
+
+  /* 交互列 */
+  .col.interactive .col-tag{color:#5C4680; background:rgba(122,95,160,0.14);}
+  .phone.has-sidebar{display:flex; flex-direction:column;}
+  .chat-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+
+  /* 底部输入栏 */
+  .input-bar{display:flex; align-items:center; gap:10px; padding:10px 16px 32px; background:#fff; border-top:0.5px solid var(--line); flex-shrink:0;}
+  .input-bar .ib-voice{width:32px; height:32px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; background:#fff; color:var(--green); font-size:14px; cursor:pointer; flex-shrink:0;}
+  .input-bar .ib-ph{flex:1; font-size:14px; color:var(--t27);}
+  .input-bar .ib-input{flex:1; font-size:14px; color:var(--t80); border:none; outline:none; background:transparent; font-family:inherit;}
+  .input-bar .ib-icon{font-size:20px; color:var(--t45); cursor:pointer; flex-shrink:0; line-height:1;}
+
+  /* 商品标题入口卡 */
+  .pcard{display:flex; align-items:center; gap:6px; padding:10px 0; cursor:pointer; margin:2px 0; white-space:nowrap;}
+  .pcard .pc-name{font-size:15px; font-weight:700; color:var(--t80); letter-spacing:0.01em; overflow:hidden; text-overflow:ellipsis;}
+  .pcard .pc-score{font-size:14px; font-weight:700; color:var(--t80); flex-shrink:0;}
+  .pcard .pc-star{color:var(--gold); font-size:13px; flex-shrink:0;}
+  .pcard .pc-arrow{color:var(--t45); font-size:16px; flex-shrink:0;}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>商详页交互流程</h1>
+  <p>收藏 + 追问引用 · 从浏览到决策的关键动作</p>
+</div>
+
+<!-- ================================================================
+     Row 0 · 商品卡类型
+     ================================================================ -->
+<div class="section-header" style="border-top:none; margin-top:0;">
+  <h2>商品卡</h2>
+  <p>正文蓝链 · 标题入口卡 · 两种商品提及方式</p>
+</div>
+
+<!-- 商品卡-A: 蓝链（正文内联） -->
+<div class="col single">
+  <div class="col-tag">商品卡</div>
+  <div class="col-title">蓝链 · 正文内联</div>
+  <div class="col-sub">商品名蓝色 + 购物袋 icon · 点击跳商详</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+        <div class="lead">
+          关于 <span class="plink">GoPro Hero 13</span>，它的最大优势在于配件生态——防水壳、稳定架、水下灯一整套，是目前运动相机里最成熟的。画质方面，5.3K60 白天水下表现扎实，后期剪辑余量大。
+        </div>
+        <div class="lead">
+          不过 1/1.9" 的传感器面积偏小，深潜到 15 米以下光线不足时噪点会比较明显。如果你主要是夜潜场景，建议看看 <span class="plink">DJI Action 5 Pro</span>，大底低光强很多。
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- 商品卡-B: 标题入口卡 -->
+<div class="col single">
+  <div class="col-tag">商品卡</div>
+  <div class="col-title">标题入口卡</div>
+  <div class="col-sub">商品名 + 评分 + 箭头 · 点击跳商详</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+        <div class="lead">
+          关于 <span class="plink">GoPro Hero 13</span>，它的最大优势在于配件生态——防水壳、稳定架、水下灯一整套，是目前运动相机里最成熟的。画质方面，5.3K60 白天水下表现扎实，后期剪辑余量大。
+        </div>
+        <div style="padding:0 14px;">
+          <div class="pcard">
+            <span class="pc-name">DJI Osmo Action 5 Pro</span>
+            <span class="pc-star">★</span>
+            <span class="pc-score">4.7</span>
+            <span class="pc-arrow">›</span>
+          </div>
+        </div>
+        <div class="lead">
+          不过 1/1.9" 的传感器面积偏小，深潜到 15 米以下光线不足时噪点会比较明显。如果你主要是夜潜场景，建议看看 <span class="plink">DJI Action 5 Pro</span>，大底低光强很多。
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     Row 1 · 商详页 + 收藏 + 追问
+     ================================================================ -->
+<div class="section-header">
+  <h2>商详页 + 收藏 + 追问</h2>
+  <p>收藏 + 追问引用 · 从浏览到决策的关键动作</p>
+</div>
+
+<!-- Phone 0: 对话页 -->
+<div class="col single">
+  <div class="col-tag">对话页</div>
+  <div class="col-title">AI 回答 · 商品内联链接</div>
+  <div class="col-sub">商品名蓝色虚线 + 购物袋 icon</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+        <div class="lead">
+          关于 <span class="plink">GoPro Hero 13</span>，它的最大优势在于配件生态——防水壳、稳定架、水下灯一整套，是目前运动相机里最成熟的。画质方面，5.3K60 白天水下表现扎实，后期剪辑余量大。
+        </div>
+        <div class="lead">
+          不过 1/1.9" 的传感器面积偏小，深潜到 15 米以下光线不足时噪点会比较明显。如果你主要是夜潜场景，建议看看 <span class="plink">DJI Action 5 Pro</span>，大底低光强很多。
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- Phone 1: 商详页 · 带操作按钮 -->
+<div class="col single">
+  <div class="col-tag">商品详情页</div>
+  <div class="col-title">底部操作按钮</div>
+  <div class="col-sub">收藏 + 追问</div>
+
+  <div class="phone" style="position:relative;">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="detail" style="margin:0; border:none; border-radius:0;">
+      <div class="detail-gallery">
+        <img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt="">
+        <div class="cnt">1 / 5</div>
+        <div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-top">
+          <div class="detail-title">DJI Osmo Action 5 Pro</div>
+          <div class="detail-price"><span class="lbl">参考价</span>¥2,199-2,599</div>
+        </div>
+        <div class="ai-sum">
+          <div class="head">
+            <span class="pct">推荐值<b>90.2%</b></span>
+            <span class="lbl">AI 总结</span>
+          </div>
+          <div class="body">
+            <div class="badge">
+              <div class="rank">仙品</div>
+              <div class="cnt">892 人点评 ›</div>
+            </div>
+            <div class="bars">
+              <div class="bar-row"><span class="dim">推荐</span><div class="track"><div class="fill pro" style="width:89%"></div></div><span class="val">89%</span></div>
+              <div class="bar-row"><span class="dim">一般</span><div class="track"><div class="fill mid" style="width:8%"></div></div><span class="val">8%</span></div>
+              <div class="bar-row"><span class="dim">不行</span><div class="track"><div class="fill neg" style="width:3%"></div></div><span class="val">3%</span></div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag pos">低光画质强(126)</span>
+            <span class="tag pos">超长续航(89)</span>
+            <span class="tag neg">第三方配件少(34)</span>
+            <span class="tag neg">长时间发热(21)</span>
+          </div>
+        </div>
+        <div class="detail-sec">基本介绍</div>
+        <div class="detail-intro">大疆 2024 下半年发布的旗舰运动相机，主打 1/1.3" 大底传感器和低光表现，裸机 20 米防水 + 240 分钟续航是同价位段的天花板。</div>
+        <div class="detail-params">
+          <div class="row"><span>传感器</span><span>1/1.3" CMOS</span></div>
+          <div class="row"><span>最高视频</span><span>4K120</span></div>
+          <div class="row"><span>原生防水</span><span>20 米</span></div>
+          <div class="row"><span>电池</span><span>1950 mAh · 约 240 min</span></div>
+        </div>
+        <div class="detail-sec">购买渠道</div>
+        <div class="shop-list">
+          <a class="shop-item" href="#" onclick="return false">
+            <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+            <div class="mid">
+              <div class="nm">DJI 大疆官方旗舰店</div>
+              <div class="price">¥2,399</div>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="detail-actions">
+      <button class="act-btn fav"><span class="star">☆</span>收藏</button>
+      <button class="act-btn ask">追问</button>
+    </div>
+  </div>
+</div>
+
+<!-- Phone 2: 点击 ＋ 弹出菜单 -->
+<div class="col single">
+  <div class="col-tag">收藏</div>
+  <div class="col-title">点击 ＋ 号</div>
+  <div class="col-sub">弹出功能菜单 · 选择"收藏"</div>
+
+  <div class="phone has-sidebar" style="position:relative;">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+        <div class="lead">
+          关于 <span class="plink">GoPro Hero 13</span>，它的最大优势在于配件生态丰富……
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon" style="color:var(--green); font-weight:700;">＋</span>
+    </div>
+    <div class="plus-menu">
+      <div class="pm-item"><span class="pm-ico">📷</span>拍照</div>
+      <div class="pm-item"><span class="pm-ico">🖼</span>相册</div>
+      <div class="pm-item pm-hl"><span class="pm-ico">⭐</span>收藏</div>
+      <div class="pm-item"><span class="pm-ico">📍</span>位置</div>
+    </div>
+  </div>
+</div>
+
+<!-- Phone 3: 收藏列表 · 点选引用 -->
+<div class="col single">
+  <div class="col-tag">收藏</div>
+  <div class="col-title">收藏列表</div>
+  <div class="col-sub">点选商品 · 引用到对话</div>
+
+  <div class="phone has-sidebar" style="position:relative;">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+        <div class="lead">
+          关于 <span class="plink">GoPro Hero 13</span>，它的最大优势在于配件生态丰富……
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="fav-overlay"></div>
+    <div class="fav-sheet">
+      <div class="fs-head">
+        <span class="fs-title">我的收藏</span>
+        <span class="fs-close">✕</span>
+      </div>
+      <div class="fs-list">
+        <div class="fl-card">
+          <div class="fl-check on">✓</div>
+          <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">DJI Osmo Action 5 Pro</div>
+            <div class="info-row">
+              <span class="price" style="color:var(--t45);">¥2,199-2,599</span>
+              <span class="score"><span class="s">★</span>4.6 (1.8k)</span>
+            </div>
+          </div>
+        </div>
+        <div class="fl-card">
+          <div class="fl-check on">✓</div>
+          <div class="img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png" alt=""></div>
+          <div class="mid">
+            <div class="nm">GoPro Hero 13 Black</div>
+            <div class="info-row">
+              <span class="price" style="color:var(--t45);">¥2,498-3,198</span>
+              <span class="score"><span class="s">★</span>4.7 (2.3k)</span>
+            </div>
+          </div>
+        </div>
+        <div class="fl-card">
+          <div class="fl-check">✓</div>
+          <div class="img"><img src="images/Insta360_Ace_Pro.jpg" alt=""></div>
+          <div class="mid">
+            <div class="nm">Insta360 Ace Pro 2</div>
+            <div class="info-row">
+              <span class="price" style="color:var(--t45);">¥2,299-2,799</span>
+              <span class="score"><span class="s">★</span>4.6 (940)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="input-bar" style="position:relative; z-index:11;">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- Phone 4: 追问引用 -->
+<div class="col single">
+  <div class="col-tag">追问引用</div>
+  <div class="col-title">点击"追问"</div>
+  <div class="col-sub">商品变引用卡片 · 用户继续对话</div>
+
+  <div class="phone has-sidebar" style="position:relative;">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>GoPro Hero 13 潜水到底怎么样？值得买吗</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">147 篇</b>真人潜水实拍笔记</span>
+        </div>
+        <div class="lead">
+          关于 <span class="plink">GoPro Hero 13</span>，它的最大优势在于配件生态——防水壳、稳定架、水下灯一整套，是目前运动相机里最成熟的。画质方面，5.3K60 白天水下表现扎实。
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="quote-area">
+      <div class="quote-ref">
+        <span class="qt">"</span>
+        <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg" alt=""></div>
+        <div class="nm">DJI Osmo Action 5 Pro</div>
+        <span class="qt">"</span>
+        <div class="close">✕</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <input class="ib-input" type="text" value="这个和 GoPro 13 比哪个更适合潜水？" readonly>
+      <span class="ib-icon" style="color:var(--green);">↑</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     Row 2 · PK 对比
+     ================================================================ -->
+<div class="section-header">
+  <h2>PK 对比</h2>
+  <p>关键维度拆解 · 参数 + 口碑融合的对比卡片</p>
+</div>
+
+<!-- Phone PK-1: 完整回答 -->
+<div class="col single">
+  <div class="col-tag">PK 对比</div>
+  <div class="col-title">完整回答</div>
+  <div class="col-sub">三个关键维度 + 最终结论</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body">
+      <div class="userq"><span>帮我对比大疆 Action 5 Pro 和影石 Ace Pro 2</span></div>
+      <div class="answer">
+        <div class="ref">
+          <div class="avs"><i></i><i></i><i></i></div>
+          <span>综合 <b style="color:var(--t62)">92 篇</b>双机对比笔记</span>
+        </div>
+        <div class="lead">
+          这两台是目前同价位段最强的两台运动相机，核心差异在<b>低光画质</b>、<b>防抖体验</b>和<b>续航散热</b>三个维度。
+        </div>
+
+        <div class="sec-label">🔦 维度一 · 低光画质</div>
+        <div class="pk-card">
+          <div class="pk-scores">
+            <div class="pk-side win">
+              <div class="nm">DJI Action 5 Pro</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:90%">★★★★★</span></div>
+              </div>
+            </div>
+            <div class="pk-vs">VS</div>
+            <div class="pk-side">
+              <div class="nm">Insta360 Ace Pro 2</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:70%">★★★★★</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="pk-params">
+            <div class="pk-row">
+              <div class="pk-val">1/1.3"</div>
+              <div class="pk-dim">传感器</div>
+              <div class="pk-val" style="text-align:right">1/1.3"</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val">f/2.8</div>
+              <div class="pk-dim">光圈</div>
+              <div class="pk-val win" style="text-align:right">f/2.6</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val win">12800</div>
+              <div class="pk-dim">ISO</div>
+              <div class="pk-val" style="text-align:right">6400</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val win">自研夜景算法</div>
+              <div class="pk-dim">算法</div>
+              <div class="pk-val" style="text-align:right">徕卡色彩<span class="sub">AI 降噪</span></div>
+            </div>
+          </div>
+          <div class="pk-voices">
+            <div class="pk-ventry" onclick="openPkSheet(this,'低光画质','dji')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>47人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+            <div class="pk-vmid">口碑</div>
+            <div class="pk-ventry" onclick="openPkSheet(this,'低光画质','insta')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>28人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+          </div>
+        </div>
+        <div class="pk-explain">
+          传感器尺寸相同，但 DJI 的 <b>ISO 上限是影石的两倍</b>，配合自研夜景算法，在 15-20 米深暗光环境下优势明显。影石虽然光圈更大（f/2.6 vs f/2.8），进光量略多，但 <b>高 ISO 下的降噪能力</b>才是暗光的决定性因素。
+        </div>
+
+        <div class="sec-label">📷 维度二 · 防抖体验</div>
+        <div class="pk-card">
+          <div class="pk-scores">
+            <div class="pk-side">
+              <div class="nm">DJI Action 5 Pro</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:80%">★★★★★</span></div>
+              </div>
+            </div>
+            <div class="pk-vs">VS</div>
+            <div class="pk-side win">
+              <div class="nm">Insta360 Ace Pro 2</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:90%">★★★★★</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="pk-params">
+            <div class="pk-row">
+              <div class="pk-val">RockSteady 3.0+<span class="sub">地平线增稳</span></div>
+              <div class="pk-dim">技术</div>
+              <div class="pk-val win" style="text-align:right">FlowState<span class="sub">360° 水平锁定</span></div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val">4K60</div>
+              <div class="pk-dim">最高增稳</div>
+              <div class="pk-val win" style="text-align:right">4K120</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val">无</div>
+              <div class="pk-dim">AI 追踪</div>
+              <div class="pk-val win" style="text-align:right">AI 主体追踪</div>
+            </div>
+          </div>
+          <div class="pk-voices">
+            <div class="pk-ventry" onclick="openPkSheet(this,'防抖体验','dji')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>38人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+            <div class="pk-vmid">口碑</div>
+            <div class="pk-ventry" onclick="openPkSheet(this,'防抖体验','insta')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>56人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+          </div>
+        </div>
+        <div class="pk-explain">
+          影石的 <b>FlowState 防抖口碑碾压</b>，支持 4K120 下满血增稳，配合 AI 主体追踪，运动跟拍场景明显更强。DJI 的 RockSteady 日常够用，但在极端运动（山地车、跳伞）场景下会有果冻效应。
+        </div>
+
+        <div class="sec-label">🔋 维度三 · 续航与散热</div>
+        <div class="pk-card">
+          <div class="pk-scores">
+            <div class="pk-side win">
+              <div class="nm">DJI Action 5 Pro</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:92%">★★★★★</span></div>
+              </div>
+            </div>
+            <div class="pk-vs">VS</div>
+            <div class="pk-side">
+              <div class="nm">Insta360 Ace Pro 2</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:60%">★★★★★</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="pk-params">
+            <div class="pk-row">
+              <div class="pk-val win">1950 mAh<span class="sub">约 240 分钟</span></div>
+              <div class="pk-dim">电池</div>
+              <div class="pk-val" style="text-align:right">1800 mAh<span class="sub">约 150 分钟</span></div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val win">温</div>
+              <div class="pk-dim">散热</div>
+              <div class="pk-val" style="text-align:right">偏热</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val win">Type-C 快充<span class="sub">边充边录</span></div>
+              <div class="pk-dim">充电</div>
+              <div class="pk-val" style="text-align:right">Type-C<span class="sub">不支持边充边录</span></div>
+            </div>
+          </div>
+          <div class="pk-voices">
+            <div class="pk-ventry" onclick="openPkSheet(this,'续航与散热','dji')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>52人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+            <div class="pk-vmid">口碑</div>
+            <div class="pk-ventry" onclick="openPkSheet(this,'续航与散热','insta')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>19人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+          </div>
+        </div>
+        <div class="pk-explain">
+          续航是 DJI 的<b>碾压级优势</b>——240 分钟 vs 150 分钟，多出 60%。影石的散热问题在长时间录制场景比较明显，4K60 以上持续录制容易过热降频。DJI 支持边充边录，长时间固定机位拍摄更实用。
+        </div>
+
+        <div class="sec-label">🗣 维度四 · 口碑</div>
+        <div class="pk-card">
+          <div class="pk-scores">
+            <div class="pk-side win">
+              <div class="nm">DJI Action 5 Pro</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:90%">★★★★★</span></div>
+              </div>
+            </div>
+            <div class="pk-vs">VS</div>
+            <div class="pk-side">
+              <div class="nm">Insta360 Ace Pro 2</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:80%">★★★★★</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="pk-params">
+            <div class="pk-row">
+              <div class="pk-val win">92%</div>
+              <div class="pk-dim">好评率</div>
+              <div class="pk-val" style="text-align:right">85%</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val win">312 篇</div>
+              <div class="pk-dim">评论数</div>
+              <div class="pk-val" style="text-align:right">248 篇</div>
+            </div>
+            <div class="pk-row">
+              <div class="pk-val win">89%</div>
+              <div class="pk-dim">推荐率</div>
+              <div class="pk-val" style="text-align:right">78%</div>
+            </div>
+          </div>
+          <div class="pk-voices">
+            <div class="pk-ventry" onclick="openPkSheet(this,'口碑','dji')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>287人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+            <div class="pk-vmid">口碑</div>
+            <div class="pk-ventry" onclick="openPkSheet(this,'口碑','insta')">
+              <div class="pk-avatars"><i></i><i></i><i></i></div>
+              <div class="pk-vlabel"><b>211人</b>好评</div>
+              <div class="pk-varrow">›</div>
+            </div>
+          </div>
+        </div>
+        <div class="pk-explain">
+          综合小红书 560+ 篇真人笔记，DJI 的<b>好评率和推荐率均领先</b>。用户最常提到的优势是"续航长不焦虑"和"低光出片率高"；影石的好评集中在"防抖碾压"和"自拍翻转屏方便"。
+        </div>
+
+        <div class="sec-label">🧭 该怎么选</div>
+        <div class="pk-conclusion">
+          <div class="row">
+            <div class="cond">新手潜水、想<b>省心不折腾</b></div>
+            <div class="arrow">→</div>
+            <div class="pick">Action 5 Pro</div>
+          </div>
+          <div class="row">
+            <div class="cond">喜欢自拍 vlog、重视<b>暗光画质</b></div>
+            <div class="arrow">→</div>
+            <div class="pick">Ace Pro 2</div>
+          </div>
+          <div class="row">
+            <div class="cond">经常出国潜水、看重<b>配件生态</b></div>
+            <div class="arrow">→</div>
+            <div class="pick">GoPro Hero 13</div>
+          </div>
+          <div class="row">
+            <div class="cond">预算有限、只浮潜不深潜</div>
+            <div class="arrow">→</div>
+            <div class="pick">Action 5 Pro</div>
+          </div>
+        </div>
+        <div class="foot-info">内容由 AI 生成 · 综合小红书真人经验</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<!-- Phone PK-2: 点击好评后的半屏浮窗 -->
+<div class="col single">
+  <div class="col-tag">PK 对比</div>
+  <div class="col-title">评论浮窗</div>
+  <div class="col-sub">点击好评入口 · 拉起半屏</div>
+
+  <div class="phone has-sidebar">
+    <div class="nav">
+      <div class="av"></div>
+      <div class="nm">点点</div>
+    </div>
+    <div class="chat-body" style="filter:brightness(0.7);">
+      <div class="answer" style="margin-top:8px;">
+        <div class="sec-label">🔦 维度一 · 低光画质</div>
+        <div class="pk-card" style="opacity:0.5;">
+          <div class="pk-scores">
+            <div class="pk-side win">
+              <div class="nm">DJI Action 5 Pro</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:90%">★★★★★</span></div>
+              </div>
+            </div>
+            <div class="pk-vs">VS</div>
+            <div class="pk-side">
+              <div class="nm">Insta360 Ace Pro 2</div>
+              <div class="score-row">
+                <div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:70%">★★★★★</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 半屏浮窗 -->
+    <div class="pk-sheet-overlay">
+      <div class="pk-sheet">
+        <div class="pk-sheet-bar"></div>
+        <div class="pk-sheet-head">
+          <div class="pk-avatars"><i></i><i></i><i></i></div>
+          <div class="pk-sheet-title">低光画质 · DJI 47人好评</div>
+        </div>
+        <div class="pk-sheet-list">
+          <div class="pk-comment">
+            <div class="pk-c-head">
+              <div class="pk-c-av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D);"></div>
+              <div class="pk-c-name">潜水小白兔</div>
+              <div class="pk-c-tag">小红书 · 3 天前</div>
+            </div>
+            <div class="pk-c-imgs"><span></span><span></span><span></span></div>
+            <div class="pk-c-text">在仙本那 20 米深的暗礁区拍的，真的惊到了！鱼身上的花纹清晰可见，GoPro 同场景拍出来一团黑。夜景算法确实强，不用后期就能直出……</div>
+          </div>
+          <div class="pk-comment">
+            <div class="pk-c-head">
+              <div class="pk-c-av" style="background:linear-gradient(135deg,#B4D8FB,#5A9AFF);"></div>
+              <div class="pk-c-name">深海摄影师老王</div>
+              <div class="pk-c-tag">小红书 · 1 周前</div>
+            </div>
+            <div class="pk-c-text">ISO 拉到 12800 居然还能看，噪点控制比上一代进步太多了。15 米以内低光场景可以放心拍，画面很干净……</div>
+          </div>
+          <div class="pk-comment">
+            <div class="pk-c-head">
+              <div class="pk-c-av" style="background:linear-gradient(135deg,#D4FBE4,#34B39D);"></div>
+              <div class="pk-c-name">极限vlogger阿杰</div>
+              <div class="pk-c-tag">小红书 · 2 周前</div>
+            </div>
+            <div class="pk-c-text">洞穴潜水的时候测了一下，只带手电的情况下画面还是很稳，色彩也比较准。和影石比完低光就决定入 DJI 了……</div>
+          </div>
+          <div class="pk-comment">
+            <div class="pk-c-head">
+              <div class="pk-c-av" style="background:linear-gradient(135deg,#FBEAB4,#E8A33D);"></div>
+              <div class="pk-c-name">水下世界探秘</div>
+              <div class="pk-c-tag">小红书 · 3 周前</div>
+            </div>
+            <div class="pk-c-text">夜潜全程没有出现明显的噪点爆炸，15 米内简直是神器。唯一就是超过 25 米之后色彩会偏绿，但同价位没对手……</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="input-bar" style="position:relative; z-index:0;">
+      <div class="ib-voice">◉</div>
+      <span class="ib-ph">发消息或按住说话...</span>
+      <span class="ib-icon">📷</span>
+      <span class="ib-icon">＋</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleCheck(el){
+  el.classList.toggle('on');
+  var count=el.closest('.phone').querySelectorAll('.fl-check.on').length;
+  var btn=el.closest('.phone').querySelector('.fl-btn');
+  if(count>0){
+    btn.disabled=false;
+    btn.textContent='✦ 帮我对比这 '+count+' 个';
+  }else{
+    btn.disabled=true;
+    btn.textContent='请选择要对比的商品';
+  }
+}
+</script>
+</body>
+</html>

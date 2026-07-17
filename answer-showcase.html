@@ -30,7 +30,7 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .selector-row button[data-intent="single"].active{background:var(--blue);}
 .selector-row button[data-intent="versus"].active{background:var(--gold);}
 .selector-row button[data-intent="guide"].active{background:var(--purple);}
-.case-panel{display:none;width:393px;flex-direction:column;align-items:center;gap:16px;}
+.case-panel{display:none;width:390px;flex-direction:column;align-items:center;gap:16px;}
 .case-panel.active{display:flex;}
 .col-head{align-self:stretch;background:#fff;border-radius:16px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.05);border:0.5px solid rgba(0,0,0,0.06);}
 .col-tag{font-size:11px;font-weight:600;border-radius:100px;padding:3px 10px;display:inline-block;}
@@ -38,7 +38,10 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .cat-beauty .col-tag{color:var(--pink-deep);background:rgba(232,141,160,0.16);}
 .cat-outdoor .col-tag{color:var(--blue-deep);background:rgba(90,154,255,0.14);}
 .col-query{font-size:15px;font-weight:600;color:var(--t80);line-height:1.45;margin-top:6px;}
-.phone{align-self:stretch;position:relative;width:393px;background:#F7F7F6;border-radius:48px;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,0.14);display:flex;flex-direction:column;max-height:844px;}
+.col-strategy{align-self:stretch;background:rgba(0,0,0,0.02);border:0.5px solid rgba(0,0,0,0.06);border-radius:12px;padding:12px 16px;margin-top:-6px;}
+.col-strategy .cs-label{font-size:10px;font-weight:600;color:var(--t45);letter-spacing:0.05em;margin-bottom:6px;}
+.col-strategy .cs-text{font-size:12px;color:var(--t62);line-height:1.6;}
+.phone{position:relative;width:390px;height:844px;background:#F7F7F6;border-radius:55px;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,0.14);display:flex;flex-direction:column;}
 .phone .nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:52px 16px 8px;flex-shrink:0;}
 .phone .nav .av{width:18px;height:18px;border-radius:50%;border:0.5px solid #fff;}
 .cat-3c .nav .av{background:linear-gradient(135deg,#7EE8D4,#34B39D);}
@@ -207,6 +210,8 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .ptitle{display:flex;align-items:center;gap:6px;margin:8px 14px;font-size:15px;font-weight:600;color:var(--blue-deep);cursor:pointer;}
 .ptitle .rating{display:inline-flex;align-items:center;gap:1px;background:rgba(52,179,157,0.12);border-radius:4px;padding:1px 6px;margin-left:2px;}
 .ptitle .star{color:var(--gold);font-size:15px;}
+.prod-img{margin:4px 14px 8px;width:130px;height:130px;border-radius:12px;overflow:hidden;background:#EEE;}
+.prod-img img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;}
 .ptitle .score{font-size:14px;font-weight:700;color:var(--t80);font-variant-numeric:tabular-nums;}
 /* 内联 quote — 用户评论 */
 .iq{margin:4px 24px 12px;font-size:13px;color:var(--t62);line-height:1.6;border-left:3px solid #ccc;padding-left:10px;overflow:hidden;}
@@ -223,10 +228,12 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .phone .ann{display:none;}
 .case-panel{overflow:visible;position:relative;}
 .ann-layer{position:absolute;pointer-events:none;z-index:2;overflow:visible;}
-.side-ann{position:absolute;display:flex;gap:3px;align-items:center;white-space:nowrap;transition:opacity .15s;}
-.side-ann::before{content:'';width:14px;border-top:1px dotted rgba(0,0,0,0.13);flex-shrink:0;}
-.phone.has-sidebar{height:844px;}
-.cite-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.18);z-index:9;opacity:0;pointer-events:none;transition:opacity .3s;border-radius:48px;}
+.side-ann{position:absolute;display:flex;flex-direction:column;gap:2px;transition:opacity .15s;max-width:140px;}
+.side-ann .ann-tags{display:flex;gap:3px;align-items:center;white-space:nowrap;}
+.side-ann .ann-tags::before{content:'';width:14px;border-top:1px dotted rgba(0,0,0,0.13);flex-shrink:0;}
+.side-ann .ann-reason{font-size:10px;color:var(--t35);line-height:1.4;white-space:normal;padding-left:17px;}
+.phone.has-sidebar{}
+.cite-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.18);z-index:9;opacity:0;pointer-events:none;transition:opacity .3s;border-radius:55px;}
 .cite-overlay.open{opacity:1;pointer-events:auto;}
 .cite-sidebar{position:absolute;bottom:0;left:0;right:0;height:90%;background:#fff;box-shadow:0 -4px 20px rgba(0,0,0,0.08);transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:10;display:flex;flex-direction:column;border-radius:16px 16px 0 0;}
 .cite-sidebar.open{transform:translateY(0);}
@@ -391,10 +398,97 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .pk-varrow{flex-shrink:0;font-size:14px;color:var(--t27);}
 .pk-explain{padding:6px 14px 12px;font-size:15px;color:#141414;line-height:1.66;letter-spacing:0.01em;}
 .pk-explain b{color:#141414;font-weight:500;}
+.pk-lite{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:14px;overflow:hidden;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto;gap:0;}
+.pkl-center{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;}
+.pkl-dim{font-size:12px;font-weight:700;color:var(--t80);line-height:1.3;}
+.pkl-vs{font-size:10px;font-weight:800;color:var(--t27);margin-top:1px;}
+.pkl-left{grid-column:1;text-align:left;}
+.pkl-right{grid-column:3;text-align:right;}
+.pkl-nm{font-size:11px;color:var(--t62);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;}
+.pkl-val{font-size:12px;font-weight:700;color:var(--t45);margin-bottom:3px;}
+.pkl-left.win .pkl-val{color:var(--green-deep);}
+.pkl-right.win .pkl-val{color:var(--green-deep);}
+.pk-lite .pk-stars .s-empty,.pk-lite .pk-stars .s-fill{font-size:11px;letter-spacing:0.5px;}
+.pk-lite .pk-voices{grid-column:1/4;padding-top:8px;border-top:0.5px solid var(--line2);margin-top:8px;}
+.main-layout{position:relative;width:100%;}
+.side-panel{position:absolute;right:calc(50% + 220px);top:110px;width:300px;}
+.sp-section{margin-bottom:6px;cursor:pointer;}
+.sp-head{display:flex;align-items:center;justify-content:space-between;padding:6px 0;}
+.sp-title{font-size:15px;font-weight:700;color:var(--t80);}
+.sp-arrow{font-size:10px;color:var(--t45);transition:transform .2s;transform:rotate(0deg);}
+.sp-section.open .sp-arrow{transform:rotate(180deg);}
+.sp-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.sp-section.open .sp-body{max-height:500px;}
+.sp-strat-label,.sp-query-label{font-size:13px;font-weight:700;color:var(--green-deep);margin:6px 0 2px;letter-spacing:0.03em;}
+.sp-strategy{font-size:12px;color:var(--t62);line-height:1.65;padding:4px 0 8px;}
+.sp-queries{display:flex;flex-direction:column;gap:3px;padding-bottom:6px;border-bottom:0.5px solid var(--line2);margin-bottom:2px;}
+.sp-q{font-size:12px;color:var(--t62);line-height:1.5;padding-left:12px;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sp-q::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;border-radius:50%;}
+.sp-q.q-3c::before{background:var(--green);}
+.sp-q.q-beauty::before{background:var(--pink);}
+.sp-q.q-outdoor::before{background:var(--blue);}
+.sp-scene{font-size:11px;font-weight:600;color:var(--t45);margin-right:6px;white-space:nowrap;}
+.main-content{display:flex;flex-direction:column;align-items:center;}
 </style>
 </head>
 <body>
 <div class="page-header"><h1>购物回答示例</h1><p>3 品类 × 4 意图 · 点击切换查看</p></div>
+<div class="main-layout">
+<div class="side-panel">
+<div class="sp-section open" data-intent="rec">
+<div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">选品推荐</div><span class="sp-arrow">▼</span></div>
+<div class="sp-body">
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">拆解用户需求（场景、水平、预算）→ 建立选择框架（核心看什么、不用看什么）→ 按框架分层推荐并说理</div>
+<div class="sp-query-label">Query</div>
+<div class="sp-queries">
+<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>我想学潜水，想买个运动相机，推荐一下</div>
+<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>学生党有哪些平价好用的眼线笔？</div>
+<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>单板滑雪买雪板，有哪些值得买的入门款？</div>
+</div>
+</div>
+</div>
+<div class="sp-section" data-intent="single">
+<div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">单品评估</div><span class="sp-arrow">▼</span></div>
+<div class="sp-body">
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先给结论（值不值得买）→ 基于用户需求拆解为什么 → 跳出用户需求，给更普适的优缺点梳理（真人评价数据）→ One More Thing（替代品、省钱方案、懂行建议）</div>
+<div class="sp-query-label">Query</div>
+<div class="sp-queries">
+<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>DJI Action 5 Pro 潜水用值得入手吗</div>
+<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>kissme眼线液笔容易晕妆吗</div>
+<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>Burton Ripcord怎么样？适合从初级往进阶过渡吗</div>
+</div>
+</div>
+</div>
+<div class="sp-section" data-intent="versus">
+<div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">对比决策</div><span class="sp-arrow">▼</span></div>
+<div class="sp-body">
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先给结论（选哪个）→ A 胜在哪里 → 补信息差（B 落败但有的优势），通过全面体现真实 → 场景路由</div>
+<div class="sp-query-label">Query</div>
+<div class="sp-queries">
+<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个</div>
+<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>橘朵和kissme眼线液笔选哪个？油皮</div>
+<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>Burton Ripcord和Ride Agenda选哪个？主要玩全山</div>
+</div>
+</div>
+</div>
+<div class="sp-section" data-intent="guide">
+<div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">攻略咨询</div><span class="sp-arrow">▼</span></div>
+<div class="sp-body">
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">教用户怎么选 → 拆解需求维度（要想清楚哪几个问题）→ 每个维度怎么判断 → 补充需要明白的真相 / 避坑</div>
+<div class="sp-query-label">Query</div>
+<div class="sp-queries">
+<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>潜水用的运动相机怎么选？</div>
+<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>油皮怎么选眼线笔</div>
+<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>买雪板最易踩的坑是什么？</div>
+</div>
+</div>
+</div>
+</div>
+<div class="main-content">
 <div class="selector-row" id="catSelector">
   <button class="active" data-cat="3c" onclick="switchCat(this)">3C·运动相机</button>
   <button data-cat="beauty" onclick="switchCat(this)">美妆·眼线笔</button>
@@ -409,7 +503,6 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 
 <!-- 3C · 选品推荐 -->
 <div class="case-panel active cat-3c" data-cat="3c" data-intent="rec">
-<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">我想学潜水，想买个运动相机，推荐一下</div></div>
 <div class="phone has-sidebar"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>我想学潜水，想买个运动相机，推荐一下</span></div>
 <div class="answer">
@@ -420,9 +513,10 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <li><b>拍出来颜色正不正</b>：不用后期调就好看。</li>
 <li><b>好不好上手</b>：别买回来发现操作复杂不会用。</li>
 </ul>
-<div class="lead">防抖、续航这些主流机型都够用，不用专门比。下面按适合潜水初学者的程度，给你介绍 3 款。<span class="ann dm">懂我</span><span class="ann dh">懂行</span></div>
-<div class="sec-label">⭐ 新手首选，一台全能 <span class="ann dh">懂行</span><span class="ann yp">有判断</span></div>
+<div class="lead">防抖、续航这些主流机型都够用，不用专门比。下面按适合潜水初学者的程度，给你介绍 3 款。<span class="ann dm" data-reason="从「学潜水」推出初学者需求层级">懂我</span><span class="ann dh" data-reason="先排除不重要的维度，帮用户聚焦">懂行</span></div>
+<div class="sec-label">⭐ 新手首选，一台全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="替用户做了筛选，直接给首选">有判断</span></div>
 <div class="ptitle" onclick="openSidebar(this)" data-sb="sb-action5pro">DJI Osmo Action 5 Pro <span class="rating"><span class="star">★</span><span class="score">4.8</span></span></div>
+<div class="prod-img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg"></div>
 <div class="lead"><b>新手闭眼入，最省心的一台。</b></div>
 <ul class="blist">
 <li><span class="hl">裸机防水 20 米，不用买壳直接下水</span><span class="cite">"</span>，绕开进水这个头号风险，深度也够绝大多数休闲潜水。
@@ -431,19 +525,21 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <li>唯一短板是<span class="hl">水下直出偏蓝绿</span><span class="cite">"</span>，水质一般时得简单后期，App 一拉基本就回来了。
 <div class="iq"><div class="av" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div>"新手第一台就买它，开机即拍不用折腾，防抖很稳。水下发蓝用 App 拉一下就回来了，我发圈基本不用细修"</div></li>
 </ul>
-<div class="lead">放几张 Action 5 Pro 的水下实拍给你参考，直出大概是这个观感（都没后期）：<span class="ann zs">真实</span></div>
+<div class="lead">放几张 Action 5 Pro 的水下实拍给你参考，直出大概是这个观感（都没后期）：<span class="ann zs" data-reason="放真人实拍样张，不用官方美化图">真实</span></div>
 <div class="shots">
 <figure><img src="images/dive_shot_1.jpg"></figure>
 <figure><img src="images/dive_shot_2.jpg"></figure>
 <figure><img src="images/dive_shot_3.jpg"></figure>
 </div>
-<div class="sec-label">🎬 还想拍别的？看这两台 <span class="ann dh">懂行</span></div>
+<div class="sec-label">🎬 还想拍别的？看这两台 <span class="ann dh" data-reason="预判用户可能有潜水之外的需求">懂行</span></div>
 <div class="lead">除了潜水还有别的侧重，这两台各有更擅长的场景，也各有一条短板：</div>
 <div class="ptitle">Insta360 Ace Pro 2 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
+<div class="prod-img"><img src="images/Insta360_Ace_Pro.jpg"></div>
 <div class="lead">亮点是<b>徕卡调色直出好看、不用后期</b>，翻转屏方便水面自拍，除了潜水还能当旅行 vlog 机；短板是<b>裸机只 12 米，往深潜必须加壳</b>。</div>
 <div class="ptitle">GoPro Hero 13 Black <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="prod-img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png"></div>
 <div class="lead">亮点是<b>全球潜店配件好买好换、坏了好修</b>，出国最省心；短板是<b>裸机只 10 米，深潜必配壳，色彩偏冷要后期</b>。</div>
-<div class="sec-label">🎯 其他可以了解的 <span class="ann dh">懂行</span></div>
+<div class="sec-label">🎯 其他可以了解的 <span class="ann dh" data-reason="覆盖长尾需求，不遗漏小众选项">懂行</span></div>
 <div class="lead">下面这几款有各自的特点和适配的特定需求，感兴趣的可以了解：</div>
 <ul class="blist">
 <li><b>更强低光画质</b>：<a class="slink">DJI Action 6</a>，1/1.1" 大底、8K，愿意加预算就上。裸机 20m，¥2,998。</li>
@@ -451,13 +547,13 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <li><b>微距小生物</b>：<a class="slink">OM System TG-7</a>，1cm 微距、三防，拍海兔神器。裸机 15m，暗光弱。</li>
 <li><b>预算够用就行</b>：<a class="slink">上代 Action 4</a>，裸机 18m，现价约 ¥1,300，性价比高。</li>
 </ul>
-<div class="sec-label">📌 一句话总结 <span class="ann dm">懂我</span><span class="ann yp">有判断</span></div>
+<div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按用户场景直接给结论，不让用户自己归纳">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
 <div class="scene-row">纯潜水、图省心 → <b>Action 5 Pro</b>，闭眼入。</div>
 <div class="scene-row">还想拍 vlog 或常出国潜 → <b>Ace Pro 2 / GoPro Hero 13</b>。</div>
 <div class="scene-row">有微距、360°、超低预算等特殊玩法 → 看上面对应款。</div>
 </div>
-<div class="lead"><b>你主要浮潜还是水肺？</b><span class="ann dm">懂我</span></div>
+<div class="lead"><b>你主要浮潜还是水肺？</b><span class="ann dm" data-reason="追问精准需求，进一步缩小推荐范围">懂我</span></div>
 <div class="follow"><button class="fbtn">预算 3000 能配齐一套吗？</button><button class="fbtn">浮潜和水肺对相机要求有什么区别？</button><button class="fbtn">360 全景相机适合潜水吗？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人潜水装备笔记</div>
 </div></div>
@@ -856,7 +952,6 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 
 <!-- 3C · 单品评估 -->
 <div class="case-panel cat-3c" data-cat="3c" data-intent="single">
-<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">DJI Action 5 Pro 潜水用值得入手吗</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>DJI Action 5 Pro 潜水用值得入手吗？</span></div>
 <div class="answer">
@@ -936,7 +1031,6 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 
 <!-- 3C · 对比决策 -->
 <div class="case-panel cat-3c" data-cat="3c" data-intent="versus">
-<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个？</span></div>
 <div class="answer">
@@ -944,55 +1038,17 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <div class="lead"><span class="hl">潜水为主，选 DJI Action 5 Pro。</span><span class="ann dm" data-reason="锚定用户说的「潜水拍摄」，直接给答案">懂我</span><span class="ann yp">有判断</span></div>
 <div class="lead">原因主要有以下几点：</div>
 <div class="sec-label">1. 原生防水更强 <span class="ann dh" data-reason="用裸机防水深度对比，一目了然">懂行</span></div>
-<div class="pk-card">
-<div class="pk-scores">
-<div class="pk-side win">
-<div class="nm">DJI Action 5 Pro</div>
-<div class="score-row">
-<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:95%">★★★★★</span></div>
-</div>
-</div>
-<div class="pk-vs">VS</div>
-<div class="pk-side">
-<div class="nm">Insta360 Ace Pro 2</div>
-<div class="score-row">
-<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:55%">★★★★★</span></div>
-</div>
-</div>
-</div>
-<div class="pk-params">
-<div class="pk-row">
-<div class="pk-val win">20 米</div>
-<div class="pk-dim">裸机防水</div>
-<div class="pk-val" style="text-align:right">12 米</div>
-</div>
-<div class="pk-row">
-<div class="pk-val win">不需要</div>
-<div class="pk-dim">浮潜配壳</div>
-<div class="pk-val" style="text-align:right">建议配壳</div>
-</div>
-<div class="pk-row">
-<div class="pk-val win">安全余量大</div>
-<div class="pk-dim">水肺潜</div>
-<div class="pk-val" style="text-align:right">必须配壳</div>
-</div>
-</div>
+<div class="pk-lite">
+<div class="pkl-left win"><div class="pkl-nm">DJI Action 5 Pro</div><div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:95%">★★★★★</span></div><div class="pkl-val">裸机 20 米</div></div>
+<div class="pkl-center"><div class="pkl-dim">防水性能</div><div class="pkl-vs">vs</div></div>
+<div class="pkl-right"><div class="pkl-nm">Insta360 Ace Pro 2</div><div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:55%">★★★★★</span></div><div class="pkl-val">裸机 12 米</div></div>
 <div class="pk-voices">
-<div class="pk-ventry">
-<div class="pk-avatars"><i></i><i></i><i></i></div>
-<div class="pk-vlabel"><b>52人</b>好评</div>
-<div class="pk-varrow">›</div>
-</div>
-<div class="pk-vmid">口碑</div>
-<div class="pk-ventry">
-<div class="pk-avatars"><i></i><i></i><i></i></div>
-<div class="pk-vlabel"><b>18人</b>好评</div>
-<div class="pk-varrow">›</div>
-</div>
+<div class="pk-ventry"><div class="pk-avatars"><i></i><i></i><i></i></div><div class="pk-vlabel"><b>52人</b>好评</div></div>
+<div class="pk-ventry"><div class="pk-avatars"><i></i><i></i><i></i></div><div class="pk-vlabel"><b>18人</b>好评</div></div>
 </div>
 </div>
 <div class="pk-explain">
-浮潜两台都够用，但自由潜或水肺潜时 DJI 的 <b>20 米裸机防水安全余量更大</b>。Insta360 超过 12 米就必须配壳，壳装不到位有漏水风险。
+浮潜两台都够用，但自由潜或水肺潜时 DJI 的 <b>20 米裸机防水安全余量更大</b>，不用配壳就能直接下水。
 </div>
 <div class="sec-label">2. 水下色彩更稳定 <span class="ann dh" data-reason="从实测角度对比，不是念参数">懂行</span></div>
 <div class="pk-card">
@@ -1046,55 +1102,17 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画面一致性好，后期调色轻松不少。Insta360 徕卡调色直出好看，但水下偶尔偏色。
 </div>
 <div class="sec-label">3. 防抖表现优秀 <span class="ann dh" data-reason="结合潜水时的实际晃动场景解释">懂行</span></div>
-<div class="pk-card">
-<div class="pk-scores">
-<div class="pk-side win">
-<div class="nm">DJI Action 5 Pro</div>
-<div class="score-row">
-<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:88%">★★★★★</span></div>
-</div>
-</div>
-<div class="pk-vs">VS</div>
-<div class="pk-side">
-<div class="nm">Insta360 Ace Pro 2</div>
-<div class="score-row">
-<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:72%">★★★★★</span></div>
-</div>
-</div>
-</div>
-<div class="pk-params">
-<div class="pk-row">
-<div class="pk-val win">RockSteady 3.0+<span class="sub">地平线增稳</span></div>
-<div class="pk-dim">技术</div>
-<div class="pk-val" style="text-align:right">FlowState<span class="sub">360° 锁定</span></div>
-</div>
-<div class="pk-row">
-<div class="pk-val win">第一梯队</div>
-<div class="pk-dim">水下表现</div>
-<div class="pk-val" style="text-align:right">够用</div>
-</div>
-<div class="pk-row">
-<div class="pk-val win">游泳·下潜·跟拍</div>
-<div class="pk-dim">适用场景</div>
-<div class="pk-val" style="text-align:right">日常水下</div>
-</div>
-</div>
+<div class="pk-lite">
+<div class="pkl-left win"><div class="pkl-nm">DJI Action 5 Pro</div><div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:88%">★★★★★</span></div><div class="pkl-val">RockSteady 3.0+</div></div>
+<div class="pkl-center"><div class="pkl-dim">水下防抖</div><div class="pkl-vs">vs</div></div>
+<div class="pkl-right"><div class="pkl-nm">Insta360 Ace Pro 2</div><div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:72%">★★★★★</span></div><div class="pkl-val">FlowState</div></div>
 <div class="pk-voices">
-<div class="pk-ventry">
-<div class="pk-avatars"><i></i><i></i><i></i></div>
-<div class="pk-vlabel"><b>38人</b>好评</div>
-<div class="pk-varrow">›</div>
-</div>
-<div class="pk-vmid">口碑</div>
-<div class="pk-ventry">
-<div class="pk-avatars"><i></i><i></i><i></i></div>
-<div class="pk-vlabel"><b>24人</b>好评</div>
-<div class="pk-varrow">›</div>
-</div>
+<div class="pk-ventry"><div class="pk-avatars"><i></i><i></i><i></i></div><div class="pk-vlabel"><b>38人</b>好评</div></div>
+<div class="pk-ventry"><div class="pk-avatars"><i></i><i></i><i></i></div><div class="pk-vlabel"><b>24人</b>好评</div></div>
 </div>
 </div>
 <div class="pk-explain">
-潜水时人一直在漂浮、摆动，DJI 的 <b>水下防抖属于第一梯队</b>，游泳、下潜、跟拍鱼群画面都很稳。Insta360 FlowState 陆地更强，但水下大动作偶尔抖。
+潜水时人一直在漂浮、摆动，DJI 的 <b>水下防抖属于第一梯队</b>，画面很稳。Insta360 陆地更强，但水下大动作偶尔抖。
 </div>
 <div class="sec-label">4. 续航更长 <span class="ann dh" data-reason="指出水下不能换电池这个硬约束">懂行</span></div>
 <div class="pk-card">
@@ -1167,7 +1185,6 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 
 <!-- 3C · 攻略咨询 -->
 <div class="case-panel cat-3c" data-cat="3c" data-intent="guide">
-<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">潜水用的运动相机怎么选？</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>潜水用的运动相机怎么选？</span></div>
 <div class="answer">
@@ -1218,195 +1235,475 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人潜水摄影攻略</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
+
 <!-- 美妆 · 选品推荐 -->
 <div class="case-panel cat-beauty" data-cat="beauty" data-intent="rec">
-<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">学生党有哪些平价好用的眼线笔？</div></div>
-<div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
+<div class="phone has-sidebar"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>学生党有哪些平价好用的眼线笔？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">213 篇</b>学生党眼妆笔记</span></div>
-<div class="lead">学生党选眼线笔核心看<span class="hl">持妆时长</span>和<span class="hl">新手友好度</span>，价格差异不大，关键是画不画得好、撑不撑得住一天课。</div>
-<div class="sec-label">🎯 学生党最值得入的 4 支</div>
-<div class="rich">
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#FFD6E0,#E88DA0);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">橘朵眼线胶笔</div><div class="desc">胶笔质地 · 顺滑不拉扯 · 新手最友好</div><div class="pbottom"><div class="price">¥29.9</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">3.2k 人推荐</span></div></div></div></div>
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#FFE8CC,#E8A33D);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">Kissme 奇士美眼线液笔</div><div class="desc">极细笔头 · 持妆 12h · 温水可卸</div><div class="pbottom"><div class="price">¥79</div><div class="stars-line"><span class="s">★</span>4.8<span class="cnt">5.1k 人推荐</span></div></div></div></div>
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#D4E8FF,#5A9AFF);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">花知晓眼线液笔</div><div class="desc">速干不晕 · 颜色选择多 · 性价比高</div><div class="pbottom"><div class="price">¥49</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">1.8k 人推荐</span></div></div></div></div>
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#E8D4FF,#9B6ED0);display:flex;align-items:center;justify-content:center;font-size:22px;">🖊</div><div class="mid"><div class="nm">UZU 眼线液笔</div><div class="desc">日本殿堂级 · 笔触精准 · 不飞水</div><div class="pbottom"><div class="price">¥128</div><div class="stars-line"><span class="s">★</span>4.9<span class="cnt">2.4k 人推荐</span></div></div></div></div>
-</div>
-<div class="sec-label">💬 用过的人怎么说</div>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">大油田大学生</div><div class="lk">♡ 4,230</div></div><div class="tx"><span class="q">"</span>橘朵胶笔 29 块钱，画内眼线特别顺滑，新手闭眼入。唯一缺点是持妆一般，下午会稍微淡一点<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">早八人的眼妆</div><div class="lk">♡ 2,670</div></div><div class="tx"><span class="q">"</span>Kissme 用了三年了，从早八到晚十不晕。温水就能卸，不用专门买眼唇卸妆<span class="q">"</span></div></div>
-</div>
-<div class="sec-label">🧭 按需求直接选</div>
+<div class="lead">学生党买眼线笔，平价其实不是难点，20～50 元已经有很多成熟产品。真正要挑的是，哪一支真正"好用"。<span class="ann dm" data-reason="从「学生党」锚定平价区间，消除预算焦虑">懂我</span></div>
+<div class="lead"><span class="hl">对于平价眼线笔来说，"好用"主要看三个方面：</span><span class="ann dh" data-reason="把模糊的「好用」拆成可判断的标准">懂行</span></div>
+<div class="sec-label">① 画起来顺不顺 <span class="ann dm" data-reason="每天都要画，顺不顺直接决定能不能坚持用">懂我</span></div>
+<ul class="blist">
+<li>眼线每天都要贴着眼皮画，如果容易卡顿、拉扯眼皮，再便宜也很难坚持用</li>
+</ul>
+<div class="sec-label">② 持妆稳不稳 <span class="ann dm" data-reason="从学生党的作息推出持妆需求：早八到晚课，很少补妆">懂我</span></div>
+<ul class="blist">
+<li>学生党从早八到晚课，很少有机会补妆。一支眼线能不能撑住一天、不容易晕妆，比各种宣传参数更重要</li>
+</ul>
+<div class="sec-label">③ 发挥稳不稳定 <span class="ann dh" data-reason="长期使用视角：断墨飞水是平价笔常见问题">懂行</span></div>
+<ul class="blist">
+<li>好的眼线笔应该每次都好画，不会断墨、飞水，也不会颜色忽深忽浅，长期用更省心</li>
+</ul>
+<div class="lead" style="color:var(--t62);font-size:13px">包装、联名、颜色多少这些，对"好不好用"影响其实没那么大，不必作为第一决策因素。<span class="ann dh" data-reason="排除容易被营销干扰的次要因素">懂行</span></div>
+<div class="lead">所以推荐思路也很简单：<span class="ann yp" data-reason="先建逻辑再推产品，不上来就列清单">有判断</span></div>
 <div class="scene">
-<div class="scene-row">新手第一支、追求好画，选 <b>橘朵胶笔</b>——滑得像蜡笔，30 块试错成本低。</div>
-<div class="scene-row">油皮、要撑一整天课，选 <b>Kissme</b>——持妆能力天花板，温水可卸不伤眼周。</div>
-<div class="scene-row">想画精致细线、喜欢日系妆感，选 <b>UZU</b>——笔头最精准，画眼尾不飞水。</div>
-<div class="scene-row">预算 50 以内想要液笔，选 <b>花知晓</b>——速干不晕，性价比最高的液笔。</div>
+<div class="scene-row">第一次买，优先选<b>综合体验最好的</b>，不容易踩雷</div>
+<div class="scene-row">如果有特别需求，再根据需求<b>升级</b></div>
+<div class="scene-row">预算实在有限，也有<b>值得买的选择</b></div>
 </div>
-<div class="lead" style="color:var(--t62);font-size:13px;"><b>新手小建议</b>：第一次画眼线建议从胶笔/铅笔型开始（好控制），等手稳了再换液笔画细线。</div>
-<div class="lead"><b>你是油皮还是干皮？</b></div>
+<div class="sec-label">⭐ 闭眼入首选：一台全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="直接给出首选，不让新手纠结">有判断</span></div>
+<div class="ptitle" onclick="openSidebar(this)" data-sb="sb-judydoll">橘朵眼线胶笔 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
+<div class="prod-img"><img src="images/eyeliner_judydoll_v2.png"></div>
+<div class="lead"><b>新手闭眼入，综合体验最好的一支。</b></div>
+<ul class="blist">
+<li><span class="hl">胶笔质地顺滑，不拉扯眼皮</span><span class="cite">"</span>，新手容错率高，画错还能修改。
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"第一次画眼线就用的橘朵，胶笔真的好画，画歪了用棉签擦掉就行，不像液笔一笔定生死"</div></li>
+<li><span class="hl">价格不到 30 元，试错成本极低</span><span class="cite">"</span>，买错也不心疼。</li>
+<li>唯一不足是<span class="hl">持妆属于中等水平</span><span class="cite">"</span>，油皮夏天到下午可能稍微变淡。
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"混油皮用了一学期，画起来很舒服。下午偶尔眼尾会淡一点，但不至于晕成熊猫眼，整体很满意"</div></li>
+</ul>
+<div class="sec-label">💧 持妆优先，值得加一点预算 <span class="ann dh" data-reason="精准匹配「早八到晚课不补妆」的持妆需求">懂行</span></div>
+<div class="ptitle">UKISS 悠珂思眼线液笔 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
+<div class="prod-img"><img src="images/eyeliner_ukiss.png"></div>
+<div class="lead">从胶笔升级液笔的首选。<span class="hl">防晕和稳定性在几十元价位最突出</span><span class="cite">"</span>，笔尖细、出水均匀，早八到晚课不补妆。</div>
+<div class="sec-label">🌸 兼顾颜值和妆感 <span class="ann dm" data-reason="匹配在意妆感、喜欢搭配的审美需求">懂我</span></div>
+<div class="ptitle">花知晓眼线液笔 <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="prod-img"><img src="images/eyeliner_huazhixiao.png"></div>
+<div class="lead">最大特点不是最防水，而是<b>配色丰富</b>，棕色、灰棕画出来柔和自然。日常通勤、上课完全够用。</div>
+<div class="sec-label">🎯 其他可以了解的 <span class="ann dh" data-reason="覆盖长尾需求，不遗漏小众选项">懂行</span></div>
+<div class="lead">下面两支各有特点：</div>
+<ul class="blist">
+<li><b>极致预算</b>：<a class="slink">尔木萄眼线液笔</a>，¥20～30，二三十元也能有稳定体验。</li>
+<li><b>可选升级</b>：<a class="slink">Kissme 奇士美眼线液笔</a>，¥69～79，最抗晕最稳定，油皮首选。</li>
+</ul>
+<div class="sec-label">📌 一句话怎么选 <span class="ann dm" data-reason="按需求直接对应产品，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
+<div class="scene">
+<div class="scene-row">🥇 不知道买哪支 → <b>橘朵</b>，闭眼入</div>
+<div class="scene-row">💧 最怕晕妆 → <b>UKISS</b></div>
+<div class="scene-row">🌸 想要自然妆感 → <b>花知晓</b></div>
+<div class="scene-row">💰 预算只有二三十 → <b>尔木萄</b></div>
+<div class="scene-row">⬆️ 预算提高到 70 → <b>Kissme</b></div>
+</div>
+<div class="lead"><b>你的化妆经验和肤质是？</b><span class="ann dm" data-reason="收集个人条件，进一步精准推荐">懂我</span></div>
 <div class="follow"><button class="fbtn">内双适合画什么样的眼线？</button><button class="fbtn">棕色和黑色哪个更日常？</button><button class="fbtn">有没有不脱妆的画法技巧？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人眼妆测评笔记</div>
-</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+</div></div>
+<div class="quote-area" id="qa-judydoll">
+<div class="quote-ref"><span class="qt">"</span><div class="qimg"><img src="images/eyeliner_judydoll_v2.png" alt=""></div><div class="qnm">橘朵眼线胶笔</div><span class="qt">"</span><div class="qclose" onclick="closeQuote(this)">✕</div></div>
+</div>
+<div class="fav-overlay" id="fov-judydoll" onclick="closeFavSheet(this)"></div>
+<div class="fav-sheet" id="fs-judydoll">
+<div class="fs-head"><span class="fs-title">我的收藏</span><span class="fs-close" onclick="closeFavSheet(this)">✕</span></div>
+<div class="fs-list">
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_judydoll_v2.png" alt=""></div><div class="mid"><div class="nm">橘朵眼线胶笔</div><div class="info-row"><span class="price">¥25～35</span><span class="score"><span class="s">★</span>4.7 (3.2k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_ukiss.png" alt=""></div><div class="mid"><div class="nm">UKISS 悠珂思眼线液笔</div><div class="info-row"><span class="price">¥35～45</span><span class="score"><span class="s">★</span>4.7 (2.9k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_huazhixiao.png" alt=""></div><div class="mid"><div class="nm">花知晓眼线液笔</div><div class="info-row"><span class="price">¥39～49</span><span class="score"><span class="s">★</span>4.6 (1.8k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_ermutao.png" alt=""></div><div class="mid"><div class="nm">尔木萄眼线液笔</div><div class="info-row"><span class="price">¥20～30</span><span class="score"><span class="s">★</span>4.5 (1.5k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_kissme.png" alt=""></div><div class="mid"><div class="nm">Kissme 奇士美眼线液笔</div><div class="info-row"><span class="price">¥69～79</span><span class="score"><span class="s">★</span>4.8 (5.1k)</span></div></div><span class="fl-check">✓</span></div>
+</div>
+<div class="fs-bar" id="fsbar-judydoll"><div class="fs-sel"></div><span class="fs-ask" onclick="askFavSelected(this)">追问</span></div>
+</div>
+<div class="input-bar" id="ib-judydoll" style="position:relative;z-index:11;"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon" onclick="togglePlus(this)">＋</span></div>
+<div class="plus-menu" id="pm-judydoll">
+<div class="pm-item"><span class="pm-ico">📷</span>拍照</div>
+<div class="pm-item"><span class="pm-ico">🖼</span>相册</div>
+<div class="pm-item pm-hl" onclick="openFavSheet(this)"><span class="pm-ico">⭐</span>收藏</div>
+<div class="pm-item"><span class="pm-ico">📍</span>位置</div>
+</div>
+<div class="cite-overlay" onclick="closeSidebar(this)"></div>
+<div class="cite-sidebar" id="sb-judydoll">
+<div class="sb-handle" onclick="closeSidebar(this)"></div>
+<div class="sb-top"><div class="sb-title">橘朵眼线胶笔</div><button class="sb-close" onclick="closeSidebar(this)">✕</button></div>
+<div class="sb-body" style="padding:0;">
+<div class="detail" style="margin:0;border:none;border-radius:0;">
+<div class="detail-gallery"><img src="images/eyeliner_judydoll_v2.png" alt=""><div class="cnt">1 / 3</div><div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span></div></div>
+<div class="detail-body">
+<div class="detail-top"><div class="detail-title">橘朵眼线胶笔</div><div class="detail-price"><span class="lbl">参考价</span>¥25～35</div></div>
+<div class="ai-sum">
+<div class="head"><span class="pct">推荐值<b>91.5%</b></span><span class="lbl">AI 总结</span></div>
+<div class="body">
+<div class="badge"><div class="rank">仙品</div><div class="cnt">3,200 人点评 ›</div></div>
+<div class="bars">
+<div class="bar-row"><span class="dim">推荐</span><div class="track"><div class="fill pro" style="width:91%"></div></div><span class="val">91%</span></div>
+<div class="bar-row"><span class="dim">一般</span><div class="track"><div class="fill mid" style="width:6%"></div></div><span class="val">6%</span></div>
+<div class="bar-row"><span class="dim">不行</span><div class="track"><div class="fill neg" style="width:3%"></div></div><span class="val">3%</span></div>
+</div>
+</div>
+<div class="tags"><span class="tag pos">顺滑好画(890)</span><span class="tag pos">新手友好(456)</span><span class="tag neg">持妆中等(178)</span><span class="tag neg">油皮不够持久(92)</span></div>
+</div>
+<div class="detail-sec">基本介绍</div>
+<div class="detail-intro">橘朵眼线胶笔是学生党中最受欢迎的平价眼线产品之一，胶笔质地兼顾顺滑和容错率，新手也能轻松上手，价格不到 30 元试错成本极低。</div>
+<div class="detail-params">
+<div class="row"><span>质地</span><span>胶笔</span></div>
+<div class="row"><span>笔径</span><span>1.5mm</span></div>
+<div class="row"><span>防水等级</span><span>中等防水</span></div>
+<div class="row"><span>持妆时间</span><span>约 6–8h</span></div>
+</div>
+<div class="detail-sec">用户评价</div>
+<div class="op-tabs">
+<button class="op-tab pos on" onclick="switchTab(this,'jd1')">顺滑好画<span class="pct">91%</span></button>
+<button class="op-tab pos" onclick="switchTab(this,'jd2')">新手友好<span class="pct">86%</span></button>
+<button class="op-tab neg" onclick="switchTab(this,'jd3')">持妆中等<span class="pct">62%</span></button>
+</div>
+<div class="op-panel on" id="jd1">
+<div class="op-versus"><div class="side pro on" style="flex:91" onclick="switchSide(this,'pro')">支持 91%</div><div class="side con" style="flex:9" onclick="switchSide(this,'con')">9%</div></div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">新</div><div class="body"><div class="u">@新手化妆 · 笔记 · 2.4k 赞</div><div class="t">第一次画眼线就用的橘朵，胶笔真的好画，画歪了用棉签擦掉就行</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">学</div><div class="body"><div class="u">@学生日常 · 笔记 · 1.8k 赞</div><div class="t">很顺滑不卡顿，贴着睫毛根部画完全不拉扯，三十块不到太香了</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)">内</div><div class="body"><div class="u">@内双眼妆 · 评论 · 1.2k 赞</div><div class="t">内双画内眼线特别合适，胶笔不像液笔那么容易蹭到上眼皮</div></div></div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">对</div><div class="body"><div class="u">@对比评测 · 评论 · 234 赞</div><div class="t">顺滑是顺滑，但颜色偏淡，需要来回描两三遍才够显色</div></div></div>
+</div>
+</div>
+<div class="op-panel" id="jd2">
+<div class="op-versus"><div class="side pro on" style="flex:86" onclick="switchSide(this,'pro')">支持 86%</div><div class="side con" style="flex:14" onclick="switchSide(this,'con')">14%</div></div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">零</div><div class="body"><div class="u">@零基础学眼妆 · 笔记 · 1.6k 赞</div><div class="t">完全零基础，看了一个教程就画出来了。胶笔比液笔好控制太多</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)">练</div><div class="body"><div class="u">@练手首选 · 评论 · 980 赞</div><div class="t">画错了擦掉重来就行，不像液笔一笔定生死。练手太合适了</div></div></div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">熟</div><div class="body"><div class="u">@熟手体验 · 评论 · 156 赞</div><div class="t">会画之后觉得胶笔不够精细，画不了太细的线条</div></div></div>
+</div>
+</div>
+<div class="op-panel" id="jd3">
+<div class="op-versus"><div class="side pro on" style="flex:62" onclick="switchSide(this,'pro')">认同 62%</div><div class="side con" style="flex:38" onclick="switchSide(this,'con')">38%</div></div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">油</div><div class="body"><div class="u">@油皮测评 · 笔记 · 890 赞</div><div class="t">混油皮到下午眼尾会淡一点，不至于晕成熊猫眼但确实变淡了</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">夏</div><div class="body"><div class="u">@夏天实测 · 评论 · 567 赞</div><div class="t">夏天出汗多的时候持妆确实差一些，但这个价位不能要求太多</div></div></div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)">干</div><div class="body"><div class="u">@干皮用户 · 评论 · 345 赞</div><div class="t">干皮用完全没问题，一天下来眼线还是很清晰，持妆够用了</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">定</div><div class="body"><div class="u">@定妆技巧 · 评论 · 234 赞</div><div class="t">画完散粉定妆一下就行了，多撑两三个小时不成问题</div></div></div>
+</div>
+</div>
+<div class="detail-sec">购买渠道</div>
+<div class="shop-list"><a class="shop-item" href="#" onclick="return false"><div class="img"><img src="images/eyeliner_judydoll_v2.png" alt=""></div><div class="mid"><div class="nm">橘朵官方旗舰店</div><div class="price">¥29.9</div></div><div class="arrow">›</div></a></div>
+</div>
+</div>
+</div>
+<div class="detail-actions"><button class="act-btn fav" onclick="toggleFav(this)"><span class="star">☆</span>收藏</button><button class="act-btn ask" onclick="askAbout(this,'qa-judydoll','ib-judydoll')">追问</button></div>
+<div class="detail-toast" id="toast-judydoll">⭐ 已加入决赛圈<span class="tst-arrow">›</span></div>
+</div>
+</div></div>
 
 <!-- 美妆 · 单品评估 -->
 <div class="case-panel cat-beauty" data-cat="beauty" data-intent="single">
-<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">kissme眼线液笔容易晕妆吗</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>kissme眼线液笔容易晕妆吗？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">347 篇</b>真人持妆实测</span></div>
-<div class="lead"><b>不容易晕，这是它最大的卖点。</b>大多数人反馈<span class="hl">日常通勤 8–12 小时不晕</span>，即使出汗出油也能撑住。但有几个特殊情况需要注意。</div>
-<div class="pcard"><div class="img" style="background:linear-gradient(135deg,#FFE8CC,#E8A33D);display:flex;align-items:center;justify-content:center;font-size:26px;">🖊</div><div class="body"><div class="nm">Kissme 奇士美眼线液笔</div><div class="features">极细 0.1mm 笔头 · 持妆 12h · 温水可卸 · 防水防汗</div><div class="pbottom"><div class="price">¥79</div><div class="stars-line"><span class="s">★</span>4.8<span class="unit">分</span><span class="cnt">5.1k 人推荐</span></div></div></div></div>
-<div class="sec-label">📊 大家怎么评价</div>
-<div class="pc">
-<div class="pc-block pro"><div class="pc-hd"><span class="num">4</span><span class="lbl">个值得入手的理由</span></div>
-<div class="pc-item"><span class="ic">✓</span>持妆能力强，日常 8–12h 基本不晕<span class="heat">🔥 提及 91%</span></div>
-<div class="pc-item"><span class="ic">✓</span>温水可卸，不需要专门的眼唇卸妆<span class="heat">🔥 提及 85%</span></div>
-<div class="pc-item"><span class="ic">✓</span>笔头极细（0.1mm），能画出毛流感<span class="heat">提及 72%</span></div>
-<div class="pc-item"><span class="ic">✓</span>不结块、不断水，出墨均匀<span class="heat">提及 63%</span></div>
-</div>
-<div class="pc-block con"><div class="pc-hd"><span class="num">3</span><span class="lbl">个要注意的地方</span></div>
-<div class="pc-item"><span class="ic">✗</span>大油皮 + 不定妆，下午内眼线可能微晕<span class="heat">提及 34%</span></div>
-<div class="pc-item"><span class="ic">✗</span>笔头偏软，新手画粗线不太好控制<span class="heat">提及 28%</span></div>
-<div class="pc-item"><span class="ic">✗</span>棕色款颜色偏浅，存在感不够强<span class="heat">提及 19%</span></div>
-</div></div>
-<div class="sec-label">⚠️ 什么情况下会晕</div>
+<div class="lead"><b>不太容易晕妆。</b><span class="ann dm" data-reason="用户问的就是「晕不晕」，第一句直接给结论">懂我</span><span class="ann yp" data-reason="不含糊，先下判断再补充边界">有判断</span></div>
+<div class="pcard"><div class="img"><img src="images/eyeliner_kissme.png"></div><div class="body"><div class="nm">Kissme 奇士美眼线液笔</div><div class="features">极细 0.1mm 笔头 · 持妆 12h · 温水可卸 · 防水防汗</div><div class="pbottom"><div class="price">¥79</div><div class="stars-line"><span class="s">★</span>4.8<span class="unit">分</span><span class="cnt">5.1k 人推荐</span></div></div></div></div>
+<div class="lead">KISS ME（花漾美姬）眼线液笔整体属于比较持久、防水防汗的一类，正常肤质和大多数混油皮日常使用都比较稳，不容易因为出汗或轻微出油就晕开。<span class="ann dh" data-reason="从产品特性解释为什么不容易晕">懂行</span></div>
+<div class="lead">不过如果是<b>油眼皮、眼周特别容易出油</b>，或者画在<b>内眼线、下眼睑</b>的位置，到了后期还是可能会有一点晕染。<span class="ann zs" data-reason="主动交代会晕的边界条件，不只说好话">真实</span></div>
+<div class="lead">建议画之前先做好<b>眼皮打底</b>或<b>轻扫一层散粉</b>，持妆效果会更好。<span class="ann dh" data-reason="给出具体可操作的对策，不只描述问题">懂行</span></div>
+<div class="sec-label">💬 用过的人怎么说 <span class="ann zs" data-reason="真人使用经验佐证，有好有差">真实</span></div>
 <div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">混油皮实测</div><div class="lk">♡ 3,120</div></div><div class="tx"><span class="q">"</span>日常通勤完全不晕。但有一次去蹦迪，出了巨多汗，内眼线有一点点化。外眼线和眼尾完全没事<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">用了两年的老粉</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>内眼线如果不定妆确实会淡一点，但不会晕成熊猫眼。外眼线真的铁，哭完还在<span class="q">"</span></div></div>
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">混油皮上班族</div><div class="lk">♡ 3,120</div></div><div class="tx"><span class="q">"</span>通勤一整天完全不晕，戴口罩也没问题。唯一一次化是去蹦迪出了巨多汗，内眼线有一点点淡，外眼线和眼尾完全没事<span class="q">"</span></div></div>
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">回购三年的老用户</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>外眼线真的铁，哭完都还在。内眼线如果不定妆确实会淡一点，但不至于晕成熊猫眼<span class="q">"</span></div></div>
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></div><div class="nm">大油皮学生党</div><div class="lk">♡ 2,450</div></div><div class="tx"><span class="q">"</span>我是那种眼皮出油特别厉害的，之前用别的牌子下午必晕。换了 Kissme 之后好很多，但内眼线还是要先扫一层散粉才稳<span class="q">"</span></div></div>
 </div>
-<div class="ai-sum"><div class="head"><span class="score"><span class="n">8.5</span><span class="mx">/ 10</span><span class="st">★★★★☆</span></span><span class="lbl">AI 总结</span></div><div class="text">持妆能力是同价位<b>天花板级别</b>。日常场景几乎不会晕，温水可卸省心省钱。唯一要注意：大油皮画内眼线建议<b>先用眼部打底定妆</b>，外眼线放心画。</div><div class="from">基于 347 篇小红书真人持妆实测 · 580 条评论综合</div></div>
-<div class="scene">
-<div class="scene-row">日常通勤、上课——<b>放心买</b>，8 小时以上不晕。</div>
-<div class="scene-row">大油皮画内眼线——<b>先用眼部打底</b>，或者用棉签蘸散粉压一下。</div>
-<div class="scene-row">运动、蹦迪等大量出汗——外眼线没问题，内眼线可能微淡。</div>
-<div class="scene-row">追求完全不晕——可以看看 <b>UZU</b>，持妆更极端但价格翻倍。</div>
-</div>
-<div class="follow"><button class="fbtn">和 UZU 比持妆谁更强？</button><button class="fbtn">黑色和棕色选哪个好？</button><button class="fbtn">有没有让它更持久的画法？</button></div>
+<div class="follow"><button class="fbtn">和 UKISS 比持妆谁更强？</button><button class="fbtn">黑色和棕色选哪个好？</button><button class="fbtn">有没有让它更持久的画法？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人持妆实测</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 美妆 · 对比决策 -->
 <div class="case-panel cat-beauty" data-cat="beauty" data-intent="versus">
-<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">橘朵和kissme眼线液笔选哪个？油皮</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>橘朵和kissme眼线液笔选哪个？油皮</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">189 篇</b>真人对比测评</span></div>
-<div class="lead"><span class="hl">油皮出门用 Kissme，在家练手用橘朵。</span></div>
-<div class="sec-label">🔍 本质差异就一点</div>
-<div class="lead"><b>成膜型 vs 蜡基——决定油皮能撑多久</b><br>Kissme 是<b>成膜型液笔</b>，画完干了之后在皮肤上形成一层薄膜，油脂渗不进去，油皮能撑 8–12 小时。橘朵是<b>蜡基胶笔</b>，质地顺滑好画，但蜡会被皮脂慢慢溶掉，油皮下午就开始糊。</div>
-<div class="sec-label">💬 买家口碑</div>
-<div class="buzz">
-<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">橘朵眼线胶笔</span><span class="buzz-cnt">89 人讨论</span></div><div class="buzz-tags">
-<span class="buzz-tag hot">顺滑好画 🔥94%</span><span class="buzz-tag hot">便宜试错 82%</span><span class="buzz-tag warn">下午会糊 56%</span><span class="buzz-tag warn">油皮不持久 48%</span>
-</div></div>
-<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">Kissme 眼线液笔</span><span class="buzz-cnt">127 人讨论</span></div><div class="buzz-tags">
-<span class="buzz-tag hot">持妆铁 🔥91%</span><span class="buzz-tag hot">温水可卸 85%</span><span class="buzz-tag">笔头极细 68%</span><span class="buzz-tag warn">新手难控制 32%</span>
-</div></div>
+<div class="lead"><span class="hl">油皮选 Kiss Me。</span><span class="ann dm" data-reason="锚定用户说的「油皮」，直接给答案">懂我</span><span class="ann yp">有判断</span></div>
+<div class="lead">原因主要有以下几点：</div>
+<div class="sec-label">1. 抗油抗晕更强 <span class="ann dh" data-reason="油皮最核心的需求维度">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">Kiss Me 眼线液笔</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:95%">★★★★★</span></div>
 </div>
-<div class="sec-label">📊 详细对比</div>
-<div class="comp-table"><table>
-<tr><th></th><th>橘朵眼线胶笔</th><th>Kissme 眼线液笔</th></tr>
-<tr><td class="dim">类型</td><td>胶笔（旋转式）</td><td>液笔（毛笔头）</td></tr>
-<tr><td class="dim">新手友好</td><td class="win">★★★★★</td><td>★★★☆☆</td></tr>
-<tr><td class="dim">持妆（油皮）</td><td>4–6 小时</td><td class="win">8–12 小时</td></tr>
-<tr><td class="dim">线条精细度</td><td>粗线为主</td><td class="win">极细 0.1mm</td></tr>
-<tr><td class="dim">卸妆</td><td>需要卸妆液</td><td class="win">温水即卸</td></tr>
-<tr><td class="dim">价格</td><td class="win">¥29.9</td><td>¥79</td></tr>
-</table></div>
-<div class="sec-label">🧭 按你的情况选</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side">
+<div class="nm">橘朵眼线液笔</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:55%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">防水防汗防皮脂</div>
+<div class="pk-dim">防脱妆</div>
+<div class="pk-val" style="text-align:right">基础防水</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">8–12h</div>
+<div class="pk-dim">持妆时长</div>
+<div class="pk-val" style="text-align:right">4–6h</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">极强</div>
+<div class="pk-dim">油皮适配</div>
+<div class="pk-val" style="text-align:right">一般</div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>67人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>23人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+Kiss Me 靠<b>防水、防汗、防皮脂</b>三防出名，是油皮圈的经典款。橘朵基础防水够用，但油皮到下午眼尾容易因为出油而掉色。
+</div>
+<div class="sec-label">2. 笔头精细度 <span class="ann dh" data-reason="液笔的核心体验维度">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">Kiss Me 眼线液笔</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:90%">★★★★★</span></div>
+</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side">
+<div class="nm">橘朵眼线液笔</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:72%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">0.1mm<span class="sub">极细毛笔尖</span></div>
+<div class="pk-dim">笔尖</div>
+<div class="pk-val" style="text-align:right">0.1mm<span class="sub">纤细笔尖</span></div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">均匀稳定</div>
+<div class="pk-dim">出墨</div>
+<div class="pk-val" style="text-align:right">顺滑但偶断</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">精准好控</div>
+<div class="pk-dim">手感</div>
+<div class="pk-val" style="text-align:right">顺滑自然</div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>45人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>31人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+Kiss Me 的<b>毛笔尖弹性好、出墨均匀</b>，画细线和眼尾都很精准。橘朵顺滑度不错，但偶尔会断墨。
+</div>
+<div class="sec-label">3. 性价比 <span class="ann zs" data-reason="承认落选方的优势">真实</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side">
+<div class="nm">Kiss Me 眼线液笔</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:60%">★★★★★</span></div>
+</div>
+</div>
+<div class="pk-vs">VS</div>
+<div class="pk-side win">
+<div class="nm">橘朵眼线液笔</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:92%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val">¥79</div>
+<div class="pk-dim">价格</div>
+<div class="pk-val win" style="text-align:right">¥29.9</div>
+</div>
+<div class="pk-row">
+<div class="pk-val">约 3 个月</div>
+<div class="pk-dim">使用周期</div>
+<div class="pk-val" style="text-align:right">约 2 个月</div>
+</div>
+<div class="pk-row">
+<div class="pk-val">温水可卸</div>
+<div class="pk-dim">卸妆</div>
+<div class="pk-val win" style="text-align:right">普通卸妆</div>
+</div>
+</div>
+<div class="pk-voices">
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>28人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+<div class="pk-vmid">口碑</div>
+<div class="pk-ventry">
+<div class="pk-avatars"><i></i><i></i><i></i></div>
+<div class="pk-vlabel"><b>52人</b>好评</div>
+<div class="pk-varrow">›</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+橘朵<b>价格不到 Kiss Me 的一半</b>，性价比碾压。日常使用完全够用，混油或中性皮不一定非花这个溢价。
+</div>
+<div class="sec-label">👥 用过两支的人怎么选 <span class="ann zs" data-reason="用真人选择经验验证建议">真实</span></div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"夏天戴口罩通勤一整天，下班眼线还在。之前用橘朵下午就糊了，换了 Kissme 再没出过问题"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"两支都用过。橘朵画起来更舒服，但我是大油皮，到下午眼尾那截就淡了。Kissme 贵但省心"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></div>"混油皮学生党，橘朵其实够用了。Kissme 好是好，但 79 一支对学生来说还是贵了"</div>
+<div class="sec-label">🧭 按你的情况选 <span class="ann dm" data-reason="分场景路由，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row"><span class="cond">油皮、需要<b>撑一整天不晕</b></span><span class="arrow">→</span><span class="pick b">Kissme</span></div>
-<div class="scene-row"><span class="cond">新手、还在<b>学画眼线</b></span><span class="arrow">→</span><span class="pick a">橘朵</span></div>
-<div class="scene-row"><span class="cond">油皮 + 新手</span><span class="arrow">→</span><span class="pick a">先橘朵练手，再上 Kissme</span></div>
-<div class="scene-row"><span class="cond">预算够、不想纠结</span><span class="arrow">→</span><span class="pick yes">两个都买，各管各的</span></div>
+<div class="scene-row"><span class="cond">油皮 / 夏天出汗多 / <b>戴口罩</b></span><span class="arrow">→</span><span class="pick a">Kiss Me</span></div>
+<div class="scene-row"><span class="cond">混油或中性皮 / <b>预算有限</b></span><span class="arrow">→</span><span class="pick b">橘朵也够用</span></div>
 </div>
-<div class="follow"><button class="fbtn">油皮用橘朵有没有办法延长持妆？</button><button class="fbtn">Kissme 新手有什么画法技巧？</button><button class="fbtn">还有没有其他油皮友好的平价选择？</button></div>
+<div class="follow"><button class="fbtn">我是双眼皮</button><button class="fbtn">内双，眼皮特别容易出油</button><button class="fbtn">帮我选个颜色（黑/深棕/灰棕）</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人对比测评</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 美妆 · 攻略咨询 -->
 <div class="case-panel cat-beauty" data-cat="beauty" data-intent="guide">
-<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">油皮怎么选眼线笔</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>油皮怎么选眼线笔？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">276 篇</b>油皮眼妆攻略</span></div>
-<div class="lead">油皮选眼线笔的核心：<span class="hl">成膜型 vs 非成膜型</span>。选对类型持妆解决 80%，剩下 20% 靠定妆手法。</div>
-<div class="sec-label">🧠 三种类型，油皮的选择逻辑</div>
-<div class="lead"><b>眼线液笔：成膜防油，油皮首选</b><br><b>成膜型</b>，画完形成防水薄膜，油脂渗不进去。比如 Kissme、UZU 都是这类</div>
-<div class="lead"><b>眼线胶笔：好画但怕皮脂，必须搭定妆</b><br><b>蜡基质地</b>，顺滑好画但容易被皮脂溶掉。比如橘朵、3CE</div>
-<div class="lead"><b>眼线膏：持妆最强，但上手门槛高</b><br><b>膏体 + 刷子</b>，持妆最强但上手难度最高。适合化妆手法熟练的人</div>
-<div class="sec-label">⚠️ 油皮必须知道的 3 个真相</div>
-<div class="lead"><b>第一，"防水"不等于"防油"。</b>很多标"防水"的笔遇到皮脂照样晕。要看<b>"防水防汗防皮脂"三项全标</b>的。</div>
-<div class="lead"><b>第二，内眼线比外眼线更容易晕。</b>内眼线接触泪液和油脂，再好的笔也可能淡化。画完用<b>棉签蘸少量散粉轻压一下</b>就行。</div>
-<div class="lead"><b>第三，定妆手法比选笔更重要。</b>哪怕是胶笔，画完用散粉或眼部打底定住，油皮也能撑一整天。</div>
-<div class="sec-label">💬 油皮姐妹在讨论什么</div>
-<div class="buzz">
-<div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">高频讨论话题</span><span class="buzz-cnt">276 篇笔记</span></div>
-<div class="buzz-tags">
-<span class="buzz-tag hot">成膜型液笔</span>
-<span class="buzz-tag hot">散粉定妆法</span>
-<span class="buzz-tag">眼部打底</span>
-<span class="buzz-tag">内眼线防晕</span>
-<span class="buzz-tag warn">胶笔油皮晕妆</span>
-<span class="buzz-tag">防水≠防油</span>
-<span class="buzz-tag">温水可卸</span>
-<span class="buzz-tag">棕色更自然</span>
-</div></div>
+<div class="lead">油皮选眼线笔，不是越防水越好，而是<span class="hl">先想清楚你最想解决什么问题</span>。很多人一味追求"最持妆"，其实未必是最适合自己的。<span class="ann dh" data-reason="纠正油皮常见误区，不直接堆产品">懂行</span><span class="ann dm" data-reason="先理解用户真实痛点再给方案">懂我</span></div>
+<div class="sec-label">① 如果你最怕脱妆，先别急着换眼线笔 <span class="ann dh" data-reason="先排除手法问题，再推产品">懂行</span></div>
+<div class="lead">油皮确实更容易晕妆，但脱妆不完全是眼线笔的问题。</div>
+<div class="lead">如果只是下午开始轻微晕染，可以先试试：</div>
+<ul class="blist">
+<li>眼部打底</li>
+<li>画完后轻压一层散粉</li>
+<li>避免乳霜型眼霜蹭到眼尾</li>
+</ul>
+<div class="lead" style="color:var(--t62);font-size:13px">这些方法往往就能明显提升持妆。如果做了这些还是容易晕，再优先选择防皮脂、成膜快的眼线液笔。</div>
+<div class="voice">
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">大油田通勤族</div><div class="lk">♡ 2,870</div></div><div class="tx"><span class="q">"</span>之前一直以为是眼线笔不行，后来用了眼部打底再画，同一支笔多撑了三四个小时。很多时候不是笔的问题<span class="q">"</span></div></div>
 </div>
-<div class="lead"><b>你日常通勤多还是经常运动出汗？</b></div>
-<div class="follow"><button class="fbtn">眼部打底用什么好？</button><button class="fbtn">油皮画眼线有什么手法技巧？</button><button class="fbtn">棕色和黑色哪个更不容易显晕？</button></div>
+<div class="sec-label">② 如果你很在意出油，就重点看这几个点 <span class="ann dh" data-reason="精准指出油皮真正该看的指标">懂行</span><span class="ann zs" data-reason="防水≠防油是油皮最常踩的坑">真实</span></div>
+<div class="lead">油皮真正要看的不是"防水"，而是：</div>
+<ul class="blist">
+<li><b>是否防皮脂</b>（Oil Proof）</li>
+<li><b>是否速干成膜</b></li>
+<li><b>是否防汗</b></li>
+</ul>
+<div class="lead" style="color:var(--t62);font-size:13px">很多产品宣传防水，但皮脂才是油皮眼线晕开的主要原因，所以防皮脂比防水更重要。</div>
+<div class="voice">
+<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">混油皮研究生</div><div class="lk">♡ 1,540</div></div><div class="tx"><span class="q">"</span>买了三支都标防水的，夏天照晕不误。后来特意找了一支写防皮脂的，真的就不晕了。防水和防油完全是两回事<span class="q">"</span></div></div>
+</div>
+<div class="sec-label">③ 再根据你的化妆习惯选类型 <span class="ann dm" data-reason="从用户的画法习惯出发，不是从产品参数出发">懂我</span></div>
+<ul class="blist">
+<li><b>想要最好画、新手容易成功</b>：优先选胶笔，画内眼线和填睫毛根部都更轻松</li>
+<li><b>想要最持妆、通勤一天不补妆</b>：优先选液笔，更适合油皮日常</li>
+<li><b>想画自然妆</b>：可以选棕色，容错率更高</li>
+<li><b>喜欢干净利落的妆感</b>：黑色会更有存在感</li>
+</ul>
+<div class="sec-label">⚠️ 油皮一定要知道的 3 个真相 <span class="ann dh">懂行</span><span class="ann zs" data-reason="来自油皮用户的真实踩坑经验">真实</span></div>
+<ul class="blist">
+<li><b>防水≠防油</b>，有没有防皮脂更重要</li>
+<li><b>内眼线本来就是最容易掉的部位</b>，不要期待一支眼线笔完全解决</li>
+<li><b>选对产品只能解决一部分问题</b>，眼部打底和定妆同样会影响持妆表现</li>
+</ul>
+<div class="lead">💬 大家讨论最多的几款眼线笔是 Kiss Me、橘朵、UZU、花知晓。如果你告诉我你的情况，我可以具体帮你选选：<span class="ann dm" data-reason="主动收集需求，精准推荐">懂我</span></div>
+<div class="follow"><button class="fbtn">自然妆为主，新手</button><button class="fbtn">已经会画，想要最持妆的</button><button class="fbtn">预算 50 以内</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人油皮眼妆攻略</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 户外 · 选品推荐 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="rec">
-<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">单板滑雪买雪板，有哪些值得买的入门款？</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>单板滑雪买雪板，有哪些值得买的入门款？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">156 篇</b>入门雪板测评笔记</span></div>
-<div class="lead">入门板核心一个字：<span class="hl">软</span>。软板容错率高、摔了不容易受伤、转弯轻松。<span class="hl">新手用硬板练不出来还容易伤膝盖</span>。</div>
-<div class="sec-label">🎯 入门雪板 TOP 4</div>
-<div class="rich">
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Burton Ripcord</div><div class="desc">Flat Top 板型 · 偏软弹性好 · 全山入门经典</div><div class="pbottom"><div class="price">¥2,800</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div></div></div></div>
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Ride Agenda</div><div class="desc">Twin 对称板 · 公园全山两用 · 性价比之王</div><div class="pbottom"><div class="price">¥2,200</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">890 人推荐</span></div></div></div></div>
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#7EE8D4,#34B39D);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Rossignol Sawblade</div><div class="desc">AmpTek Rocker · 极软好转弯 · 最便宜的大牌入门</div><div class="pbottom"><div class="price">¥1,800</div><div class="stars-line"><span class="s">★</span>4.5<span class="cnt">670 人推荐</span></div></div></div></div>
-<div class="rich-item"><div class="img" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0);display:flex;align-items:center;justify-content:center;font-size:22px;">🏂</div><div class="mid"><div class="nm">Salomon Pulse</div><div class="desc">Rocker 板型 · 中软 · 偏全山 · 做工扎实</div><div class="pbottom"><div class="price">¥2,500</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">540 人推荐</span></div></div></div></div>
-</div>
-<div class="sec-label">💬 过来人怎么说</div>
+<div class="lead">滑雪入门买第一块单板，真正要看的是这三点：<span class="ann dm" data-reason="从「入门」拆出新手最该关心的维度">懂我</span><span class="ann dh" data-reason="帮用户排除不重要的参数，聚焦核心">懂行</span></div>
+<ul class="blist">
+<li><b>好不好上手</b>：板子偏软、板型容错高，换刃才省力、不容易卡刃摔跤；太硬的板新手根本压不动。</li>
+<li><b>耐不耐用</b>：但也别一味求软，太软的板你学会换刃后很快就嫌它撑不住、想换。挑「偏软但不过软」的能多陪你几年。</li>
+<li><b>尺寸对不对</b>：长度看身高体重（站直板头在下巴到鼻子之间），脚大（44 码以上）要专门挑加宽版，不然转弯脚尖脚跟蹭雪。这个比纠结型号更要紧。</li>
+</ul>
+<div class="lead">高阶参数先不用管，下面按你的水平推荐几款。<span class="ann dm" data-reason="从「入门」推出学习曲线和进阶空间需求">懂我</span><span class="ann dh" data-reason="先排除对新手不重要的维度，帮用户聚焦">懂行</span></div>
+<div class="sec-label">⭐ 新手首选，一块全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="替用户做了筛选，直接给首选">有判断</span></div>
+<div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">偏软好上手 · 全山通用 · 入门经典</div><div class="pbottom"><div class="price">¥2,800 参考</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div></div></div></div>
+<div class="lead">新手第一块板，我会优先看它。<b>闭眼入，最不打击信心的一块。</b></div>
+<ul class="blist">
+<li><span class="hl">不容易突然摔</span><sup class="cite">提及 88%</sup>：板边圆钝，新手那种「毫无预兆栽跟头」会少很多。</li>
+<li><span class="hl">板软、好学</span><sup class="cite">提及 82%</sup>：换刃省力，从落叶飘到连着转弯，上手特别快。</li>
+<li><span class="hl">大牌、保值</span><sup class="cite">提及 65%</sup>：固定器随便配都能装，将来换板二手也好出。</li>
+</ul>
+<div class="lead">唯一缺点：偏软，滑到高级道想飙速会嫌它「跟不上」，一般用 1.5–2 季就想升级了。</div>
 <div class="voice">
 <div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div><div class="nm">滑了三季的老手</div><div class="lk">♡ 2,450</div></div><div class="tx"><span class="q">"</span>我第一块板就是 Ripcord，从连续落叶飘练到换刃，用了两个雪季才换板。入门板不需要好，需要"不打击信心"<span class="q">"</span></div></div>
 <div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">教练的建议</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>新手买板最常犯的错就是一步到位买进阶板。硬板确实高速更稳，但你还没到需要"稳"的阶段，先学会转弯再说<span class="q">"</span></div></div>
 </div>
-<div class="sec-label">🧭 按需求选</div>
+<div class="sec-label">🏂 想省钱 / 想玩公园？看这两块 <span class="ann dh" data-reason="预判用户在预算和玩法上的不同侧重">懂行</span></div>
+<div class="lead">这两块各有更擅长的方向，也各有一条短板：</div>
+<div class="item-title"><span class="tag">预算友好</span>Nitro Prime</div>
+<div class="pcard"><div class="img"><img src="images/snowboard_nitro_prime.png"></div><div class="body"><div class="nm">Nitro Prime</div><div class="features">软硬适中 · 全山通用 · 便宜好用</div><div class="pbottom"><div class="price">¥1,900 参考</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">720 人推荐</span></div></div></div></div>
+<div class="lead"><b>更便宜、也更耐用一点。</b>它比 Ripcord 稍硬，上手没那么「无脑」，但也正因为硬一点，支撑更足，滑好了也不会太快嫌它软。图省钱、想一块板多用几年就选它。缺点是滑起来速度一般，没有哪项特别突出。</div>
+<div class="item-title"><span class="tag">想玩公园</span>Ride Agenda</div>
+<div class="pcard"><div class="img"><img src="images/snowboard_ride_agenda.png"></div><div class="body"><div class="nm">Ride Agenda</div><div class="features">头尾对称 · 软硬适中 · 偏公园</div><div class="pbottom"><div class="price">¥2,200 参考</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">890 人推荐</span></div></div></div></div>
+<div class="lead"><b>正着倒着都能滑、脚下更弹的一块。</b>想往公园、玩花活方向发展就选它。缺点是比纯软板稍微难压一点，头几天更费劲。</div>
+<div class="sec-label">🎯 按需求还能看这些 <span class="ann dh" data-reason="覆盖平花、女生、进阶、大脚等长尾需求">懂行</span></div>
+<div class="lead">下面按不同需求分了几类，对号入座：</div>
+<ul class="blist">
+<li><b>想专练花式 / 公园</b>：Rome Mechanic<sup class="mag">🔍</sup>、CAPiTA Pathfinder<sup class="mag">🔍</sup>，板子更软更灵活，做跳跃、压板这些花式动作更顺手；Rossignol Sawblade<sup class="mag">🔍</sup> 也偏这类，偏硬一点，适合会滑之后再玩花活。</li>
+<li><b>女生第一块板</b>：Burton Stylus<sup class="mag">🔍</sup>、Salomon Lotus<sup class="mag">🔍</sup>、Nitro Lectra<sup class="mag">🔍</sup>，轻、好控、不容易摔。</li>
+<li><b>已经会换刃、想进阶</b>：K2 Raygun<sup class="mag">🔍</sup>、CAPiTA Outerspace Living<sup class="mag">🔍</sup>，板子更有支撑，适合认真练。</li>
+</ul>
+<div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按人群直接给结论，不让用户自己归纳">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row">纯新手、刚学会刹车，选 <b>Rossignol Sawblade</b>——最软最便宜，摔了不心疼。</div>
-<div class="scene-row">想滑全山、偶尔走走小跳台，选 <b>Burton Ripcord</b>——全能型入门，两个雪季够用。</div>
-<div class="scene-row">想往公园方向发展、喜欢玩花活，选 <b>Ride Agenda</b>——Twin 对称板正反滑都行。</div>
-<div class="scene-row">不确定自己会不会坚持——<b>先租一季</b>，确认喜欢了再买不迟。</div>
+<div class="scene-row">想一块稳妥全能、用两季再换 → <b>Burton Ripcord</b>，闭眼入。</div>
+<div class="scene-row">预算有限、又想能陪你进阶一阵 → <b>Nitro Prime</b>，最划算。</div>
+<div class="scene-row">想往公园 / 平花发展 → <b>Ride Agenda</b>。</div>
 </div>
-<div class="lead" style="color:var(--t62);font-size:13px;"><b>入门必知</b>：板的长度 = 下巴到鼻子之间（体重偏重选长一点）。固定器和雪鞋比板更影响脚感，别把预算全花在板上。</div>
-<div class="lead"><b>你现在什么水平？</b></div>
-<div class="follow"><button class="fbtn">固定器和雪鞋怎么选？</button><button class="fbtn">二手板值得买吗？</button><button class="fbtn">入门全套预算大概多少？</button></div>
+<div class="lead"><b>小提醒</b>：固定器和雪鞋比板更影响脚感，别把预算全砸在板上。</div>
+<div class="lead"><b>你告诉我身高、体重、鞋码、预算，主要想滑雪道还是平花，我直接帮你把型号和长度缩到 2–3 个。</b><span class="ann dm" data-reason="追问精准需求，进一步缩小推荐范围">懂我</span></div>
+<div class="follow"><button class="fbtn">固定器和雪鞋也得一起买吧？</button><button class="fbtn">二手板值得买吗？</button><button class="fbtn">全套下来大概花多少？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人雪板测评笔记</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 户外 · 单品评估 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="single">
-<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">Burton Ripcord怎么样？适合从初级往进阶过渡吗</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>Burton Ripcord怎么样？适合从初级往进阶过渡吗？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">98 篇</b>真人使用反馈</span></div>
-<div class="lead"><b>入门到初级进阶完全够用，但别指望它陪你到高级。</b>Ripcord 的定位就是<span class="hl">「学会滑雪」这个阶段的最佳搭档</span>，换刃、连续弯、简单小跳台都没问题，但高速大回转会明显感觉板子软、抓不住雪。</div>
+<div class="lead"><b>入门到初级进阶完全够用，但别指望它陪你到高级。</b>Ripcord 的定位就是<span class="hl">「学会滑雪」这个阶段的最佳搭档</span>，换刃、连续弯、简单小跳台都没问题，但高速大回转会明显感觉板子软、抓不住雪。<span class="ann dh">懂行</span><span class="ann yp" data-reason="第一句直接说够不够用，再划定能力边界">有判断</span></div>
 <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF);display:flex;align-items:center;justify-content:center;font-size:26px;">🏂</div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">Flat Top 板型 · 偏软 · 全山入门 · 木芯减震</div><div class="pbottom"><div class="price">¥2,800</div><div class="stars-line"><span class="s">★</span>4.7<span class="unit">分</span><span class="cnt">1.2k 人推荐</span></div></div></div></div>
-<div class="sec-label">📊 大家怎么评价</div>
+<div class="sec-label">📊 大家怎么评价 <span class="ann zs" data-reason="好评差评都摆出来，带提及比例">真实</span></div>
 <div class="pc">
 <div class="pc-block pro"><div class="pc-hd"><span class="num">4</span><span class="lbl">个值得入手的理由</span></div>
 <div class="pc-item"><span class="ic">✓</span>Flat Top 板型容错高，换刃学习曲线平滑<span class="heat">🔥 提及 88%</span></div>
@@ -1418,17 +1715,17 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="pc-item"><span class="ic">✗</span>高速（40km/h+）时板头会抖，刃感不足<span class="heat">提及 45%</span></div>
 <div class="pc-item"><span class="ic">✗</span>想玩公园 jib 的话偏硬了，不够弹<span class="heat">提及 30%</span></div>
 </div></div>
-<div class="sec-label">🔄 什么时候该换板</div>
-<div class="lead">判断标准很简单：<b>如果你在中高级道上觉得"板子跟不上我了"</b>——高速刃感不足、颠簸路段弹不回来——就是该换的时候了。大多数人用 Ripcord <b>1.5–2 个雪季</b>会到这个临界点。</div>
+<div class="sec-label">🔄 什么时候该换板 <span class="ann dm" data-reason="预判进阶需求，提前告知换板节点">懂我</span><span class="ann dh">懂行</span></div>
+<div class="lead">判断标准很简单：<b>如果你在中高级道上觉得"板子跟不上我了"</b>，高速刃感不足、颠簸路段弹不回来，就是该换的时候了。大多数人用 Ripcord <b>1.5–2 个雪季</b>会到这个临界点。</div>
 <div class="voice">
 <div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div><div class="nm">用了两季换板的人</div><div class="lk">♡ 1,670</div></div><div class="tx"><span class="q">"</span>第一季从落叶飘到换刃，第二季开始走黑道，明显感觉板子软了。换了 Custom 之后高速稳太多了。Ripcord 完成了它的使命<span class="q">"</span></div></div>
 </div>
 <div class="ai-sum"><div class="head"><span class="score"><span class="n">8</span><span class="mx">/ 10</span><span class="st">★★★★☆</span></span><span class="lbl">AI 总结</span></div><div class="text"><b>入门到初级进阶最稳的选择。</b>容错高、品牌靠谱、二手好出。不要期待它是"一步到位"的板，它的价值就是帮你<b>用最低的试错成本学会滑雪</b>。学会了再按自己的风格选进阶板。</div><div class="from">基于 98 篇小红书真人使用反馈 · 210 条评论综合</div></div>
 <div class="scene">
-<div class="scene-row">从零开始学单板——<b>放心入</b>，1–2 季内你不会嫌它差。</div>
-<div class="scene-row">已经会换刃、想学刻滑——<b>还能再用一季</b>，但高速时会觉得软。</div>
-<div class="scene-row">已经滑黑道了——<b>该换了</b>，看看 Burton Custom 或 Process。</div>
-<div class="scene-row">不确定自己会不会坚持——Ripcord 的二手残值不错，<b>不亏</b>。</div>
+<div class="scene-row">从零开始学单板：<b>放心入</b>，1–2 季内你不会嫌它差。</div>
+<div class="scene-row">已经会换刃、想学刻滑：<b>还能再用一季</b>，但高速时会觉得软。</div>
+<div class="scene-row">已经滑黑道了：<b>该换了</b>，看看 Burton Custom 或 Process。</div>
+<div class="scene-row">不确定自己会不会坚持：Ripcord 的二手残值不错，<b>不亏</b>。</div>
 </div>
 <div class="follow"><button class="fbtn">进阶换什么板比较好？</button><button class="fbtn">155 和 157 选哪个长度？</button><button class="fbtn">搭配什么固定器合适？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人使用反馈</div>
@@ -1436,15 +1733,14 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 
 <!-- 户外 · 对比决策 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="versus">
-<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">Burton Ripcord和Ride Agenda选哪个？主要玩全山</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>Burton Ripcord和Ride Agenda选哪个？主要玩全山</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">112 篇</b>真人对比体验</span></div>
-<div class="lead"><span class="hl">主要玩全山选 Ripcord，想往公园发展选 Agenda。</span></div>
-<div class="sec-label">🔍 本质差异就一点</div>
-<div class="lead"><b>方向性 vs 对称——决定你怎么滑</b><br>Ripcord 是<b>方向性板</b>，板头比板尾长，天生适合往一个方向冲。全山巡航更稳，刻滑入弯更顺——但反脚滑会别扭。Agenda 是<b>对称板</b>，正反完全一样，Switch 和正常滑手感一致。公园里正反切换、落地 fakie 需要这种板——但高速巡航比方向性板差一点。</div>
-<div class="sec-label">💬 买家口碑</div>
+<div class="lead"><span class="hl">主要玩全山选 Ripcord，想往公园发展选 Agenda。</span><span class="ann dm" data-reason="锚定用户说的「全山」，直接给答案">懂我</span><span class="ann yp">有判断</span></div>
+<div class="sec-label">🔍 本质差异就一点 <span class="ann dh" data-reason="把硬度差异翻译成实际体感区别">懂行</span></div>
+<div class="lead"><b>方向性 vs 对称，决定你怎么滑</b><br>Ripcord 是<b>方向性板</b>，板头比板尾长，天生适合往一个方向冲。全山巡航更稳，刻滑入弯更顺，但反脚滑会别扭。Agenda 是<b>对称板</b>，正反完全一样，Switch 和正常滑手感一致。公园里正反切换、落地 fakie 需要这种板，但高速巡航比方向性板差一点。</div>
+<div class="sec-label">💬 买家口碑 <span class="ann zs" data-reason="展示两边真实评价，有好有差">真实</span></div>
 <div class="buzz">
 <div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">Burton Ripcord</span><span class="buzz-cnt">78 人讨论</span></div><div class="buzz-tags">
 <span class="buzz-tag hot">换刃顺畅 🔥87%</span><span class="buzz-tag hot">全山稳 82%</span><span class="buzz-tag">品牌保值 60%</span><span class="buzz-tag warn">高速偏软 45%</span>
@@ -1453,7 +1749,7 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <span class="buzz-tag hot">Switch自如 🔥90%</span><span class="buzz-tag hot">公园好玩 84%</span><span class="buzz-tag">性价比高 72%</span><span class="buzz-tag warn">巡航差一点 38%</span>
 </div></div>
 </div>
-<div class="sec-label">📊 详细参数对比</div>
+<div class="sec-label">📊 详细参数对比 <span class="ann dh" data-reason="提供客观参数表供用户核实">懂行</span></div>
 <div class="comp-table"><table>
 <tr><th></th><th>Burton Ripcord</th><th>Ride Agenda</th></tr>
 <tr><td class="dim">板型</td><td class="win">Flat Top（方向性）</td><td>Twin（对称）</td></tr>
@@ -1463,7 +1759,7 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <tr><td class="dim">反滑</td><td>一般</td><td class="win">优秀</td></tr>
 <tr><td class="dim">参考价</td><td>¥2,800</td><td class="win">¥2,200</td></tr>
 </table></div>
-<div class="sec-label">🧭 按你的情况选</div>
+<div class="sec-label">🧭 按你的情况选 <span class="ann dm" data-reason="分场景路由，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
 <div class="scene-row"><span class="cond">主要<b>全山巡航、练刻滑</b></span><span class="arrow">→</span><span class="pick a">Ripcord</span></div>
 <div class="scene-row"><span class="cond">想学<b>公园、跳台、反脚滑</b></span><span class="arrow">→</span><span class="pick b">Agenda</span></div>
@@ -1476,23 +1772,22 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 
 <!-- 户外 · 攻略咨询 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="guide">
-<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">买雪板最易踩的坑是什么？</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>买雪板最易踩的坑是什么？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">203 篇</b>买板踩坑帖</span></div>
-<div class="lead">新手买板最大的误区：<span class="hl">以为"贵的=好的"，其实是"合适的=好的"</span>。大部分踩坑都是觉得省了钱或一步到位了，其实花了冤枉钱。</div>
-<div class="sec-label">🧠 先建立 3 个核心认知</div>
+<div class="lead">新手买板最大的误区：<span class="hl">以为"贵的=好的"，其实是"合适的=好的"</span>。大部分踩坑都是觉得省了钱或一步到位了，其实花了冤枉钱。<span class="ann dh" data-reason="先破除误区再讲怎么选">懂行</span></div>
+<div class="sec-label">🧠 先建立 3 个核心认知 <span class="ann dh" data-reason="用三个认知帮新手建选板框架">懂行</span></div>
 <div class="lead"><b>新手别碰硬板，"进阶"不是"更好"</b><br>进阶板不是"更好"，是"更硬"。<b>新手用硬板学不出来，还容易受伤</b>。等滑够 20 天再考虑换板</div>
 <div class="lead"><b>鞋和固定器比板重要，别把预算全砸在板上</b><br>脚感 70% 来自鞋和固定器，板只占 30%。<b>预算全砸在板上、鞋买最便宜的</b>是最常见的错误</div>
 <div class="lead"><b>买错板型比买错牌子影响大</b><br>Camber、Rocker、Flat 各有用途。新手选 Flat 或 Rocker，别碰 Camber</div>
-<div class="sec-label">⚠️ 五大经典坑</div>
+<div class="sec-label">⚠️ 五大经典坑 <span class="ann dh">懂行</span><span class="ann zs" data-reason="来自真人踩坑经历的经验总结">真实</span></div>
 <div class="lead"><b>一步到位买进阶板</b><br>比如 Burton Custom 这类硬板，新手根本压不住，每次换刃都打滑</div>
 <div class="lead"><b>只看板、忽略鞋和固定器</b><br>合理比例是板 40% + 固定器 25% + 鞋 35%</div>
 <div class="lead"><b>按身高选长度</b><br>体重才是关键。同样 175cm，55kg 和 70kg 的人板长差 5cm</div>
 <div class="lead"><b>二手捡漏来路不明的板</b><br>看不出芯材断裂和暗伤，省了几百块可能一个赛季就报废</div>
 <div class="lead"><b>不了解板型就下单</b><br>新手选 Flat 或 Rocker（比如 Burton Ripcord），别碰 Camber，卡刃容易摔</div>
-<div class="sec-label">💬 买板圈在聊什么</div>
+<div class="sec-label">💬 买板圈在聊什么 <span class="ann zs" data-reason="展示社区真实讨论热点">真实</span></div>
 <div class="buzz">
 <div class="buzz-prod"><div class="buzz-hd"><span class="buzz-nm">高频讨论话题</span><span class="buzz-cnt">203 篇笔记</span></div>
 <div class="buzz-tags">
@@ -1511,11 +1806,16 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人买板踩坑经验</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
+</div><!-- /main-content -->
+</div><!-- /main-layout -->
 <script>
 let currentCat='3c',currentIntent='rec';
 function switchCat(btn){document.querySelectorAll('#catSelector button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentCat=btn.dataset.cat;showPanel();}
+function toggleSP(headEl){const sec=headEl.closest('.sp-section');sec.classList.toggle('open');}
+function alignSidePanel(){const phone=document.querySelector('.case-panel.active .phone');const sp=document.querySelector('.side-panel');if(phone&&sp){const pr=phone.getBoundingClientRect();const lr=sp.parentElement.getBoundingClientRect();sp.style.top=(pr.top-lr.top)+'px';}}
+window.addEventListener('load',alignSidePanel);
 function switchIntent(btn){document.querySelectorAll('#intentSelector button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentIntent=btn.dataset.intent;showPanel();}
-function showPanel(){document.querySelectorAll('.case-panel').forEach(p=>p.classList.remove('active'));const t=document.querySelector(`.case-panel[data-cat="${currentCat}"][data-intent="${currentIntent}"]`);if(t)t.classList.add('active');initAnnotations();}
+function showPanel(){document.querySelectorAll('.case-panel').forEach(p=>p.classList.remove('active'));const t=document.querySelector(`.case-panel[data-cat="${currentCat}"][data-intent="${currentIntent}"]`);if(t)t.classList.add('active');initAnnotations();setTimeout(alignSidePanel,50);}
 
 function initAnnotations(){
   document.querySelectorAll('.ann-layer').forEach(l=>l.remove());
@@ -1529,7 +1829,7 @@ function initAnnotations(){
   layer.className='ann-layer';
   layer.style.top=phone.offsetTop+'px';
   layer.style.left=(phone.offsetLeft+phone.offsetWidth+14)+'px';
-  layer.style.width='110px';
+  layer.style.width='140px';
   layer.style.height=phone.offsetHeight+'px';
   panel.appendChild(layer);
 
@@ -1537,19 +1837,29 @@ function initAnnotations(){
   phone.querySelectorAll('.ann').forEach(el=>{
     const p=el.parentElement;
     if(!groups.has(p)) groups.set(p,[]);
-    groups.get(p).push({cls:el.className,txt:el.textContent});
+    groups.get(p).push({cls:el.className,txt:el.textContent,reason:el.dataset.reason||''});
   });
 
   const items=[];
   groups.forEach((anns,source)=>{
     const div=document.createElement('div');
     div.className='side-ann';
+    const tags=document.createElement('div');
+    tags.className='ann-tags';
     anns.forEach(a=>{
       const s=document.createElement('span');
       s.className=a.cls;
       s.textContent=a.txt;
-      div.appendChild(s);
+      tags.appendChild(s);
     });
+    div.appendChild(tags);
+    const reasonText=anns.find(a=>a.reason)?.reason;
+    if(reasonText){
+      const reason=document.createElement('div');
+      reason.className='ann-reason';
+      reason.textContent=reasonText;
+      div.appendChild(reason);
+    }
     layer.appendChild(div);
     items.push({el:div,source});
   });
@@ -1565,8 +1875,8 @@ function initAnnotations(){
       if(relY>navH&&relY<phoneRect.height-barH){
         el.style.top=relY+'px';
         el.style.transform='translateY(-50%)';
-        el.style.opacity='0.75';
-        el.style.display='flex';
+        el.style.opacity='0.8';
+        el.style.display='block';
       } else {
         el.style.display='none';
       }

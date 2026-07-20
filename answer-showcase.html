@@ -163,7 +163,6 @@ sup.mag{font-size:10px;margin-left:1px;vertical-align:super;opacity:.5;}
 .comp-table th{background:#FAFAFB;font-weight:600;color:var(--t80);font-size:11px;}
 .comp-table td.dim{color:var(--t80);width:30%;font-size:11px;}
 .comp-table td.win{color:var(--green-deep);font-weight:700;}
-.comp-table td.win::before{content:"★ ";color:var(--gold);}
 .comp-table tr:last-child td{border-bottom:0;}
 .scene{margin:0 14px 4px;background:linear-gradient(180deg,rgba(232,163,61,0.10),rgba(232,163,61,0.02));border:0.5px solid rgba(232,163,61,0.4);border-radius:16px;padding:14px 15px;}
 .scene-row{font-size:13px;line-height:1.65;margin-bottom:8px;color:var(--t80);}
@@ -238,6 +237,13 @@ sup.mag{font-size:10px;margin-left:1px;vertical-align:super;opacity:.5;}
 .ov-row .ov-score{font-size:12px;font-weight:700;color:var(--t80);flex-shrink:0;display:flex;align-items:center;gap:2px;}
 .ov-row .ov-score .s{color:var(--gold);font-size:13px;}
 .ptitle .score{font-size:14px;font-weight:700;color:var(--t80);font-variant-numeric:tabular-nums;}
+.dim-rating{margin:6px 14px 10px;padding:0;}
+.dim-rating .dr-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
+.dim-rating .dr-row+.dr-row{border-top:0.5px solid var(--line2);}
+.dim-rating .dr-dim{font-size:11px;color:var(--t62);width:32px;flex-shrink:0;}
+.dim-rating .dr-stars{color:var(--gold);font-size:12px;letter-spacing:1px;}
+.dim-rating .dr-stars .empty{color:var(--line);}
+.dim-rating .dr-num{font-size:12px;font-weight:700;color:var(--t80);margin-left:2px;font-variant-numeric:tabular-nums;}
 /* 内联 quote — 用户评论 */
 .iq{margin:4px 24px 12px;font-size:13px;color:var(--t62);line-height:1.6;border-left:3px solid #ccc;padding-left:10px;overflow:hidden;}
 .iq .av{width:18px;height:18px;border-radius:50%;float:left;margin:1px 5px 0 0;}
@@ -584,14 +590,19 @@ sup.mag{font-size:10px;margin-left:1px;vertical-align:super;opacity:.5;}
 <div class="ref"><div class="avs"><i></i><i></i><i></i></div><span>综合 <b style="color:var(--t62)">87 篇</b>潜水装备笔记</span></div>
 <div class="lead">学潜水选相机，其实就看三点：防水靠不靠谱、拍出来颜色好不好、操作够不够简单。防抖、续航这些主流机型差距不大，不用纠结。下面按适合潜水新手的程度，介绍 3 款。<span class="ann dm" data-reason="从「学潜水」推出初学者需求层级">懂我</span><span class="ann dh" data-reason="先排除不重要的维度，帮用户聚焦">懂行</span></div>
 <div class="overview">
-<div class="ov-row" onclick="openSidebar(this)" data-sb="sb-action5pro"><div class="ov-img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg"></div><div class="ov-nm">DJI Osmo Action 5 Pro</div><div class="ov-score"><span class="s">★</span>4.8</div></div>
-<div class="ov-row"><div class="ov-img"><img src="images/Insta360_Ace_Pro.jpg"></div><div class="ov-nm">Insta360 Ace Pro 2</div><div class="ov-score"><span class="s">★</span>4.7</div></div>
-<div class="ov-row"><div class="ov-img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png"></div><div class="ov-nm">GoPro Hero 13 Black</div><div class="ov-score"><span class="s">★</span>4.6</div></div>
+<div class="ov-row" onclick="openSidebar(this)" data-sb="sb-action5pro"><div class="ov-img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg"></div><div class="ov-nm">DJI Osmo Action 5 Pro</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/Insta360_Ace_Pro.jpg"></div><div class="ov-nm">Insta360 Ace Pro 2</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png"></div><div class="ov-nm">GoPro Hero 13 Black</div></div>
 </div>
 <div class="sec-label">⭐ 新手首选，一台全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="替用户做了筛选，直接给首选">有判断</span></div>
 <div class="pcard" onclick="openSidebar(this)" data-sb="sb-action5pro" style="cursor:pointer;">
 <div class="img"><img src="images/DJI_Osmo_Action_5_Pro_02.jpg"></div>
-<div class="body"><div class="nm">DJI Osmo Action 5 Pro</div><div class="features">裸机防水 20m · 防抖强 · 续航 160min</div><div class="pbottom"><div class="price">¥1,999–2,299</div><div class="stars-line"><span class="s">★</span>4.8<span class="cnt">87 人推荐</span></div></div></div>
+<div class="body"><div class="nm">DJI Osmo Action 5 Pro</div><div class="features">裸机防水 20m · 防抖强 · 续航 160min</div><div class="pbottom"><div class="price">¥1,999–2,299</div><div class="stars-line"><span class="s" style="color:var(--gold)">仙品</span><span class="cnt">87 人推荐</span></div></div></div>
+</div>
+<div class="dim-rating">
+<div class="dr-row"><span class="dr-dim">防水</span><span class="dr-stars">★★★★★</span><span class="dr-num">5.0</span></div>
+<div class="dr-row"><span class="dr-dim">续航</span><span class="dr-stars">★★★★<span class="empty">★</span></span><span class="dr-num">4.0</span></div>
+<div class="dr-row"><span class="dr-dim">画质</span><span class="dr-stars">★★★★★</span><span class="dr-num">5.0</span></div>
 </div>
 <div class="lead"><b>新手闭眼入，最省心的一台。</b></div>
 <ul class="blist">
@@ -609,18 +620,39 @@ sup.mag{font-size:10px;margin-left:1px;vertical-align:super;opacity:.5;}
 </div>
 <div class="sec-label">🎬 你也可以看看这两台 <span class="ann dh" data-reason="预判用户可能有潜水之外的需求">懂行</span></div>
 <div class="lead">除了潜水还有别的侧重，这两台各有更擅长的场景，也各有一条短板：</div>
-<div class="ptitle">Insta360 Ace Pro 2 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
-<div class="shots">
-<figure><img src="images/Insta360_Ace_Pro.jpg"></figure>
-<figure><img src="images/insta360_underwater.png"></figure>
+<div class="ptitle">Insta360 Ace Pro 2</div>
+<div class="dim-rating">
+<div class="dr-row"><span class="dr-dim">防水</span><span class="dr-stars">★★★★<span class="empty">★</span></span><span class="dr-num">4.0</span></div>
+<div class="dr-row"><span class="dr-dim">续航</span><span class="dr-stars">★★★★<span class="empty">★</span></span><span class="dr-num">4.0</span></div>
+<div class="dr-row"><span class="dr-dim">画质</span><span class="dr-stars">★★★★★</span><span class="dr-num">5.0</span></div>
 </div>
 <div class="lead">Ace Pro 2 更偏向旅行相机，很多人喜欢它的<b>徕卡调色</b>，翻转屏自拍也很方便。但是<b>裸机下潜深度只有 12 米</b>，想深潜最好还是配个防水壳。</div>
-<div class="ptitle">GoPro Hero 13 Black <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="shots">
+<figure><img src="images/Insta360_Ace_Pro.jpg"></figure>
+<figure><img src="images/insta360_flip_screen.png"></figure>
+<figure><img src="images/insta360_underwater.png"></figure>
+</div>
+<div class="ptitle">GoPro Hero 13 Black</div>
+<div class="dim-rating">
+<div class="dr-row"><span class="dr-dim">防水</span><span class="dr-stars">★★★★★</span><span class="dr-num">5.0</span></div>
+<div class="dr-row"><span class="dr-dim">续航</span><span class="dr-stars">★★★<span class="empty">★★</span></span><span class="dr-num">3.0</span></div>
+<div class="dr-row"><span class="dr-dim">画质</span><span class="dr-stars">★★★★<span class="empty">★</span></span><span class="dr-num">4.0</span></div>
+</div>
+<div class="lead">如果你主要在国内用，GoPro 已经不是大多数人的首选了。不过，GoPro 在海外依然有自己的优势：<b>全球潜店配件好买好换、坏了好修</b>，出国最省心。不过它的<b>裸机下潜只有 10 米，深潜必须配壳</b>，并且色彩偏冷需要后期调整。<span class="ann dh" data-reason="区分国内外市场格局，给出有信息差的判断">懂行</span></div>
 <div class="shots">
 <figure><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png"></figure>
 <figure><img src="images/gopro_underwater.png"></figure>
 </div>
-<div class="lead">如果你主要在国内用，GoPro 已经不是大多数人的首选了。不过，GoPro 在海外依然有自己的优势：<b>全球潜店配件好买好换、坏了好修</b>，出国最省心。不过它的<b>裸机下潜只有 10 米，深潜必须配壳</b>，并且色彩偏冷需要后期调整。<span class="ann dh" data-reason="区分国内外市场格局，给出有信息差的判断">懂行</span></div>
+<div class="sec-label">📊 三款参数对比</div>
+<div class="comp-table">
+<table>
+<tr><th></th><th>Action 5 Pro</th><th>Ace Pro 2</th><th>Hero 13</th></tr>
+<tr><td class="dim">传感器</td><td class="win">1/1.3"</td><td class="win">1/1.3"</td><td>1/1.9"</td></tr>
+<tr><td class="dim">最大分辨率</td><td>4K 120fps</td><td class="win">8K 30fps</td><td>5.3K 60fps</td></tr>
+<tr><td class="dim">电池容量</td><td class="win">1950mAh</td><td>1800mAh</td><td>1900mAh</td></tr>
+<tr><td class="dim">重量</td><td class="win">145g</td><td>177g</td><td>154g</td></tr>
+</table>
+</div>
 <div class="sec-label">🎯 其他可以了解的潜水相机 <span class="ann dh" data-reason="覆盖长尾需求，不遗漏小众选项">懂行</span></div>
 <div class="lead">下面这几款有各自的特点和适配的特定需求，感兴趣的可以了解：</div>
 <ul class="blist">
@@ -632,7 +664,7 @@ sup.mag{font-size:10px;margin-left:1px;vertical-align:super;opacity:.5;}
 <div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按用户场景直接给结论，不让用户自己归纳">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
 <div class="scene-row">纯潜水、图省心 → <b>Action 5 Pro</b></div>
-<div class="scene-row">徕卡画质/常出国 → <b>Ace Pro 2 / GoPro Hero 13</b></div>
+<div class="scene-row">莱卡画质/常出国 → <b>Ace Pro 2 / GoPro Hero 13</b></div>
 <div class="scene-row">拿不准 → <b>先租后买</b></div>
 </div>
 <div class="lead">你主要玩浮潜还是水肺？预算大概多少？告诉我你的情况，我可以帮你选得更具体。<span class="ann dm" data-reason="追问精准需求，进一步缩小推荐范围">懂我</span></div>
@@ -1273,13 +1305,14 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">213 篇</b>学生党眼妆笔记</span></div>
 <div class="lead">学生党买眼线笔，平价其实不是难点，市面上已经有很多成熟产品。真正要挑的是，哪一支真正好用。<span class="ann dm" data-reason="从「学生党」锚定平价区间，消除预算焦虑">懂我</span></div>
 <div class="lead"><span class="hl">好用这件事，拆开来看就是类型、持妆、顺滑度、好控笔四个维度</span>，从站内大量真人测评里筛下来，排序是这样的。<span class="ann dh" data-reason="把模糊的「好用」拆成可判断的标准">懂行</span></div>
-<div class="sec-label">好用的胶笔 <span class="ann yp" data-reason="先建逻辑再推产品，不上来就列清单">有判断</span></div>
-<div class="lead">眼线笔分胶笔和液笔两大类。<b>胶笔更好上手</b>，所以我优先推荐这些产品。</div>
 <div class="overview">
 <div class="ov-row"><div class="ov-img"><img src="images/eyeliner_yuxiaji.png"></div><div class="ov-nm">与夏集眼线胶笔</div><div class="ov-score"><span class="s">★</span>4.8</div></div>
 <div class="ov-row"><div class="ov-img"><img src="images/eyeliner_peiran.png"></div><div class="ov-nm">佩冉眼线胶笔</div><div class="ov-score"><span class="s">★</span>4.6</div></div>
 <div class="ov-row"><div class="ov-img"><img src="images/eyeliner_miniso_gold.png"></div><div class="ov-nm">名创优品小金管眼线液笔</div><div class="ov-score"><span class="s">★</span>4.7</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/eyeliner_judydoll_bent.png"></div><div class="ov-nm">橘朵弯头眼线液笔</div><div class="ov-score"><span class="s">★</span>4.5</div></div>
 </div>
+<div class="sec-label">好用的胶笔 <span class="ann yp" data-reason="先建逻辑再推产品，不上来就列清单">有判断</span></div>
+<div class="lead">眼线笔分胶笔和液笔两大类。<b>胶笔更好上手</b>，所以我优先推荐这些产品。</div>
 <div class="sec-label">🥇 最推荐：与夏集眼线胶笔（约 10 元/支）<span class="ann dh">懂行</span><span class="ann yp" data-reason="四维度综合最稳，直接给首选">有判断</span></div>
 <div class="pcard">
 <div class="img"><img src="images/eyeliner_yuxiaji.png"></div>
@@ -1427,9 +1460,9 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">偏软好上手 · 全山通用 · 入门经典</div><div class="pbottom"><div class="price">¥2,998 参考</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div></div></div></div>
 <div class="lead">只推一块的话，我会先选它——容错率最高、学得最快，闭眼入不会踩雷。</div>
 <ul class="blist">
-<li><b>不容易突然摔</b><sup class="cite">提及 88%</sup>：板边圆钝，新手那种「毫无预兆栽跟头」会少很多。</li>
-<li><b>板软、好学</b><sup class="cite">提及 82%</sup>：换刃省力，从落叶飘到连着转弯，上手特别快。</li>
-<li><b>大牌、保值</b><sup class="cite">提及 65%</sup>：固定器随便配都能装，将来换板二手也好出。</li>
+<li><b>不容易突然摔</b><span class="cite">"</span>：板边圆钝，新手那种「毫无预兆栽跟头」会少很多。</li>
+<li><b>板软、好学</b><span class="cite">"</span>：换刃省力，从落叶飘到连着转弯，上手特别快。</li>
+<li><b>大牌、保值</b><span class="cite">"</span>：固定器随便配都能装，将来换板二手也好出。</li>
 </ul>
 <div class="lead"><b>能陪你多久</b>：偏软好学是它最大的优点，也是它的天花板——滑到高级道想飙速会嫌它「跟不上」，一般 1.5–2 季就想换。</div>
 <div class="iq"><div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>"我第一块板就是 Ripcord，从连续落叶飘练到换刃，用了两个雪季才换板。入门板不需要好，需要'不打击信心'"</div>
@@ -1480,8 +1513,8 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="lead">官方定位是<b>入门到入门进阶</b>，专门服务于刚学会滑雪、想扎实进步的人。</div>
 <div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">板子偏软好上手 · 边缘不容易卡雪 · 初级到中级全山通用</div><div class="pbottom"><div class="price">¥2,998</div><div class="stars-line"><span class="s">★</span>4.7<span class="unit">分</span><span class="cnt">1.2k 人推荐</span></div></div></div></div>
 <ul class="blist">
-<li><b>板软、好压</b><sup class="cite">提及 82%</sup>：脚一使劲就能把板压弯，换方向省力，压雪道练刻滑都吃得消。</li>
-<li><b>大牌、好出手</b><sup class="cite">提及 65%</sup>：固定器随便买哪个牌子都能装，将来想升级换板，二手也好出。</li>
+<li><b>板软、好压</b><span class="cite">"</span>：脚一使劲就能把板压弯，换方向省力，压雪道练刻滑都吃得消。</li>
+<li><b>大牌、好出手</b><span class="cite">"</span>：固定器随便买哪个牌子都能装，将来想升级换板，二手也好出。</li>
 </ul>
 <div class="lead">几张真人实拍给你参考，配色和板型大概是这个样子：<span class="ann zs" data-reason="放真人实拍，不用官方棚拍白底图">真实</span></div>
 <div class="shots">
@@ -1542,20 +1575,20 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="sec-label" style="margin-top:6px">👍 Ripcord 优势在哪</div>
 <div class="item-title" style="margin-top:14px">1. 全山巡航更顺手 <span class="ann dh" data-reason="把板头板尾的差异翻译成滑起来的体感">懂行</span></div>
 <ul class="blist">
-<li>Ripcord <b>板头比板尾长</b>，天生适合朝一个方向往下冲，从缓坡到陡坡巡航更稳、转弯更顺<sup class="cite">提及 76%</sup>。</li>
+<li>Ripcord <b>板头比板尾长</b>，天生适合朝一个方向往下冲，从缓坡到陡坡巡航更稳、转弯更顺<span class="cite">"</span>。</li>
 <li>Agenda 头尾一样长，好处是正反都能滑，但<b>一门心思往前冲的场景下，稳定感稍逊一点</b>。</li>
 </ul>
 <div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"纯全山、不打算玩公园的话闭眼 Ripcord，巡航是真的稳。我这种就想爽快往下滑的，Agenda 那点弹性对我没用"</div>
 <div class="iq"><div class="av" style="background:linear-gradient(135deg,#F4C58F,#E8A04D)"></div>"来问的十个有八个我都推 Ripcord，就因为大部分人一开始根本说不清要不要玩公园，全山板适用面广、不容易后悔"</div>
 <div class="item-title" style="margin-top:18px">2. 上手一样好学 <span class="ann dh" data-reason="点明两块都软、都容错，打消新手顾虑">懂行</span></div>
 <ul class="blist">
-<li>两块都偏软、边缘都不容易咬住雪，新手都不容易摔<sup class="cite">提及 81%</sup>，上手难度差不多。</li>
+<li>两块都偏软、边缘都不容易咬住雪，新手都不容易摔<span class="cite">"</span>，上手难度差不多。</li>
 <li>真要挑，Ripcord 更「无脑」一点；Agenda 脚下有一小段更弹，最初使用的时候要多适应一下。</li>
 </ul>
 <div class="sec-label">✨ Agenda 也有它的好 <span class="ann zs" data-reason="落选方的优势也如实讲，不只夸赢家">真实</span></div>
 <ul class="blist">
-<li>正反脚都能滑<sup class="cite">提及 63%</sup>：头尾对称，将来想学公园里换方向、倒着落地，它天生更顺手。</li>
-<li>脚下更弹<sup class="cite">提及 47%</sup>：想玩跳台、做花式动作，它比 Ripcord 更有回弹、更好玩。</li>
+<li>正反脚都能滑<span class="cite">"</span>：头尾对称，将来想学公园里换方向、倒着落地，它天生更顺手。</li>
+<li>脚下更弹<span class="cite">"</span>：想玩跳台、做花式动作，它比 Ripcord 更有回弹、更好玩。</li>
 <li><b>还便宜 ¥800</b>：预算紧、又想留点公园可能性的话，它更划算。</li>
 </ul>
 <div class="iq"><div class="av" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div>"我第一块是 Agenda，后来真的迷上公园了，正反脚早早练起来省了不少事。要是当初买了纯全山板，现在又得换"</div>

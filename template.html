@@ -144,9 +144,9 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .pc-block.con .pc-item::before{background:#C67A1A;}
 .comp-table{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;overflow:hidden;}
 .comp-table table{width:100%;border-collapse:collapse;}
-.comp-table th,.comp-table td{padding:9px 12px;font-size:12px;border-bottom:0.5px solid var(--line2);text-align:left;}
-.comp-table th{background:#FAFAFB;font-weight:600;color:var(--t45);font-size:11px;}
-.comp-table td.dim{color:var(--t45);width:30%;font-size:11px;}
+.comp-table th,.comp-table td{padding:9px 12px;font-size:12px;border-bottom:0.5px solid var(--line2);text-align:left;color:var(--t80);}
+.comp-table th{background:#FAFAFB;font-weight:600;color:var(--t80);font-size:11px;}
+.comp-table td.dim{color:var(--t80);width:30%;font-size:11px;}
 .comp-table td.win{color:var(--green-deep);font-weight:700;}
 .comp-table td.win::before{content:"★ ";color:var(--gold);}
 .comp-table tr:last-child td{border-bottom:0;}
@@ -212,6 +212,14 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .ptitle .star{color:var(--gold);font-size:15px;}
 .prod-img{margin:4px 14px 8px;width:130px;height:130px;border-radius:12px;overflow:hidden;background:#EEE;}
 .prod-img img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;}
+.overview{margin:6px 14px 10px;padding:0;}
+.ov-row{display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;}
+.ov-row+.ov-row{border-top:0.5px solid var(--line2);}
+.ov-row .ov-img{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#EEE;flex-shrink:0;}
+.ov-row .ov-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.ov-row .ov-nm{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--t80);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-row .ov-score{font-size:12px;font-weight:700;color:var(--t80);flex-shrink:0;display:flex;align-items:center;gap:2px;}
+.ov-row .ov-score .s{color:var(--gold);font-size:13px;}
 .ptitle .score{font-size:14px;font-weight:700;color:var(--t80);font-variant-numeric:tabular-nums;}
 /* 内联 quote — 用户评论 */
 .iq{margin:4px 24px 12px;font-size:13px;color:var(--t62);line-height:1.6;border-left:3px solid #ccc;padding-left:10px;overflow:hidden;}
@@ -235,13 +243,13 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .phone.has-sidebar{}
 .cite-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.18);z-index:9;opacity:0;pointer-events:none;transition:opacity .3s;border-radius:55px;}
 .cite-overlay.open{opacity:1;pointer-events:auto;}
-.cite-sidebar{position:absolute;bottom:0;left:0;right:0;height:90%;background:#fff;box-shadow:0 -4px 20px rgba(0,0,0,0.08);transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:10;display:flex;flex-direction:column;border-radius:16px 16px 0 0;}
+.cite-sidebar{position:absolute;bottom:0;left:0;right:0;height:90%;background:#fff;box-shadow:0 -4px 20px rgba(0,0,0,0.08);transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:12;display:flex;flex-direction:column;border-radius:16px 16px 0 0;}
 .cite-sidebar.open{transform:translateY(0);}
 .sb-handle{width:36px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 0;flex-shrink:0;cursor:pointer;padding:6px 0;}
 .sb-top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--line);flex-shrink:0;}
 .sb-close{width:26px;height:26px;border-radius:50%;background:#F2F2F2;border:none;cursor:pointer;font-size:12px;color:var(--t62);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;}
 .sb-title{font-size:14px;font-weight:600;color:var(--t80);line-height:1.4;flex:1;}
-.sb-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.sb-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:70px;}
 .detail{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:16px;overflow:hidden;}
 .detail-gallery{position:relative;background:#EEE;aspect-ratio:4/3;overflow:hidden;}
 .detail-gallery img{width:100%;height:100%;object-fit:cover;}
@@ -309,14 +317,14 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .op-cmt .body{flex:1;min-width:0;}
 .op-cmt .u{font-size:10px;color:var(--t45);margin-bottom:2px;}
 .op-cmt .t{color:var(--t80);line-height:1.5;font-size:11.5px;}
-.detail-actions{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:11;}
+.detail-actions{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:5;}
 .act-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .15s;box-shadow:0 2px 12px rgba(0,0,0,0.10);white-space:nowrap;}
 .act-btn.fav{background:#D7F0EB;color:var(--green-deep);border:1px solid #D7F0EB;}
 .act-btn.fav .star{font-size:14px;color:var(--green);}
 .act-btn.fav.on{background:#D7F0EB;color:var(--green-deep);border-color:#D7F0EB;}
 .act-btn.fav.on .star{color:var(--green);}
 .act-btn.ask{background:#D7F0EB;color:var(--green-deep);border:1px solid #D7F0EB;}
-.detail-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:70px;background:rgba(0,0,0,0.78);color:#fff;font-size:12px;font-weight:500;padding:7px 14px;border-radius:100px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);z-index:12;white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;}
+.detail-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:80px;background:rgba(0,0,0,0.78);color:#fff;font-size:12px;font-weight:500;padding:7px 14px;border-radius:100px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);z-index:6;white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;}
 .detail-toast.show{opacity:1;}
 .detail-toast .tst-arrow{font-size:14px;opacity:0.7;}
 .quote-area{position:relative;flex-shrink:0;display:none;}
@@ -364,9 +372,17 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .fs-sel-item img{width:20px;height:20px;border-radius:4px;object-fit:cover;}
 .fs-ask{background:var(--green);color:#fff;border:none;border-radius:16px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;white-space:nowrap;}
 .pk-card{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:14px;overflow:hidden;}
+.pk-badge{font-size:9px;font-weight:700;color:#fff;background:#FF4D4F;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+.pk-compare-shots{display:flex;gap:8px;margin-bottom:12px;}
+.pk-compare-shots .pk-shot{flex:1;min-width:0;}
+.pk-compare-shots .pk-shot img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block;}
+.pk-compare-shots .pk-shot-label{font-size:10px;color:var(--t45);text-align:center;margin-top:4px;}
+.pk-compare-shots .pk-shot-mid{flex-shrink:0;width:28px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--t45);writing-mode:vertical-rl;letter-spacing:2px;}
 .pk-scores{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:0.5px solid var(--line2);}
 .pk-side{flex:1;min-width:0;}
-.pk-side .nm{font-size:11px;color:var(--t62);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pk-side:last-child{text-align:right;}
+.pk-side:last-child .score-row{justify-content:flex-end;}
+.pk-side .nm{font-size:11px;color:var(--t80);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pk-side .score-row{display:flex;align-items:center;gap:6px;}
 .pk-side .num{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;}
 .pk-side.win .num{color:var(--green-deep);}
@@ -374,13 +390,14 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .pk-stars{position:relative;display:inline-block;line-height:1;}
 .pk-stars .s-empty{color:var(--line);letter-spacing:1px;font-size:13px;}
 .pk-stars .s-fill{position:absolute;top:0;left:0;overflow:hidden;color:var(--gold);white-space:nowrap;letter-spacing:1px;font-size:13px;}
-.pk-vs{font-size:10px;font-weight:800;color:var(--t27);flex-shrink:0;width:20px;text-align:center;}
+.pk-vs{font-size:10px;font-weight:800;color:var(--t27);flex-shrink:0;width:20px;text-align:center;overflow:visible;display:flex;flex-direction:column;align-items:center;}
+.pk-vs .pk-topic{display:block;font-size:13px;font-weight:700;color:var(--t80);white-space:nowrap;margin-bottom:2px;}
 .pk-params{margin-bottom:10px;}
 .pk-params .pk-row{display:flex;align-items:baseline;font-size:11px;padding:5px 0;border-bottom:0.5px dashed var(--line2);}
 .pk-params .pk-row:last-child{border-bottom:none;}
 .pk-params .pk-val{flex:1;min-width:0;color:var(--t80);font-weight:500;font-variant-numeric:tabular-nums;}
 .pk-params .pk-val.win{color:var(--green-deep);font-weight:600;}
-.pk-params .pk-dim{width:52px;flex-shrink:0;text-align:center;color:var(--t45);font-size:10px;}
+.pk-params .pk-dim{width:52px;flex-shrink:0;text-align:center;color:var(--t80);font-size:10px;}
 .pk-params .pk-val:last-child{text-align:right;}
 .pk-params .pk-val .sub{display:block;font-size:10px;color:var(--t45);font-weight:400;margin-top:1px;}
 .pk-voices{display:flex;gap:6px;margin-top:2px;align-items:center;}
@@ -398,18 +415,18 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .pk-varrow{flex-shrink:0;font-size:14px;color:var(--t27);}
 .pk-explain{padding:6px 14px 12px;font-size:15px;color:#141414;line-height:1.66;letter-spacing:0.01em;}
 .pk-explain b{color:#141414;font-weight:500;}
-.pk-lite{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:14px;overflow:hidden;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto;gap:0;}
-.pkl-center{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;}
-.pkl-dim{font-size:12px;font-weight:700;color:var(--t80);line-height:1.3;}
-.pkl-vs{font-size:10px;font-weight:800;color:var(--t27);margin-top:1px;}
+.pk-lite{margin:0 14px 4px;background:#fff;border:0.5px solid var(--line);border-radius:14px;padding:10px 14px;overflow:hidden;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto;gap:0;}
+.pkl-center{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8px;}
+.pkl-dim{font-size:11px;font-weight:700;color:var(--t80);line-height:1.3;}
+.pkl-vs{font-size:9px;font-weight:800;color:var(--t27);margin-top:1px;}
 .pkl-left{grid-column:1;text-align:left;}
 .pkl-right{grid-column:3;text-align:right;}
-.pkl-nm{font-size:11px;color:var(--t62);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;}
-.pkl-val{font-size:12px;font-weight:700;color:var(--t45);margin-bottom:3px;}
+.pkl-nm{font-size:11px;color:var(--t80);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px;margin-bottom:4px;}
+.pkl-right .pkl-nm{justify-content:flex-end;}
+.pkl-badge{font-size:9px;font-weight:700;color:#fff;background:#FF4D4F;padding:1px 5px;border-radius:3px;flex-shrink:0;line-height:1.4;}
+.pkl-val{font-size:13px;font-weight:700;color:var(--t80);white-space:nowrap;}
 .pkl-left.win .pkl-val{color:var(--green-deep);}
 .pkl-right.win .pkl-val{color:var(--green-deep);}
-.pk-lite .pk-stars .s-empty,.pk-lite .pk-stars .s-fill{font-size:11px;letter-spacing:0.5px;}
-.pk-lite .pk-voices{grid-column:1/4;padding-top:8px;border-top:0.5px solid var(--line2);margin-top:8px;}
 .main-layout{position:relative;width:100%;}
 .side-panel{position:absolute;right:calc(50% + 220px);top:110px;width:300px;}
 .sp-section{margin-bottom:6px;cursor:pointer;}
@@ -418,16 +435,17 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .sp-arrow{font-size:10px;color:var(--t45);transition:transform .2s;transform:rotate(0deg);}
 .sp-section.open .sp-arrow{transform:rotate(180deg);}
 .sp-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
-.sp-section.open .sp-body{max-height:500px;}
-.sp-strat-label,.sp-query-label{font-size:13px;font-weight:700;color:var(--green-deep);margin:6px 0 2px;letter-spacing:0.03em;}
-.sp-strategy{font-size:12px;color:var(--t62);line-height:1.65;padding:4px 0 8px;}
-.sp-queries{display:flex;flex-direction:column;gap:3px;padding-bottom:6px;border-bottom:0.5px solid var(--line2);margin-bottom:2px;}
-.sp-q{font-size:12px;color:var(--t62);line-height:1.5;padding-left:12px;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sp-q::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;border-radius:50%;}
-.sp-q.q-3c::before{background:var(--green);}
-.sp-q.q-beauty::before{background:var(--pink);}
-.sp-q.q-outdoor::before{background:var(--blue);}
-.sp-scene{font-size:11px;font-weight:600;color:var(--t45);margin-right:6px;white-space:nowrap;}
+.sp-section.open .sp-body{max-height:900px;}
+.sp-cat{margin-bottom:10px;padding-bottom:8px;border-bottom:0.5px solid var(--line2);}
+.sp-cat:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.sp-cat-head{font-size:12px;font-weight:700;color:var(--t62);margin-bottom:3px;padding-left:12px;position:relative;}
+.sp-cat-head::before{content:"";position:absolute;left:2px;top:5px;width:5px;height:5px;border-radius:50%;}
+.sp-cat-head.cat-3c::before{background:var(--green);}
+.sp-cat-head.cat-beauty::before{background:var(--pink);}
+.sp-cat-head.cat-outdoor::before{background:var(--blue);}
+.sp-q{font-size:12px;color:var(--t80);line-height:1.5;margin:2px 0 4px;padding-left:12px;}
+.sp-strat-label{font-size:11px;font-weight:600;color:var(--green-deep);margin:2px 0 1px;padding-left:12px;}
+.sp-strategy{font-size:11px;color:var(--t45);line-height:1.6;padding:0 0 0 12px;}
 .main-content{display:flex;flex-direction:column;align-items:center;}
 </style>
 </head>
@@ -438,52 +456,92 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <div class="sp-section open" data-intent="rec">
 <div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">选品推荐</div><span class="sp-arrow">▼</span></div>
 <div class="sp-body">
+<div class="sp-cat">
+<div class="sp-cat-head cat-3c">3C·运动相机</div>
+<div class="sp-q">我想学潜水，想买个运动相机，推荐一下</div>
 <div class="sp-strat-label">回答思路</div>
 <div class="sp-strategy">拆解用户需求（场景、水平、预算）→ 建立选择框架（核心看什么、不用看什么）→ 按框架分层推荐并说理</div>
-<div class="sp-query-label">Query</div>
-<div class="sp-queries">
-<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>我想学潜水，想买个运动相机，推荐一下</div>
-<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>学生党有哪些平价好用的眼线笔？</div>
-<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>单板滑雪买雪板，有哪些值得买的入门款？</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-beauty">美妆·眼线笔</div>
+<div class="sp-q">学生党有哪些平价好用的眼线笔？</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">把模糊的「好用」拆成可判断标准（顺不顺、稳不稳、一致性）→ 按标准逐一推荐产品 → 附真人口碑验证</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-outdoor">户外·雪板</div>
+<div class="sp-q">单板滑雪买雪板，有哪些值得买的入门款？</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">从「入门」拆出新手最该关心的维度（上手、耐用、尺寸）→ 排除高阶参数 → 按水平和需求分层推荐</div>
 </div>
 </div>
 </div>
 <div class="sp-section" data-intent="single">
 <div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">单品评估</div><span class="sp-arrow">▼</span></div>
 <div class="sp-body">
+<div class="sp-cat">
+<div class="sp-cat-head cat-3c">3C·运动相机</div>
+<div class="sp-q">DJI Action 5 Pro 潜水用值得入手吗</div>
 <div class="sp-strat-label">回答思路</div>
-<div class="sp-strategy">先给结论（值不值得买）→ 基于用户需求拆解为什么 → 跳出用户需求，给更普适的优缺点梳理（真人评价数据）→ One More Thing（替代品、省钱方案、懂行建议）</div>
-<div class="sp-query-label">Query</div>
-<div class="sp-queries">
-<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>DJI Action 5 Pro 潜水用值得入手吗</div>
-<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>kissme眼线液笔容易晕妆吗</div>
-<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>Burton Ripcord怎么样？适合从初级往进阶过渡吗</div>
+<div class="sp-strategy">先给结论（值不值得买）→ 基于用户需求拆解为什么 → 跳出用户需求给更普适的优缺点（真人评价数据）→ One More Thing</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-beauty">美妆·眼线笔</div>
+<div class="sp-q">kissme眼线液笔容易晕妆吗</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先给结论 → 按使用部位拆解表现边界（外眼线 vs 内眼线）→ 好评差评真人数据验证 → 不适合时的替代方案</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-outdoor">户外·雪板</div>
+<div class="sp-q">Burton Ripcord怎么样？适合从初级往进阶过渡吗</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先给结论并划定能力边界 → 好评差评真人数据 → 预判进阶节点（什么时候该换板）</div>
 </div>
 </div>
 </div>
 <div class="sp-section" data-intent="versus">
 <div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">对比决策</div><span class="sp-arrow">▼</span></div>
 <div class="sp-body">
+<div class="sp-cat">
+<div class="sp-cat-head cat-3c">3C·运动相机</div>
+<div class="sp-q">潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个</div>
 <div class="sp-strat-label">回答思路</div>
-<div class="sp-strategy">先给结论（选哪个）→ A 胜在哪里 → 补信息差（B 落败但有的优势），通过全面体现真实 → 场景路由</div>
-<div class="sp-query-label">Query</div>
-<div class="sp-queries">
-<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>潜水拍摄，DJI Action 5 Pro 和 Insta360 Ace Pro 2 选哪个</div>
-<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>橘朵和kissme眼线液笔选哪个？油皮</div>
-<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>Burton Ripcord和Ride Agenda选哪个？主要玩全山</div>
+<div class="sp-strategy">先给结论（选哪个）→ 推荐方胜在哪里 → 补信息差（另一方的优势）→ 按场景路由</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-beauty">美妆·眼线笔</div>
+<div class="sp-q">橘朵和kissme眼线液笔选哪个？油皮</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先给结论（油皮选 Kiss Me）→ 按油皮核心维度逐项对比 → 补橘朵的优势场景 → 场景路由</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-outdoor">户外·雪板</div>
+<div class="sp-q">Burton Ripcord和Ride Agenda选哪个？主要玩全山</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先给结论 → 抓住本质差异（方向性 vs 对称）→ 口碑数据对比 → 按玩法路由</div>
 </div>
 </div>
 </div>
 <div class="sp-section" data-intent="guide">
 <div class="sp-head" onclick="toggleSP(this)"><div class="sp-title">攻略咨询</div><span class="sp-arrow">▼</span></div>
 <div class="sp-body">
+<div class="sp-cat">
+<div class="sp-cat-head cat-3c">3C·运动相机</div>
+<div class="sp-q">潜水用的运动相机怎么选？</div>
 <div class="sp-strat-label">回答思路</div>
-<div class="sp-strategy">教用户怎么选 → 拆解需求维度（要想清楚哪几个问题）→ 每个维度怎么判断 → 补充需要明白的真相 / 避坑</div>
-<div class="sp-query-label">Query</div>
-<div class="sp-queries">
-<div class="sp-q q-3c"><span class="sp-scene">3C·运动相机</span>潜水用的运动相机怎么选？</div>
-<div class="sp-q q-beauty"><span class="sp-scene">美妆·眼线笔</span>油皮怎么选眼线笔</div>
-<div class="sp-q q-outdoor"><span class="sp-scene">户外·雪板</span>买雪板最易踩的坑是什么？</div>
+<div class="sp-strategy">教用户怎么选 → 拆解需求维度（潜多深、拍什么、会不会后期）→ 每个维度怎么判断 → 补充社区真实讨论</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-beauty">美妆·眼线笔</div>
+<div class="sp-q">油皮怎么选眼线笔</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先纠正误区（防水≠防油）→ 先排除手法问题再看产品参数 → 按化妆习惯选类型 → 补充需要明白的真相</div>
+</div>
+<div class="sp-cat">
+<div class="sp-cat-head cat-outdoor">户外·雪板</div>
+<div class="sp-q">买雪板最易踩的坑是什么？</div>
+<div class="sp-strat-label">回答思路</div>
+<div class="sp-strategy">先破除误区（贵≠好）→ 建立核心认知框架 → 列举经典踩坑 → 社区讨论热点</div>
 </div>
 </div>
 </div>

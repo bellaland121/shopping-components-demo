@@ -100,6 +100,8 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .rich-item .stars-line .s{color:var(--gold);font-size:13px;margin-right:3px;}
 .rich-item .stars-line .cnt{color:var(--t45);font-size:10px;font-weight:400;margin-left:6px;}
 .pcard{margin:12px 14px;background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02));border:0.5px solid var(--green-line);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:stretch;}
+.cat-beauty .pcard{background:linear-gradient(180deg,rgba(232,141,160,0.10),rgba(232,141,160,0.02));border-color:var(--pink-line);}
+.cat-outdoor .pcard{background:linear-gradient(180deg,rgba(90,154,255,0.10),rgba(90,154,255,0.02));border-color:var(--blue-line);}
 .pcard .img{width:64px;height:64px;align-self:center;border-radius:8px;overflow:hidden;background:#EEE;flex-shrink:0;}
 .pcard .img img{width:100%;height:100%;object-fit:cover;}
 .pcard .body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;}
@@ -111,8 +113,6 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .pcard .stars-line .s{color:var(--gold);font-size:16px;margin-right:3px;}
 .pcard .stars-line .unit{font-size:11px;font-weight:600;margin-left:1px;}
 .pcard .stars-line .cnt{color:var(--t45);font-size:10px;font-weight:400;margin-left:6px;}
-.cat-beauty .pcard{background:linear-gradient(180deg,rgba(232,141,160,0.10),rgba(232,141,160,0.02));border-color:var(--pink-line);}
-.cat-outdoor .pcard{background:linear-gradient(180deg,rgba(90,154,255,0.10),rgba(90,154,255,0.02));border-color:var(--blue-line);}
 .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:4px 14px 4px;}
 .shots figure{margin:0;min-width:0;}
 .shots img{width:100%;height:104px;border-radius:12px;object-fit:cover;background:#EEE;display:block;}
@@ -161,8 +161,6 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 .tips-item:last-child{margin-bottom:0;}
 .tips-item::before{content:"";position:absolute;left:4px;top:9px;width:5px;height:5px;border-radius:50%;background:#E0A83D;}
 .tips-item b{font-weight:600;color:#B8860B;}
-.tips-text{font-size:14px;line-height:1.62;color:#3a3a3a;letter-spacing:0.01em;}
-.tips-text b{font-weight:600;}
 .ai-sum{margin:0 14px 4px;border-radius:12px;padding:12px 14px;}
 .cat-3c .ai-sum{background:linear-gradient(180deg,rgba(86,209,191,0.10),rgba(86,209,191,0.02));border:0.5px solid var(--green-line);}
 .cat-beauty .ai-sum{background:linear-gradient(180deg,rgba(232,141,160,0.10),rgba(232,141,160,0.02));border:0.5px solid var(--pink-line);}
@@ -597,17 +595,17 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <div class="sec-label">🎬 你也可以看看这两台 <span class="ann dh" data-reason="预判用户可能有潜水之外的需求">懂行</span></div>
 <div class="lead">除了潜水还有别的侧重，这两台各有更擅长的场景，也各有一条短板：</div>
 <div class="ptitle">Insta360 Ace Pro 2 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
-<div class="prod-img"><img src="images/Insta360_Ace_Pro.jpg"></div>
+<div class="shots">
+<figure><img src="images/Insta360_Ace_Pro.jpg"></figure>
+<figure><img src="images/insta360_underwater.png"></figure>
+</div>
 <div class="lead">亮点是<b>徕卡调色直出好看、不用后期</b>，翻转屏方便水面自拍，除了潜水还能当旅行 vlog 机；短板是<b>裸机下潜深度只有 12 米，想要深潜必须加装外壳</b>。</div>
-<div class="shots" style="grid-template-columns:1fr">
-<figure><img src="images/insta360_dive_shot.png"></figure>
-</div>
 <div class="ptitle">GoPro Hero 13 Black <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
-<div class="prod-img"><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png"></div>
-<div class="lead">亮点是<b>全球潜店配件好买好换、坏了好修</b>，出国最省心；短板是<b>裸机下潜只有 10 米，深潜必须配壳，色彩偏冷需要后期调整</b>。</div>
-<div class="shots" style="grid-template-columns:1fr">
-<figure><img src="images/gopro13_dive_shot.png"></figure>
+<div class="shots">
+<figure><img src="images/GoPro_Hero_13_Black_in_Forest_Green.png"></figure>
+<figure><img src="images/gopro_underwater.png"></figure>
 </div>
+<div class="lead">亮点是<b>全球潜店配件好买好换、坏了好修</b>，出国最省心；短板是<b>裸机下潜只有 10 米，深潜必须配壳，色彩偏冷需要后期调整</b>。</div>
 <div class="sec-label">🎯 其他可以了解的潜水相机 <span class="ann dh" data-reason="覆盖长尾需求，不遗漏小众选项">懂行</span></div>
 <div class="lead">下面这几款有各自的特点和适配的特定需求，感兴趣的可以了解：</div>
 <ul class="blist">
@@ -618,10 +616,9 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 </ul>
 <div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按用户场景直接给结论，不让用户自己归纳">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row">纯潜水、图省心 → <b>Action 5 Pro</b>，闭眼入。</div>
-<div class="scene-row">还想拍 vlog 或常出国潜 → <b>Ace Pro 2 / GoPro Hero 13</b>。</div>
-<div class="scene-row">有微距、360°、超低预算等特殊玩法 → 看上面对应款。</div>
-<div class="scene-row">拿不准 → <b>可以先租一个</b>，试过再决定买不买。</div>
+<div class="scene-row">纯潜水、图省心 → <b>Action 5 Pro</b></div>
+<div class="scene-row">莱卡画质/常出国 → <b>Ace Pro 2 / GoPro Hero 13</b></div>
+<div class="scene-row">拿不准 → <b>先租后买</b></div>
 </div>
 <div class="lead">你主要玩浮潜还是水肺？预算大概多少？告诉我你的情况，我可以帮你选得更具体。<span class="ann dm" data-reason="追问精准需求，进一步缩小推荐范围">懂我</span></div>
 <div class="follow"><button class="fbtn">预算 3000 能配齐一套吗？</button><button class="fbtn">浮潜和水肺对相机要求有什么区别？</button><button class="fbtn">360 全景相机适合潜水吗？</button></div>
@@ -1036,11 +1033,11 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <li>加上官方防水壳可以到 60 米，覆盖绝大多数潜水场景</li>
 </ul>
 <div class="lead">不过有个风险要提前知道：<span class="hl">部分批次充电口盖子偏松</span>，有用户浮潜就进水了。下海建议带防水壳，泳池裸机没太大问题。<span class="ann zs" data-reason="主动讲批次风险，不只说好话">真实</span></div>
-<div class="shots" style="grid-template-columns:repeat(2,1fr)">
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"电池盖冲开了吧，批次问题，有些电池盖不够紧，很容易冲开。"</div>
+<div class="shots">
 <figure><img src="images/action5-leak.png"></figure>
 <figure><img src="images/dji-waterproof-case.png"></figure>
 </div>
-<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"电池盖冲开了吧，批次问题，有些电池盖不够紧，很容易冲开。"</div>
 <div class="sec-label">📷 水下画质表现出色 <span class="ann dh" data-reason="用具体参数说明画质优势，对比同级产品">懂行</span></div>
 <div class="lead">对于潜水来说，水下画质也是决定一台相机值不值得买的核心因素。这块 Action 5 Pro 底子不错：</div>
 <ul class="blist">
@@ -1063,14 +1060,13 @@ body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,"Helvetica Neue"
 <div class="lead">水下素材几乎都需要色彩还原，后期是否省心直接影响使用体验。Action 5 Pro 在这块做了专门优化：</div>
 <ul class="blist">
 <li><b>自动白平衡准</b>：机身内置色温传感器，能实时感知水下色温变化，白平衡水下表现比较准确</li>
-<li><b>一键还原色彩</b>：<span class="hl">DJI Mimo app 自带"水下色彩还原"功能</span>，一键把偏蓝偏绿的画面拉回来，不会调色也能出不错的成片。有用户对比过，效果很不错</li>
+<li><b>一键还原色彩</b>：<span class="hl">DJI Mimo app 自带"水下色彩还原"功能</span>，一键把偏蓝偏绿的画面拉回来，不会调色也能出不错的成片</li>
+<li><b>实测效果能打</b>：有用户对比过，直出再用 Mimo 一键还原，效果已经很不错了</li>
 </ul>
-<div class="shots" style="grid-template-columns:1fr 1fr">
-<figure><img src="images/mimo_before.png"></figure>
-<figure><img src="images/mimo_after.png"></figure>
-</div>
-<div class="shots" style="grid-template-columns:1fr">
-<figure><img src="images/mimo-color-restore.png" style="height:auto;max-height:280px;object-fit:contain"></figure>
+<div class="shots">
+<figure><img src="images/mimo-color-restore.png"></figure>
+<figure><img src="images/color_raw.png"></figure>
+<figure><img src="images/color_restored.png"></figure>
 </div>
 <div class="lead">和 Insta360 Ace Pro 2 对比：浅水区影石直出色彩更讨喜，但深水区 Action 5 Pro 大光圈优势更明显，对水中悬浮颗粒的处理也更干净。<span class="ann dh" data-reason="主动拉竞品对比，给出适用场景差异">懂行</span></div>
 <div class="sec-label">🤿 额外加分项</div>
@@ -1210,32 +1206,14 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="pk-val" style="text-align:right">1800 mAh<span class="sub">约 150 分钟</span></div>
 </div>
 <div class="pk-row">
-<div class="pk-val win">温</div>
-<div class="pk-dim">散热</div>
-<div class="pk-val" style="text-align:right">偏热</div>
-</div>
-<div class="pk-row">
 <div class="pk-val win">Type-C 快充<span class="sub">边充边录</span></div>
 <div class="pk-dim">充电</div>
 <div class="pk-val" style="text-align:right">Type-C<span class="sub">不支持边充边录</span></div>
 </div>
 </div>
-<div class="pk-voices">
-<div class="pk-ventry">
-<div class="pk-avatars"><i></i><i></i><i></i></div>
-<div class="pk-vlabel"><b>52人</b>好评</div>
-<div class="pk-varrow">›</div>
-</div>
-<div class="pk-vmid">口碑</div>
-<div class="pk-ventry">
-<div class="pk-avatars"><i></i><i></i><i></i></div>
-<div class="pk-vlabel"><b>19人</b>好评</div>
-<div class="pk-varrow">›</div>
-</div>
-</div>
 </div>
 <div class="pk-explain">
-潜水不像骑车，不能随时换电池。DJI <b>续航碾压——240 分钟 vs 150 分钟</b>，多出 60%。还支持边充边录，长时间固定机位拍摄更实用。Insta360 散热问题在 4K60 以上长时间录制时比较明显。
+潜水不像骑车，不能随时换电池。DJI <b>续航碾压——240 分钟 vs 150 分钟</b>，多出 60%。还支持边充边录，长时间固定机位拍摄更实用。
 </div>
 <div class="sec-label">Ace Pro 2 也有优势</div>
 <ul class="blist">
@@ -1248,8 +1226,8 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="iq"><div class="av" style="background:linear-gradient(135deg,#F4C58F,#E8A04D)"></div>"店里租赁机全换成 Action 5 Pro 了，续航长、防水深、客人自己就会用，售后问题少了一大半"</div>
 <div class="sec-label">🧭 按你的情况选 <span class="ann dm" data-reason="分场景路由，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row"><span class="cond">新手潜水、想<b>省心不折腾</b>，或预算有限只浮潜</span><span class="arrow">→</span><span class="pick a">Action 5 Pro</span></div>
-<div class="scene-row"><span class="cond">喜欢自拍 vlog、重视<b>暗光画质</b></span><span class="arrow">→</span><span class="pick b">Ace Pro 2</span></div>
+<div class="scene-row"><span class="cond"><b>省心不折腾</b></span><span class="arrow">→</span><span class="pick a">Action 5 Pro</span></div>
+<div class="scene-row"><span class="cond">看重<b>暗光画质</b></span><span class="arrow">→</span><span class="pick b">Ace Pro 2</span></div>
 </div>
 <div class="lead">告诉我你的使用场景和预算，我帮你做最终决定。<span class="ann dm" data-reason="收集具体需求，给出最终建议">懂我</span></div>
 <div class="follow"><button class="fbtn">两个各配什么配件比较合理？</button><button class="fbtn">有没有两全的方案？</button><button class="fbtn">Insta360 官方壳靠谱吗？</button></div>
@@ -1289,56 +1267,163 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">213 篇</b>学生党眼妆笔记</span></div>
 <div class="lead">学生党买眼线笔，平价其实不是难点，市面上已经有很多成熟产品。真正要挑的是，哪一支真正好用。<span class="ann dm" data-reason="从「学生党」锚定平价区间，消除预算焦虑">懂我</span></div>
-<div class="lead"><span class="hl">好用这件事，拆开来看就是类型、持妆、顺滑度、好控笔四个维度</span>，从站内大量真人测评里筛下来，排序是这样的。<span class="ann dh" data-reason="把模糊的「好用」拆成可判断的标准">懂行</span></div>
-<div class="sec-label">好用的胶笔 <span class="ann yp" data-reason="先建逻辑再推产品，不上来就列清单">有判断</span></div>
-<div class="lead">眼线笔分胶笔和液笔两大类。<b>胶笔更好上手</b>，所以我优先推荐这些产品。</div>
-<div class="sec-label">🥇 最推荐：与夏集眼线胶笔（约 10 元/支）<span class="ann dh">懂行</span><span class="ann yp" data-reason="四维度综合最稳，直接给首选">有判断</span></div>
-<div class="prod-img"><img src="images/eyeliner_yuxiaji.png"></div>
-<div class="lead"><b>三个维度综合最稳的一支。</b></div>
+<div class="lead"><span class="hl">对于平价眼线笔来说，"好用"主要看三个方面：</span><span class="ann dh" data-reason="把模糊的「好用」拆成可判断的标准">懂行</span></div>
+<div class="sec-label">① 画起来顺不顺 <span class="ann dm" data-reason="每天都要画，顺不顺直接决定能不能坚持用">懂我</span></div>
 <ul class="blist">
-<li><b>持妆</b>：眼头眼尾基本不怎么晕。就算油皮微晕，棕色也只是自然的淡烟熏感，不会脏</li>
-<li><b>顺滑</b>：在平价胶笔里几乎是天花板，不管手上还是眼皮上都很丝滑</li>
-<li><b>好控制</b>：极细小圆头，新手很好掌握，用久了也不会变粗变难用</li>
+<li>眼线每天都要贴着眼皮画，如果容易卡顿、拉扯眼皮，再便宜也很难坚持用</li>
 </ul>
-<div class="lead">额外加分项是它<span class="hl">不太容易断</span>——平价胶笔的通病就是断，与夏集在这点上明显好于同价位竞品。<span class="ann zs" data-reason="主动提平价笔通病，给出差异化优势">真实</span></div>
-<div class="sec-label">🥈 其次：佩冉眼线胶笔（活动价约 10 元/支，29 元 3 支）</div>
-<div class="prod-img"><img src="images/eyeliner_peiran.png"></div>
-<div class="lead"><b>持妆力是所有平价胶笔里最强的。</b></div>
+<div class="sec-label">② 持妆稳不稳 <span class="ann dm" data-reason="从学生党的作息推出持妆需求：早八到晚课，很少补妆">懂我</span></div>
 <ul class="blist">
-<li><b>持妆</b>：防晕能力一骑绝尘，画卧蚕线一整天都不掉，蹭都蹭不掉<span class="cite">"</span></li>
-<li><b>顺滑</b>：顺滑度不错，上色流畅不结块</li>
-<li><b>好控制</b>：笔头偏细，精准度可以</li>
+<li>学生党从早八到晚课，很少有机会补妆。一支眼线能不能撑住一天、不容易晕妆，比各种宣传参数更重要</li>
 </ul>
-<div class="lead">但有个明显短板：<span class="hl">克数太小，消耗极快</span>，有人说画几次就没了。换算下来单克价格并不便宜。容易断也是高频吐槽。所以排在与夏集之后。<span class="ann zs" data-reason="坦诚讲短板，不只说好话">真实</span></div>
-<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"好用是真好用，但费得也是真快。"</div>
-<div class="sec-label">好用的液笔</div>
-<div class="lead">如果你已经画过几次、手比较稳了，可以看看以下几支液笔。</div>
-<div class="sec-label">🥇 进阶首选：名创优品小金管眼线液笔（约 10-15 元/支）<span class="ann dh">懂行</span><span class="ann yp" data-reason="液笔里性价比最高的一支">有判断</span></div>
-<div class="prod-img"><img src="images/eyeliner_miniso_gold.png"></div>
-<div class="lead"><b>名创的液笔口碑还不错。</b></div>
+<div class="sec-label">③ 发挥稳不稳定 <span class="ann dh" data-reason="长期使用视角：断墨飞水是平价笔常见问题">懂行</span></div>
 <ul class="blist">
-<li><b>持妆</b>：成膜后防水防汗，有人说"妆都哭掉了眼线还在"。油皮也有不少正面反馈<span class="cite">"</span></li>
-<li><b>顺滑</b>：出水流畅不断墨，不会出现画到一半没颜色的情况<span class="cite">"</span></li>
-<li><b>好控制</b>：笔头不是极细款，稍有粗度，反而让画眼尾更好操控，新手不容易画飞</li>
+<li>好的眼线笔应该每次都好画，不会断墨、飞水，也不会颜色忽深忽浅，长期用更省心</li>
 </ul>
-<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"超级细超级持久，油皮完全不会晕。一根可以用很久，只要15R。"</div>
-<div class="sec-label">🥈 其次：橘朵弯头眼线液笔（约 20-30 元/支）</div>
-<div class="prod-img"><img src="images/eyeliner_judydoll_bent.png"></div>
-<div class="lead"><b>控制力维度的天花板。</b>价格比名创贵一点，但如果你属于"一画眼线手就开始哆嗦"的类型，这支的弯头设计值这个差价。<span class="ann dm" data-reason="精准匹配手抖用户需求">懂我</span></div>
+<div class="lead" style="color:var(--t62);font-size:13px">包装、联名、颜色多少这些，对"好不好用"影响其实没那么大，不必作为第一决策因素。<span class="ann dh" data-reason="排除容易被营销干扰的次要因素">懂行</span></div>
+<div class="lead">所以推荐思路也很简单：第一次买，优先选综合体验最好的，不容易踩雷；如果有特别需求，再根据需求升级；预算有限，也有值得买的选择。<span class="ann yp" data-reason="先建逻辑再推产品，不上来就列清单">有判断</span></div>
+<div class="overview">
+<div class="ov-row" onclick="openSidebar(this)" data-sb="sb-judydoll"><div class="ov-img"><img src="images/eyeliner_judydoll_v2.png"></div><div class="ov-nm">橘朵眼线胶笔</div><div class="ov-score"><span class="s">★</span>4.7</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/eyeliner_ukiss.png"></div><div class="ov-nm">UKISS 悠珂思眼线液笔</div><div class="ov-score"><span class="s">★</span>4.7</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/eyeliner_huazhixiao.png"></div><div class="ov-nm">花知晓眼线液笔</div><div class="ov-score"><span class="s">★</span>4.6</div></div>
+</div>
+<div class="sec-label">⭐ 闭眼入首选：一台全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="直接给出首选，不让新手纠结">有判断</span></div>
+<div class="pcard" onclick="openSidebar(this)" data-sb="sb-judydoll" style="cursor:pointer;">
+<div class="img"><img src="images/eyeliner_judydoll_v2.png"></div>
+<div class="body"><div class="nm">橘朵眼线胶笔</div><div class="features">胶笔质地 · 顺滑不拉扯 · 新手友好</div><div class="pbottom"><div class="price">¥25～35</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">3.2k 人推荐</span></div></div></div>
+</div>
+<div class="lead"><b>新手闭眼入，综合体验最好的一支。</b></div>
 <ul class="blist">
-<li><b>持妆</b>：防水防油，夏天出汗一天没晕<span class="cite">"</span></li>
-<li><b>顺滑</b>：出水顺畅，不断墨不炸毛</li>
-<li><b>好控制</b>：<span class="hl">18 度弯头设计</span>是最大亮点——笔尖贴着眼尾弧度刚好能借力，手再抖都不容易画歪。笔尖超细，画下睫毛也很稳</li>
+<li><span class="hl">胶笔质地顺滑，不拉扯眼皮</span><span class="cite">"</span>，新手容错率高，画错还能修改。
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"第一次画眼线就用的橘朵，胶笔真的好画，画歪了用棉签擦掉就行，不像液笔一笔定生死"</div></li>
+<li><span class="hl">价格不到 30 元，试错成本极低</span><span class="cite">"</span>，买错也不心疼。</li>
+<li>唯一不足是<span class="hl">持妆属于中等水平</span><span class="cite">"</span>，油皮夏天到下午可能稍微变淡。
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"混油皮用了一学期，画起来很舒服。下午偶尔眼尾会淡一点，但不至于晕成熊猫眼，整体很满意"</div></li>
+</ul>
+<div class="sec-label">💧 持妆优先，值得加一点预算 <span class="ann dh" data-reason="精准匹配「早八到晚课不补妆」的持妆需求">懂行</span></div>
+<div class="ptitle">UKISS 悠珂思眼线液笔 <span class="rating"><span class="star">★</span><span class="score">4.7</span></span></div>
+<div class="prod-img"><img src="images/eyeliner_ukiss.png"></div>
+<div class="lead">从胶笔升级液笔的首选。<span class="hl">防晕和稳定性在几十元价位最突出</span><span class="cite">"</span>，笔尖细、出水均匀，早八到晚课不补妆。</div>
+<div class="sec-label">🌸 兼顾颜值和妆感 <span class="ann dm" data-reason="匹配在意妆感、喜欢搭配的审美需求">懂我</span></div>
+<div class="ptitle">花知晓眼线液笔 <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="prod-img"><img src="images/eyeliner_huazhixiao.png"></div>
+<div class="lead">最大特点不是最防水，而是<b>配色丰富</b>，棕色、灰棕画出来柔和自然。日常通勤、上课完全够用。</div>
+<div class="sec-label">🎯 其他可以了解的眼线笔 <span class="ann dh" data-reason="覆盖长尾需求，不遗漏小众选项">懂行</span></div>
+<div class="lead">下面两支各有特点：</div>
+<ul class="blist">
+<li><b>极致预算</b>：<a class="slink">尔木萄眼线液笔</a>，¥20～30，二三十元也能有稳定体验。</li>
+<li><b>可选升级</b>：<a class="slink">Kissme 奇士美眼线液笔</a>，¥69～79，最抗晕最稳定，油皮首选。</li>
 </ul>
 <div class="sec-label">📌 一句话怎么选 <span class="ann dm" data-reason="按需求直接对应产品，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row">✨ 想买胶笔 → <b>与夏集眼线胶笔</b></div>
-<div class="scene-row">✨ 想买液笔 → <b>名创优品小金管眼线液笔</b></div>
+<div class="scene-row">🥇 不知道买哪支 → <b>橘朵</b>，闭眼入</div>
+<div class="scene-row">💧 最怕晕妆 → <b>UKISS</b></div>
+<div class="scene-row">🌸 想要自然妆感 → <b>花知晓</b></div>
+<div class="scene-row">💰 预算只有二三十 → <b>尔木萄</b></div>
+<div class="scene-row">⬆️ 预算提高到 70 → <b>Kissme</b></div>
 </div>
 <div class="lead">告诉我你的肤质、化妆经验和预算，我帮你直接选最适合的那一支。<span class="ann dm" data-reason="收集个人条件，进一步精准推荐">懂我</span></div>
 <div class="follow"><button class="fbtn">内双适合画什么样的眼线？</button><button class="fbtn">棕色和黑色哪个更日常？</button><button class="fbtn">有没有不脱妆的画法技巧？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人眼妆测评笔记</div>
-</div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
+</div></div>
+<div class="quote-area" id="qa-judydoll">
+<div class="quote-ref"><span class="qt">"</span><div class="qimg"><img src="images/eyeliner_judydoll_v2.png" alt=""></div><div class="qnm">橘朵眼线胶笔</div><span class="qt">"</span><div class="qclose" onclick="closeQuote(this)">✕</div></div>
+</div>
+<div class="fav-overlay" id="fov-judydoll" onclick="closeFavSheet(this)"></div>
+<div class="fav-sheet" id="fs-judydoll">
+<div class="fs-head"><span class="fs-title">我的收藏</span><span class="fs-close" onclick="closeFavSheet(this)">✕</span></div>
+<div class="fs-list">
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_judydoll_v2.png" alt=""></div><div class="mid"><div class="nm">橘朵眼线胶笔</div><div class="info-row"><span class="price">¥25～35</span><span class="score"><span class="s">★</span>4.7 (3.2k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_ukiss.png" alt=""></div><div class="mid"><div class="nm">UKISS 悠珂思眼线液笔</div><div class="info-row"><span class="price">¥35～45</span><span class="score"><span class="s">★</span>4.7 (2.9k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_huazhixiao.png" alt=""></div><div class="mid"><div class="nm">花知晓眼线液笔</div><div class="info-row"><span class="price">¥39～49</span><span class="score"><span class="s">★</span>4.6 (1.8k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_ermutao.png" alt=""></div><div class="mid"><div class="nm">尔木萄眼线液笔</div><div class="info-row"><span class="price">¥20～30</span><span class="score"><span class="s">★</span>4.5 (1.5k)</span></div></div><span class="fl-check">✓</span></div>
+<div class="fl-card" onclick="toggleFavCheck(this)"><div class="img"><img src="images/eyeliner_kissme.png" alt=""></div><div class="mid"><div class="nm">Kissme 奇士美眼线液笔</div><div class="info-row"><span class="price">¥69～79</span><span class="score"><span class="s">★</span>4.8 (5.1k)</span></div></div><span class="fl-check">✓</span></div>
+</div>
+<div class="fs-bar" id="fsbar-judydoll"><div class="fs-sel"></div><span class="fs-ask" onclick="askFavSelected(this)">追问</span></div>
+</div>
+<div class="input-bar" id="ib-judydoll" style="position:relative;z-index:11;"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon" onclick="togglePlus(this)">＋</span></div>
+<div class="plus-menu" id="pm-judydoll">
+<div class="pm-item"><span class="pm-ico">📷</span>拍照</div>
+<div class="pm-item"><span class="pm-ico">🖼</span>相册</div>
+<div class="pm-item pm-hl" onclick="openFavSheet(this)"><span class="pm-ico">⭐</span>收藏</div>
+<div class="pm-item"><span class="pm-ico">📍</span>位置</div>
+</div>
+<div class="cite-overlay" onclick="closeSidebar(this)"></div>
+<div class="cite-sidebar" id="sb-judydoll">
+<div class="sb-handle" onclick="closeSidebar(this)"></div>
+<div class="sb-top"><div class="sb-title">橘朵眼线胶笔</div><button class="sb-close" onclick="closeSidebar(this)">✕</button></div>
+<div class="sb-body" style="padding:0;">
+<div class="detail" style="margin:0;border:none;border-radius:0;">
+<div class="detail-gallery"><img src="images/eyeliner_judydoll_v2.png" alt=""><div class="cnt">1 / 3</div><div class="dots"><span class="d on"></span><span class="d"></span><span class="d"></span></div></div>
+<div class="detail-body">
+<div class="detail-top"><div class="detail-title">橘朵眼线胶笔</div><div class="detail-price"><span class="lbl">参考价</span>¥25～35</div></div>
+<div class="ai-sum">
+<div class="head"><span class="pct">推荐值<b>91.5%</b></span><span class="lbl">AI 总结</span></div>
+<div class="body">
+<div class="badge"><div class="rank">仙品</div><div class="cnt">3,200 人点评 ›</div></div>
+<div class="bars">
+<div class="bar-row"><span class="dim">推荐</span><div class="track"><div class="fill pro" style="width:91%"></div></div><span class="val">91%</span></div>
+<div class="bar-row"><span class="dim">一般</span><div class="track"><div class="fill mid" style="width:6%"></div></div><span class="val">6%</span></div>
+<div class="bar-row"><span class="dim">不行</span><div class="track"><div class="fill neg" style="width:3%"></div></div><span class="val">3%</span></div>
+</div>
+</div>
+<div class="tags"><span class="tag pos">顺滑好画(890)</span><span class="tag pos">新手友好(456)</span><span class="tag neg">持妆中等(178)</span><span class="tag neg">油皮不够持久(92)</span></div>
+</div>
+<div class="detail-sec">基本介绍</div>
+<div class="detail-intro">橘朵眼线胶笔是学生党中最受欢迎的平价眼线产品之一，胶笔质地兼顾顺滑和容错率，新手也能轻松上手，价格不到 30 元试错成本极低。</div>
+<div class="detail-params">
+<div class="row"><span>质地</span><span>胶笔</span></div>
+<div class="row"><span>笔径</span><span>1.5mm</span></div>
+<div class="row"><span>防水等级</span><span>中等防水</span></div>
+<div class="row"><span>持妆时间</span><span>约 6–8h</span></div>
+</div>
+<div class="detail-sec">用户评价</div>
+<div class="op-tabs">
+<button class="op-tab pos on" onclick="switchTab(this,'jd1')">顺滑好画<span class="pct">91%</span></button>
+<button class="op-tab pos" onclick="switchTab(this,'jd2')">新手友好<span class="pct">86%</span></button>
+<button class="op-tab neg" onclick="switchTab(this,'jd3')">持妆中等<span class="pct">62%</span></button>
+</div>
+<div class="op-panel on" id="jd1">
+<div class="op-versus"><div class="side pro on" style="flex:91" onclick="switchSide(this,'pro')">支持 91%</div><div class="side con" style="flex:9" onclick="switchSide(this,'con')">9%</div></div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">新</div><div class="body"><div class="u">@新手化妆 · 笔记 · 2.4k 赞</div><div class="t">第一次画眼线就用的橘朵，胶笔真的好画，画歪了用棉签擦掉就行</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">学</div><div class="body"><div class="u">@学生日常 · 笔记 · 1.8k 赞</div><div class="t">很顺滑不卡顿，贴着睫毛根部画完全不拉扯，三十块不到太香了</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)">内</div><div class="body"><div class="u">@内双眼妆 · 评论 · 1.2k 赞</div><div class="t">内双画内眼线特别合适，胶笔不像液笔那么容易蹭到上眼皮</div></div></div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">对</div><div class="body"><div class="u">@对比评测 · 评论 · 234 赞</div><div class="t">顺滑是顺滑，但颜色偏淡，需要来回描两三遍才够显色</div></div></div>
+</div>
+</div>
+<div class="op-panel" id="jd2">
+<div class="op-versus"><div class="side pro on" style="flex:86" onclick="switchSide(this,'pro')">支持 86%</div><div class="side con" style="flex:14" onclick="switchSide(this,'con')">14%</div></div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">零</div><div class="body"><div class="u">@零基础学眼妆 · 笔记 · 1.6k 赞</div><div class="t">完全零基础，看了一个教程就画出来了。胶笔比液笔好控制太多</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)">练</div><div class="body"><div class="u">@练手首选 · 评论 · 980 赞</div><div class="t">画错了擦掉重来就行，不像液笔一笔定生死。练手太合适了</div></div></div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">熟</div><div class="body"><div class="u">@熟手体验 · 评论 · 156 赞</div><div class="t">会画之后觉得胶笔不够精细，画不了太细的线条</div></div></div>
+</div>
+</div>
+<div class="op-panel" id="jd3">
+<div class="op-versus"><div class="side pro on" style="flex:62" onclick="switchSide(this,'pro')">认同 62%</div><div class="side con" style="flex:38" onclick="switchSide(this,'con')">38%</div></div>
+<div class="op-cmts pro-cmts on">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)">油</div><div class="body"><div class="u">@油皮测评 · 笔记 · 890 赞</div><div class="t">混油皮到下午眼尾会淡一点，不至于晕成熊猫眼但确实变淡了</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">夏</div><div class="body"><div class="u">@夏天实测 · 评论 · 567 赞</div><div class="t">夏天出汗多的时候持妆确实差一些，但这个价位不能要求太多</div></div></div>
+</div>
+<div class="op-cmts con-cmts">
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)">干</div><div class="body"><div class="u">@干皮用户 · 评论 · 345 赞</div><div class="t">干皮用完全没问题，一天下来眼线还是很清晰，持妆够用了</div></div></div>
+<div class="op-cmt"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)">定</div><div class="body"><div class="u">@定妆技巧 · 评论 · 234 赞</div><div class="t">画完散粉定妆一下就行了，多撑两三个小时不成问题</div></div></div>
+</div>
+</div>
+<div class="detail-sec">购买渠道</div>
+<div class="shop-list"><a class="shop-item" href="#" onclick="return false"><div class="img"><img src="images/eyeliner_judydoll_v2.png" alt=""></div><div class="mid"><div class="nm">橘朵官方旗舰店</div><div class="price">¥29.9</div></div><div class="arrow">›</div></a></div>
+</div>
+</div>
+</div>
+<div class="detail-actions"><button class="act-btn fav" onclick="toggleFav(this)"><span class="star">☆</span>收藏</button><button class="act-btn ask" onclick="askAbout(this,'qa-judydoll','ib-judydoll')">追问</button></div>
+<div class="detail-toast" id="toast-judydoll">⭐ 已加入决赛圈<span class="tst-arrow">›</span></div>
+</div>
+</div></div>
 
 <!-- 美妆 · 单品评估 -->
 <div class="case-panel cat-beauty" data-cat="beauty" data-intent="single">
@@ -1352,11 +1437,9 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="lead">不过如果是<b>油眼皮、眼周特别容易出油</b>，或者画在<b>内眼线、下眼睑</b>的位置，到了后期还是可能会有一点晕染。<span class="ann zs" data-reason="主动交代会晕的边界条件，不只说好话">真实</span></div>
 <div class="lead">建议画之前先做好<b>眼皮打底</b>或<b>轻扫一层散粉</b>，持妆效果会更好。<span class="ann dh" data-reason="给出具体可操作的对策，不只描述问题">懂行</span></div>
 <div class="sec-label">💬 用过的人怎么说 <span class="ann zs" data-reason="真人使用经验佐证，有好有差">真实</span></div>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">混油皮上班族</div><div class="lk">♡ 3,120</div></div><div class="tx"><span class="q">"</span>通勤一整天完全不晕，戴口罩也没问题。唯一一次化是去蹦迪出了巨多汗，内眼线有一点点淡，外眼线和眼尾完全没事<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">回购三年的老用户</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>外眼线真的铁，哭完都还在。内眼线如果不定妆确实会淡一点，但不至于晕成熊猫眼<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></div><div class="nm">大油皮学生党</div><div class="lk">♡ 2,450</div></div><div class="tx"><span class="q">"</span>我是那种眼皮出油特别厉害的，之前用别的牌子下午必晕。换了 Kissme 之后好很多，但内眼线还是要先扫一层散粉才稳<span class="q">"</span></div></div>
-</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"通勤一整天完全不晕，戴口罩也没问题。唯一一次化是去蹦迪出了巨多汗，内眼线有一点点淡，外眼线和眼尾完全没事"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"外眼线真的铁，哭完都还在。内眼线如果不定妆确实会淡一点，但不至于晕成熊猫眼"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></div>"我是那种眼皮出油特别厉害的，之前用别的牌子下午必晕。换了 Kissme 之后好很多，但内眼线还是要先扫一层散粉才稳"</div>
 <div class="lead">告诉我你的肤质和日常妆容习惯，我帮你判断它适不适合你。<span class="ann dm" data-reason="收集个人条件，给出适配判断">懂我</span></div>
 <div class="follow"><button class="fbtn">和 UKISS 比持妆谁更强？</button><button class="fbtn">黑色和棕色选哪个好？</button><button class="fbtn">有没有让它更持久的画法？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人持妆实测</div>
@@ -1391,32 +1474,38 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 <div class="userq"><span>油皮怎么选眼线笔？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#D4B4F7,#9B6ED0)"></i></div><span>综合 <b style="color:var(--t62)">276 篇</b>油皮眼妆攻略</span></div>
-<div class="lead">油皮选眼线笔主要要考虑到防晕染，建议<span class="hl">优先考虑成膜快、防水持妆的眼线液笔</span>。<span class="ann dh" data-reason="直接锚定油皮核心诉求：防晕染">懂行</span><span class="ann dm" data-reason="从油皮痛点出发给方向">懂我</span></div>
-<div class="sec-label">🖊️ 第一步：先选类型，液笔和胶笔差别很大 <span class="ann dh" data-reason="先建认知框架，再做选择">懂行</span></div>
-<div class="lead">眼线产品主要分两大类，油皮的适配度差异明显：</div>
+<div class="lead">油皮选眼线笔，不是越防水越好，而是<span class="hl">先想清楚你最想解决什么问题</span>。很多人一味追求"最持妆"，其实未必是最适合自己的。<span class="ann dh" data-reason="纠正油皮常见误区，不直接堆产品">懂行</span><span class="ann dm" data-reason="先理解用户真实痛点再给方案">懂我</span></div>
+<div class="sec-label">① 如果你最怕脱妆，先别急着换眼线笔 <span class="ann dh" data-reason="先排除手法问题，再推产品">懂行</span></div>
+<div class="lead">油皮确实更容易晕妆，但脱妆不完全是眼线笔的问题。</div>
+<div class="lead">如果只是下午开始轻微晕染，可以先试试：</div>
 <ul class="blist">
-<li><b>眼线液笔</b>：笔头是纤维毛，出液后速干成膜，成膜之后油脂不容易把它溶掉。<span class="hl">油皮整体更推荐从液笔入手，持妆成功率最高。</span>缺点是手抖容易歪，画错不好修，新手上手需要练</li>
-<li><b>眼线胶笔</b>：质地软糯，好画好晕染，容错率高，新手友好。但油皮踩雷率明显更高——越软的胶笔越容易被眼皮油脂"溶掉"，几小时就糊了</li>
+<li>眼部打底</li>
+<li>画完后轻压一层散粉</li>
+<li>避免乳霜型眼霜蹭到眼尾</li>
 </ul>
-<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"上一篇听了网友们的介绍，转用了眼线液笔，用了 Stila、Love Liner、Kiss Me，果然就没再晕了"</div>
-<div class="lead">不过胶笔也不是一刀切不行。有用户反馈花洛利亚、Canmake、ukiss 刀锋眼线胶笔等特定款在油皮上表现不错，关键是要选对配方。<span class="ann zs" data-reason="不一棒子打死胶笔，给出例外情况">真实</span></div>
-<div class="lead">简单判断：如果你是"万年晕妆星人"，先从液笔试起；如果你更在意上手方便、画内眼线舒服，可以试防晕口碑好的胶笔，但做好可能试几支才找到对的心理准备。<span class="ann dm" data-reason="按用户类型分流，降低选择成本">懂我</span></div>
-<div class="sec-label">🔍 第二步：选笔时重点看这几个指标 <span class="ann dh" data-reason="给出可操作的选购标准">懂行</span></div>
-<div class="lead">不管液笔还是胶笔，油皮选的时候盯住三个硬指标：</div>
+<div class="lead" style="color:var(--t62);font-size:13px">这些方法往往就能明显提升持妆。如果做了这些还是容易晕，再优先选择防皮脂、成膜快的眼线液笔。</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"之前一直以为是眼线笔不行，后来用了眼部打底再画，同一支笔多撑了三四个小时。很多时候不是笔的问题"</div>
+<div class="sec-label">② 如果你很在意出油，就重点看这几个点 <span class="ann dh" data-reason="精准指出油皮真正该看的指标">懂行</span><span class="ann zs" data-reason="防水≠防油是油皮最常踩的坑">真实</span></div>
+<div class="lead">油皮真正要看的不是"防水"，而是：</div>
 <ul class="blist">
-<li><b>速干成膜能力</b>：画上去之后多快能干、能不能形成一层膜。成膜越快越结实，后续被油脂溶解的概率越低。<span class="hl">这是油皮最该关注的第一指标</span><span class="cite">"</span></li>
-<li><b>防水防油标注</b>：认准"waterproof"或"防水防汗"标注。但要注意，目前没有任何眼线笔能真正"防油"<span class="ann zs" data-reason="防水≠防油，纠正常见误区">真实</span></li>
-<li><b>笔头粗细和顺滑度</b>：笔头太粗容易画宽、堆积产品反而更容易晕；出水/出胶不顺畅会让你反复涂抹，也会增加晕妆风险。试用时一笔画过去流畅、不卡顿的优先选</li>
+<li><b>是否防皮脂</b>（Oil Proof）</li>
+<li><b>是否速干成膜</b></li>
+<li><b>是否防汗</b></li>
 </ul>
-<div class="lead">还有一个容易忽略的点：<span class="hl">颜色深度</span>。纯黑色一旦晕开会特别明显，棕色系即使微微晕一点也不那么"脏"。如果你是油皮新手，棕色比黑色更安全。<span class="ann dm" data-reason="连颜色选择都替油皮用户想好了">懂我</span></div>
-<div class="sec-label">⚠️ tips <span class="ann dh" data-reason="从手法层面解决问题，不只靠产品">懂行</span><span class="ann yp" data-reason="给出完整的定妆流程，不是单一建议">有判断</span></div>
-<div class="lead">油皮确实更容易晕妆，但脱妆不完全是眼线笔的问题。如果你已经有一支眼线笔了，可以试试：</div>
+<div class="lead" style="color:var(--t62);font-size:13px">很多产品宣传防水，但皮脂才是油皮眼线晕开的主要原因，所以防皮脂比防水更重要。</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div>"买了三支都标防水的，夏天照晕不误。后来特意找了一支写防皮脂的，真的就不晕了。防水和防油完全是两回事"</div>
+<div class="sec-label">③ 再根据你的化妆习惯选类型 <span class="ann dm" data-reason="从用户的画法习惯出发，不是从产品参数出发">懂我</span></div>
 <ul class="blist">
-<li>妆前精简眼周护肤，少用油类、霜类产品</li>
-<li>上一层眼部打底（控油型），给眼皮做干爽隔离</li>
-<li>打底成膜后，小刷子薄扫一层透明散粉，重点扫睫毛根部和下眼睑</li>
-<li>画眼线</li>
-<li>画完后用同色系深色眼影粉轻压在眼线上，相当于给眼线再定一次妆</li>
+<li><b>想要最好画、新手容易成功</b>：优先选胶笔，画内眼线和填睫毛根部都更轻松</li>
+<li><b>想要最持妆、通勤一天不补妆</b>：优先选液笔，更适合油皮日常</li>
+<li><b>想画自然妆</b>：可以选棕色，容错率更高</li>
+<li><b>喜欢干净利落的妆感</b>：黑色会更有存在感</li>
+</ul>
+<div class="sec-label">⚠️ 油皮一定要知道的 3 个真相 <span class="ann dh">懂行</span><span class="ann zs" data-reason="来自油皮用户的真实踩坑经验">真实</span></div>
+<ul class="blist">
+<li><b>防水≠防油</b>，有没有防皮脂更重要</li>
+<li><b>内眼线本来就是最容易掉的部位</b>，不要期待一支眼线笔完全解决</li>
+<li><b>选对产品只能解决一部分问题</b>，眼部打底和定妆同样会影响持妆表现</li>
 </ul>
 <div class="lead">💬 大家讨论最多的几款眼线笔是 Kiss Me、橘朵、UZU、花知晓。如果你告诉我你的情况，我可以具体帮你选选：<span class="ann dm" data-reason="主动收集需求，精准推荐">懂我</span></div>
 <div class="follow"><button class="fbtn">自然妆为主，新手</button><button class="fbtn">已经会画，想要最持妆的</button><button class="fbtn">预算 50 以内</button></div>
@@ -1425,234 +1514,196 @@ DJI 的 <b>白平衡更稳、蓝绿偏色控制更自然</b>，连续拍摄画�
 
 <!-- 户外 · 选品推荐 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="rec">
-<div class="col-head"><div class="col-tag">选品推荐</div><div class="col-query">单板滑雪买雪板，有哪些值得买的入门款？</div></div>
-<div class="col-strategy"><div class="cs-label">回答思路</div><div class="cs-text">拆解用户需求（场景、水平、预算）→ 建立选择框架（核心看什么、不用看什么）→ 按框架分层推荐并说理</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>单板滑雪买雪板，有哪些值得买的入门款？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">156 篇</b>入门雪板测评笔记</span></div>
-<div class="lead">买第一块单板，主要看<b>板子的软硬度</b>，直接决定你现在好不好学、以后能陪你滑多久。<span class="ann dm" data-reason="从「入门」拆出新手最该关心的维度">懂我</span><span class="ann dh" data-reason="帮用户排除不重要的参数，聚焦核心">懂行</span></div>
+<div class="lead">滑雪入门买第一块单板，真正要看的是这三点：<span class="ann dm" data-reason="从「入门」拆出新手最该关心的维度">懂我</span><span class="ann dh" data-reason="帮用户排除不重要的参数，聚焦核心">懂行</span></div>
 <ul class="blist">
-<li><b>选偏软但不过软的。</b>太硬的板换刃费劲、压不动，新手学不会；但一味求软也不行，学会换刃之后很快就会嫌它撑不住、想换板。偏软但不过软的，能多陪你两三个雪季。</li>
+<li><b>好不好上手</b>：板子偏软、板型容错高，换刃才省力、不容易卡刃摔跤；太硬的板新手根本压不动。</li>
+<li><b>耐不耐用</b>：但也别一味求软，太软的板你学会换刃后很快就嫌它撑不住、想换。挑「偏软但不过软」的能多陪你几年。</li>
+<li><b>尺寸对不对</b>：长度看身高体重（站直板头在下巴到鼻子之间），脚大（44 码以上）要专门挑加宽版，不然转弯脚尖脚跟蹭雪。这个比纠结型号更要紧。</li>
 </ul>
-<div class="lead">下面这几款，我会主要介绍三个方面：好不好学、能陪你滑多久、以后适合往哪个方向玩。<span class="ann dm" data-reason="从「入门」推出学习曲线和进阶空间需求">懂我</span><span class="ann dh" data-reason="先排除对新手不重要的维度，帮用户聚焦">懂行</span></div>
-<div class="sec-label">⭐ 新手首选，一块全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="替用户做了筛选，直接给首选">有判断</span></div>
-<div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">偏软好上手 · 全山通用 · 入门经典</div><div class="pbottom"><div class="price">¥2,998 参考</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div></div></div></div>
-<div class="lead">只推一块的话，我会先选它——容错率最高、学得最快，闭眼入不会踩雷。</div>
-<ul class="blist">
-<li><b>不容易突然摔</b><sup class="cite">提及 88%</sup>：板边圆钝，新手那种「毫无预兆栽跟头」会少很多。</li>
-<li><b>板软、好学</b><sup class="cite">提及 82%</sup>：换刃省力，从落叶飘到连着转弯，上手特别快。</li>
-<li><b>大牌、保值</b><sup class="cite">提及 65%</sup>：固定器随便配都能装，将来换板二手也好出。</li>
-</ul>
-<div class="lead"><b>能陪你多久</b>：偏软好学是它最大的优点，也是它的天花板——滑到高级道想飙速会嫌它「跟不上」，一般 1.5–2 季就想换。</div>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div><div class="nm">滑了三季的老手</div><div class="lk">♡ 2,450</div></div><div class="tx"><span class="q">"</span>我第一块板就是 Ripcord，从连续落叶飘练到换刃，用了两个雪季才换板。入门板不需要好，需要"不打击信心"<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">教练的建议</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>新手买板最常犯的错就是一步到位买进阶板。硬板确实高速更稳，但你还没到需要"稳"的阶段，先学会转弯再说<span class="q">"</span></div></div>
+<div class="lead">高阶参数先不用管，下面按你的水平推荐几款。<span class="ann dm" data-reason="从「入门」推出学习曲线和进阶空间需求">懂我</span><span class="ann dh" data-reason="先排除对新手不重要的维度，帮用户聚焦">懂行</span></div>
+<div class="overview">
+<div class="ov-row"><div class="ov-img"><img src="images/snowboard_burton_ripcord.png"></div><div class="ov-nm">Burton Ripcord</div><div class="ov-score"><span class="s">★</span>4.7</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/snowboard_nitro_prime.png"></div><div class="ov-nm">Nitro Prime</div><div class="ov-score"><span class="s">★</span>4.6</div></div>
+<div class="ov-row"><div class="ov-img"><img src="images/snowboard_ride_agenda.png"></div><div class="ov-nm">Ride Agenda</div><div class="ov-score"><span class="s">★</span>4.6</div></div>
 </div>
-<div class="sec-label">🏂 想要更大成长空间？看这两块 <span class="ann dh" data-reason="预判用户在预算和玩法上的不同侧重">懂行</span></div>
-<div class="lead">这两块换刃都会比 Ripcord 稍费劲，但都能多陪你滑几年：</div>
-<div class="item-title"><span class="tag">预算友好</span>Nitro Prime</div>
-<div class="pcard"><div class="img"><img src="images/snowboard_nitro_prime.png"></div><div class="body"><div class="nm">Nitro Prime</div><div class="features">软硬适中 · 全山通用 · 便宜好用</div><div class="pbottom"><div class="price">¥1,900 参考</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">720 人推荐</span></div></div></div></div>
-<div class="lead">如果愿意多花几天适应换刃，能换来比 Ripcord 更大的成长空间。</div>
+<div class="sec-label">⭐ 新手首选，一块全能 <span class="ann dh">懂行</span><span class="ann yp" data-reason="替用户做了筛选，直接给首选">有判断</span></div>
+<div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">偏软好上手 · 全山通用 · 入门经典</div><div class="pbottom"><div class="price">¥2,800 参考</div><div class="stars-line"><span class="s">★</span>4.7<span class="cnt">1.2k 人推荐</span></div></div></div></div>
+<div class="lead">新手第一块板，我会优先看它。<b>闭眼入，最不打击信心的一块。</b></div>
 <ul class="blist">
-<li><b>能陪你多久</b>：比 Ripcord 稍硬、支撑更足，学会换刃之后滑起来更稳，不容易因为技术提升就想换板，能多陪你一两个雪季。</li>
-<li>代价是刚上手换刃要多花点力气；¥1,900 参考价也比 Ripcord 便宜不少，两头都不亏。</li>
+<li><span class="hl">不容易突然摔</span><span class="cite">"</span>：板边圆钝，新手那种「毫无预兆栽跟头」会少很多。</li>
+<li><span class="hl">板软、好学</span><span class="cite">"</span>：换刃省力，从落叶飘到连着转弯，上手特别快。</li>
+<li><span class="hl">大牌、保值</span><span class="cite">"</span>：固定器随便配都能装，将来换板二手也好出。</li>
 </ul>
-<div class="item-title"><span class="tag">自由式向</span>Ride Agenda</div>
-<div class="pcard"><div class="img"><img src="images/snowboard_ride_agenda.png"></div><div class="body"><div class="nm">Ride Agenda</div><div class="features">头尾对称 · 软硬适中 · 自由式全山</div><div class="pbottom"><div class="price">¥2,200 参考</div><div class="stars-line"><span class="s">★</span>4.6<span class="cnt">890 人推荐</span></div></div></div></div>
-<div class="lead"><b>本质是一块全山双翘板，只是更偏自由式方向。</b></div>
-<ul class="blist">
-<li>头尾对称，<b>正反脚都能滑</b>，以后想练 switch、平花或者去公园，Agenda 比 Ripcord 更经得起折腾，<b>能陪你多久</b>取决于你往这个方向走多远。</li>
-<li>代价是比纯软板稍微难压一点，头几天更费劲，跟 Nitro Prime 差不多。</li>
-</ul>
+<div class="lead">唯一缺点：偏软，滑到高级道想飙速会嫌它「跟不上」，一般用 1.5–2 季就想升级了。</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>"我第一块板就是 Ripcord，从连续落叶飘练到换刃，用了两个雪季才换板。入门板不需要好，需要'不打击信心'"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"新手买板最常犯的错就是一步到位买进阶板。硬板确实高速更稳，但你还没到需要'稳'的阶段，先学会转弯再说"</div>
+<div class="sec-label">🏂 想省钱 / 想玩公园？看这两块 <span class="ann dh" data-reason="预判用户在预算和玩法上的不同侧重">懂行</span></div>
+<div class="lead">这两块各有更擅长的方向，也各有一条短板：</div>
+<div class="ptitle">Nitro Prime <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="prod-img"><img src="images/snowboard_nitro_prime.png"></div>
+<div class="lead"><b>更便宜、也更耐用一点。</b>它比 Ripcord 稍硬，上手没那么「无脑」，但也正因为硬一点，支撑更足，滑好了也不会太快嫌它软。图省钱、想一块板多用几年就选它。缺点是滑起来速度一般，没有哪项特别突出。</div>
+<div class="ptitle">Ride Agenda <span class="rating"><span class="star">★</span><span class="score">4.6</span></span></div>
+<div class="prod-img"><img src="images/snowboard_ride_agenda.png"></div>
+<div class="lead"><b>正着倒着都能滑、脚下更弹的一块。</b>想往公园、玩花活方向发展就选它。缺点是比纯软板稍微难压一点，头几天更费劲。</div>
 <div class="sec-label">🎯 按需求还能看这些 <span class="ann dh" data-reason="覆盖平花、女生、进阶、大脚等长尾需求">懂行</span></div>
 <div class="lead">下面按不同需求分了几类，对号入座：</div>
 <ul class="blist">
-<li><b>想专练花式 / 公园</b>：Rome Mechanic<sup class="mag">🔍</sup>、CAPiTA Pathfinder<sup class="mag">🔍</sup>，板子更软更灵活，做跳跃、压板这些花式动作更顺手；Rossignol Sawblade<sup class="mag">🔍</sup> 也偏这类，偏硬一点，适合会滑之后再玩花活。</li>
-<li><b>女生第一块板</b>：Burton Stylus<sup class="mag">🔍</sup>、Salomon Lotus<sup class="mag">🔍</sup>、Nitro Lectra<sup class="mag">🔍</sup>，轻、好控、不容易摔。</li>
-<li><b>已经会换刃、想进阶</b>：K2 Raygun<sup class="mag">🔍</sup>、CAPiTA Outerspace Living<sup class="mag">🔍</sup>，板子更有支撑，适合认真练。</li>
+<li><b>想专练花式 / 公园</b>：<a class="slink">Rome Mechanic</a>、<a class="slink">CAPiTA Pathfinder</a>，板子更软更灵活，做跳跃、压板这些花式动作更顺手；<a class="slink">Rossignol Sawblade</a> 也偏这类，偏硬一点，适合会滑之后再玩花活。</li>
+<li><b>女生第一块板</b>：<a class="slink">Burton Stylus</a>、<a class="slink">Salomon Lotus</a>、<a class="slink">Nitro Lectra</a>，轻、好控、不容易摔。</li>
+<li><b>已经会换刃、想进阶</b>：<a class="slink">K2 Raygun</a>、<a class="slink">CAPiTA Outerspace Living</a>，板子更有支撑，适合认真练。</li>
 </ul>
 <div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按人群直接给结论，不让用户自己归纳">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row">完全不知道怎么选 → <b>Burton Ripcord</b>，闭眼入，学得最快。</div>
-<div class="scene-row">预算有限、想一块板多滑几年 → <b>Nitro Prime</b>，成长空间更大、更划算。</div>
-<div class="scene-row">以后想练 switch、去公园或玩平花 → <b>Ride Agenda</b>，自由式方向成长空间最好。</div>
+<div class="scene-row">想一块稳妥全能、用两季再换 → <b>Burton Ripcord</b>，闭眼入。</div>
+<div class="scene-row">预算有限、又想能陪你进阶一阵 → <b>Nitro Prime</b>，最划算。</div>
+<div class="scene-row">想往公园 / 平花发展 → <b>Ride Agenda</b>。</div>
 </div>
-<div class="lead"><b>小提醒</b>：定了型号之后，尺寸按体重挑（官网都有对照表），身高只是参考；脚大（44 码以上）选加宽版，不然转弯蹭雪。另外固定器和雪鞋比板更影响脚感，别把预算全砸在板上。</div>
-<div class="lead">你告诉我身高、体重、鞋码、预算，主要想滑雪道还是平花，我直接帮你把型号和长度缩到 2–3 个。<span class="ann dm" data-reason="追问精准需求，进一步缩小推荐范围">懂我</span></div>
+<div class="lead"><b>小提醒</b>：固定器和雪鞋比板更影响脚感，别把预算全砸在板上。</div>
+<div class="lead">告诉我你的身高体重、预算、主要想滑雪道还是玩公园，我帮你选到具体型号和尺寸。<span class="ann dm" data-reason="追问精准需求，进一步缩小推荐范围">懂我</span></div>
 <div class="follow"><button class="fbtn">固定器和雪鞋也得一起买吧？</button><button class="fbtn">二手板值得买吗？</button><button class="fbtn">全套下来大概花多少？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人雪板测评笔记</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 户外 · 单品评估 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="single">
-<div class="col-head"><div class="col-tag">单品评估</div><div class="col-query">Burton Ripcord怎么样？适合从初级往进阶过渡吗</div></div>
-<div class="col-strategy"><div class="cs-label">回答思路</div><div class="cs-text">先说清楚这块板本身的定位和特点（商品卡 + 实拍展示）→ 再具体回答能不能从初级过渡到进阶（结论 + 能力边界 + 避坑指南 + 换板节点）→ 真人反馈怎么说</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>Burton Ripcord怎么样？适合从初级往进阶过渡吗？</span></div>
 <div class="answer">
-<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">112 篇</b>真人上脚反馈</span></div>
-<div class="lead"><b>入门到入门进阶的省心款，能陪你过渡到中级，但别指望上高级道。</b><span class="ann yp" data-reason="开头一句话总结整体结论，再展开定位和过渡判断">有判断</span></div>
-<div class="sec-label">这块板的定位 <span class="ann dh" data-reason="先说清楚定位和整体性能，不跟过渡判断混在一起">懂行</span></div>
-<div class="lead">官方定位是<b>入门到入门进阶</b>，专门服务于刚学会滑雪、想扎实进步的人。</div>
-<div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">板子偏软好上手 · 边缘不容易卡雪 · 初级到中级全山通用</div><div class="pbottom"><div class="price">¥2,998</div><div class="stars-line"><span class="s">★</span>4.7<span class="unit">分</span><span class="cnt">1.2k 人推荐</span></div></div></div></div>
-<ul class="blist">
-<li><b>板软、好压</b><sup class="cite">提及 82%</sup>：脚一使劲就能把板压弯，换方向省力，压雪道练刻滑都吃得消。</li>
-<li><b>大牌、好出手</b><sup class="cite">提及 65%</sup>：固定器随便买哪个牌子都能装，将来想升级换板，二手也好出。</li>
-</ul>
-<div class="lead">几张真人实拍给你参考，配色和板型大概是这个样子：<span class="ann zs" data-reason="放真人实拍，不用官方棚拍白底图">真实</span></div>
-<div class="shots">
-<figure><img src="images/snow_ripcord_real_1.png"></figure>
-<figure><img src="images/snow_ripcord_real_2.png"></figure>
-<figure><img src="images/snow_ripcord_real_3.png"></figure>
-</div>
-<div class="shots-cap">Burton Ripcord 真人实拍 · 装好固定器的整板与细节</div>
-<div class="sec-label">能不能从初级过渡到进阶 <span class="ann yp" data-reason="直接回答 query 的「能不能过渡」">有判断</span></div>
-<div class="lead"><b>够用，从新手到初级进阶完全能陪你走完，但别指望它带你上高级道。</b><span class="ann yp" data-reason="第一句直接说够不够用，再划定能力边界">有判断</span></div>
-<div class="lead">简单说：学会滑雪、能连着转弯、上小跳台这个阶段，它是最省心的一块。等你开始想在陡道上飙速、切着雪走，就会觉得它有点软、压不住了。<span class="ann dm" data-reason="从「初级往进阶过渡」的场景出发讲能力边界，不堆参数">懂我</span></div>
-<div class="sec-label">要提前知道的两件事 <span class="ann zs" data-reason="主动讲短板，不只说好话">真实</span></div>
-<div class="lead"><b>① 想飙速时会觉得软</b></div>
-<ul class="blist">
-<li>到了陡道上想快，板子在四十码往上会有点发飘、抓不太住雪，这就是它的天花板了。</li>
-</ul>
-<div class="lead"><b>② 这是「单向板」，倒着滑不顺手</b></div>
-<ul class="blist">
-<li>它设计成朝一个方向滑，板头比板尾长一点。想在公园里正着倒着换着滑、玩平花的人，这块不太合适。</li>
-</ul>
+<div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">98 篇</b>真人使用反馈</span></div>
+<div class="lead"><b>入门到初级进阶完全够用，但别指望它陪你到高级。</b>Ripcord 的定位就是<span class="hl">「学会滑雪」这个阶段的最佳搭档</span>，换刃、连续弯、简单小跳台都没问题，但高速大回转会明显感觉板子软、抓不住雪。<span class="ann dh">懂行</span><span class="ann yp" data-reason="第一句直接说够不够用，再划定能力边界">有判断</span></div>
+<div class="pcard"><div class="img"><img src="images/snowboard_burton_ripcord.png"></div><div class="body"><div class="nm">Burton Ripcord</div><div class="features">Flat Top 板型 · 偏软 · 全山入门 · 木芯减震</div><div class="pbottom"><div class="price">¥2,800</div><div class="stars-line"><span class="s">★</span>4.7<span class="unit">分</span><span class="cnt">1.2k 人推荐</span></div></div></div></div>
 <div class="sec-label">📊 大家怎么评价 <span class="ann zs" data-reason="好评差评都摆出来，带提及比例">真实</span></div>
 <div class="pc">
-<div class="pc-block pro"><div class="pc-hd"><span class="num">4</span><span class="lbl">个大家真正满意的地方</span></div>
-<div class="pc-item"><span class="ic">✓</span>上脚就能滑，不挑人，摔得也不疼<span class="heat">🔥 提及 88%</span></div>
-<div class="pc-item"><span class="ic">✓</span>换刃学得快，一两天就能连着转弯<span class="heat">🔥 提及 82%</span></div>
-<div class="pc-item"><span class="ic">✓</span>Burton 大牌，配件好配、二手保值<span class="heat">提及 65%</span></div>
-<div class="pc-item"><span class="ic">✓</span>从零基础到中级一块板全包了<span class="heat">提及 58%</span></div>
+<div class="pc-block pro"><div class="pc-hd"><span class="tag">好评</span><span class="cnt">78人表示赞同 ›</span></div>
+<div class="pc-item"><b>换刃容错高：</b>Flat Top 板型，换刃学习曲线平滑</div>
+<div class="pc-item"><b>摔了不容易伤：</b>软硬适中偏软，膝盖更友好</div>
+<div class="pc-item"><b>品牌靠谱：</b>Burton 固定器兼容性好、二手保值</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>"第一季从落叶飘到换刃，Flat Top 容错真的高，不卡刃"</div>
+<div class="pc-item"><b>覆盖面广：</b>从零基础到中级的全过程都能用</div>
 </div>
-<div class="pc-block con"><div class="pc-hd"><span class="num">2</span><span class="lbl">个吐槽最多的地方</span></div>
-<div class="pc-item"><span class="ic">✗</span>滑快了板头会发飘，抓雪感不够<span class="heat">提及 45%</span></div>
-<div class="pc-item"><span class="ic">✗</span>想玩公园花活的话偏硬、不够弹<span class="heat">提及 30%</span></div>
+<div class="pc-block con"><div class="pc-hd"><span class="tag">差评</span><span class="cnt">18人吐槽过 ›</span></div>
+<div class="pc-item"><b>高速偏软：</b>40km/h+ 时板头会抖，刃感不足</div>
+<div class="pc-item"><b>公园不太行：</b>想玩 jib 的话偏硬了，不够弹</div>
 </div></div>
-<div class="lead">大多数人都觉得这两条短板是「入门板本来就这样」，等你滑到需要更硬的板，其实也到了该换板的时候了。</div>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div><div class="nm">用了两季换板的人</div><div class="lk">♡ 1,670</div></div><div class="tx"><span class="q">"</span>第一季从落叶飘练到换刃，第二季开始走黑道，明显感觉板子软了。换了硬一点的之后高速稳太多。Ripcord 该完成的都完成了<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div><div class="nm">教练的建议</div><div class="lk">♡ 1,890</div></div><div class="tx"><span class="q">"</span>新手最爱犯的错就是一步到位买进阶板。硬板确实高速稳，但你还没到需要那个"稳"的阶段，先学会转弯再说<span class="q">"</span></div></div>
-</div>
 <div class="sec-label">🔄 什么时候该换板 <span class="ann dm" data-reason="预判进阶需求，提前告知换板节点">懂我</span><span class="ann dh">懂行</span></div>
-<div class="lead">判断很简单：<b>在中高级道上开始觉得「板子跟不上我了」</b>——想快快不起来、颠簸路段板子弹不回来，就是该换的时候。大多数人用它 <b>1.5 到 2 个雪季</b>会到这个点。到那时你也摸清自己爱滑什么了，再按风格挑进阶板更准。</div>
-<div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="按用户所处阶段收口，给明确建议">懂我</span><span class="ann yp">有判断</span></div>
+<div class="lead">判断标准很简单：<b>如果你在中高级道上觉得"板子跟不上我了"</b>，高速刃感不足、颠簸路段弹不回来，就是该换的时候了。大多数人用 Ripcord <b>1.5–2 个雪季</b>会到这个临界点。</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>"第一季从落叶飘到换刃，第二季开始走黑道，明显感觉板子软了。换了 Custom 之后高速稳太多了。Ripcord 完成了它的使命"</div>
+<div class="sec-label">📌 tips <span class="ann dm" data-reason="按用户场景收口，给明确建议">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row">刚开始学单板 → <b>放心入</b>，一两季内你不会嫌它差。</div>
-<div class="scene-row">已经会换刃、想练刻滑 → <b>还能再战一季</b>，但滑快了会觉得软。</div>
-<div class="scene-row">已经在滑黑道了 → <b>该换了</b>，直接看硬一点的进阶板（比如 Burton Custom）。</div>
-<div class="scene-row">还不确定会不会坚持 → Ripcord 二手残值不错，<b>入了也不亏</b>。</div>
+<div class="scene-row">从零开始学单板：<b>放心入</b>，1–2 季内你不会嫌它差。</div>
+<div class="scene-row">已经会换刃、想学刻滑：<b>还能再用一季</b>，但高速时会觉得软。</div>
+<div class="scene-row">已经滑黑道了：<b>该换了</b>，看看 Burton Custom 或 Process。</div>
+<div class="scene-row">不确定自己会不会坚持：Ripcord 的二手残值不错，<b>不亏</b>。</div>
 </div>
-<div class="follow"><button class="fbtn">进阶该换什么板？</button><button class="fbtn">我 170、130 斤，选多长的？</button><button class="fbtn">配什么固定器和雪鞋合适？</button></div>
-<div class="foot-info">内容由 AI 生成 · 综合小红书真人上脚反馈</div>
+<div class="lead">告诉我你现在的水平和主要玩法，我帮你判断它够不够用。<span class="ann dm" data-reason="收集用户水平，给出精准判断">懂我</span></div>
+<div class="follow"><button class="fbtn">进阶换什么板比较好？</button><button class="fbtn">155 和 157 选哪个长度？</button><button class="fbtn">搭配什么固定器合适？</button></div>
+<div class="foot-info">内容由 AI 生成 · 综合小红书真人使用反馈</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 户外 · 对比决策 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="versus">
-<div class="col-head"><div class="col-tag">对比决策</div><div class="col-query">Burton Ripcord和Ride Agenda选哪个？主要玩全山</div></div>
-<div class="col-strategy"><div class="cs-label">回答思路</div><div class="cs-text">先给结论（选哪个）→ A 胜在哪里 → 补信息差（B 落败但有的优势），通过全面体现真实 → 场景路由</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>Burton Ripcord和Ride Agenda选哪个？主要玩全山</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">112 篇</b>真人对比体验</span></div>
-<div class="lead"><span class="hl">如果你说的「全山」是走各种地形、偶尔踩个浮雪，我更推荐 Ripcord。</span>两者的核心区别在板型：Ripcord 是定向板，板头比板尾长，专为一路冲坡、探索全山地形设计；Agenda 是双板头结构、站姿居中，更吃公园抛跳和正反脚。<span class="ann dm" data-reason="锚定用户说的「主要玩全山」，直接给答案，不额外扩展用户没问的场景">懂我</span><span class="ann yp">有判断</span></div>
-<div class="lead">从以下几个方面详细介绍：</div>
-<div class="sec-label" style="margin-top:6px">👍 Ripcord 优势在哪</div>
-<div class="item-title" style="margin-top:14px">1. 全山巡航更顺手 <span class="ann dh" data-reason="把板头板尾的差异翻译成滑起来的体感">懂行</span></div>
-<ul class="blist">
-<li>Ripcord <b>板头比板尾长</b>，天生适合朝一个方向往下冲，从缓坡到陡坡巡航更稳、转弯更顺<sup class="cite">提及 76%</sup>。</li>
-<li>Agenda 头尾一样长，好处是正反都能滑，但<b>一门心思往前冲的场景下，稳定感稍逊一点</b>。</li>
-</ul>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div><div class="nm">滑了两季的老雪友</div><div class="lk">♡ 2,180</div></div><div class="tx"><span class="q">"</span>纯全山、不打算玩公园的话闭眼 Ripcord，巡航是真的稳。我这种就想爽快往下滑的，Agenda 那点弹性对我没用<span class="q">"</span></div></div>
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F4C58F,#E8A04D)"></div><div class="nm">雪具店店员</div><div class="lk">♡ 940</div></div><div class="tx"><span class="q">"</span>来问的十个有八个我都推 Ripcord，就因为大部分人一开始根本说不清要不要玩公园，全山板适用面广、不容易后悔<span class="q">"</span></div></div>
+<div class="lead"><span class="hl">主要玩全山选 Ripcord，想往公园发展选 Agenda。</span><span class="ann dm" data-reason="锚定用户说的「全山」，直接给答案">懂我</span><span class="ann yp">有判断</span></div>
+<div class="sec-label">🔍 本质差异就一点 <span class="ann dh" data-reason="把硬度差异翻译成实际体感区别">懂行</span></div>
+<div class="lead"><b>方向性 vs 对称，决定你怎么滑</b><br>Ripcord 是<b>方向性板</b>，板头比板尾长，天生适合往一个方向冲。全山巡航更稳，刻滑入弯更顺，但反脚滑会别扭。Agenda 是<b>对称板</b>，正反完全一样，Switch 和正常滑手感一致。公园里正反切换、落地 fakie 需要这种板，但高速巡航比方向性板差一点。</div>
+<div class="sec-label">💬 买家口碑 <span class="ann zs" data-reason="展示两边真实评价，有好有差">真实</span></div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>"Ripcord 全山巡航真的稳，换刃流畅，初学到中级一直在用，就是高速有点软"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"Agenda 正反脚切换太丝滑了，公园里落地 fakie 毫无压力。但纯巡航确实不如方向性板"</div>
+<div class="sec-label">📊 详细参数对比 <span class="ann dh" data-reason="提供客观参数表供用户核实">懂行</span></div>
+<div class="pk-card">
+<div class="pk-scores">
+<div class="pk-side win">
+<div class="nm">Burton Ripcord<span class="pk-badge">胜</span></div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:90%">★★★★★</span></div>
 </div>
-<div class="item-title" style="margin-top:18px">2. 上手一样好学 <span class="ann dh" data-reason="点明两块都软、都容错，打消新手顾虑">懂行</span></div>
-<ul class="blist">
-<li>两块都偏软、边缘都不容易咬住雪，新手都不容易摔<sup class="cite">提及 81%</sup>，上手难度差不多。</li>
-<li>真要挑，Ripcord 更「无脑」一点；Agenda 脚下有一小段更弹，最初使用的时候要多适应一下。</li>
-</ul>
-<div class="sec-label">✨ Agenda 也有它的好 <span class="ann zs" data-reason="落选方的优势也如实讲，不只夸赢家">真实</span></div>
-<ul class="blist">
-<li>正反脚都能滑<sup class="cite">提及 63%</sup>：头尾对称，将来想学公园里换方向、倒着落地，它天生更顺手。</li>
-<li>脚下更弹<sup class="cite">提及 47%</sup>：想玩跳台、做花式动作，它比 Ripcord 更有回弹、更好玩。</li>
-<li><b>还便宜 ¥600</b>：预算紧、又想留点公园可能性的话，它更划算。</li>
-</ul>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div><div class="nm">从全山转公园的阿May</div><div class="lk">♡ 1,560</div></div><div class="tx"><span class="q">"</span>我第一块是 Agenda，后来真的迷上公园了，正反脚早早练起来省了不少事。要是当初买了纯全山板，现在又得换<span class="q">"</span></div></div>
 </div>
-<div class="sec-label">📊 一张表看明白 <span class="ann dh" data-reason="提供直观对比供用户核实">懂行</span></div>
-<div class="comp-table"><table>
-<tr><th></th><th>Burton Ripcord</th><th>Ride Agenda</th></tr>
-<tr><td class="dim">板头板尾</td><td>板头略长，朝一个方向滑</td><td>头尾对称，正反都能滑</td></tr>
-<tr><td class="dim">全山巡航</td><td>★★★★★</td><td>★★★★☆</td></tr>
-<tr><td class="dim">玩公园花活</td><td>★★★☆☆</td><td>★★★★★</td></tr>
-<tr><td class="dim">正反脚滑</td><td>一般</td><td class="win">顺手</td></tr>
-<tr><td class="dim">高速稳不稳</td><td class="win">稍稳</td><td>中等</td></tr>
-<tr><td class="dim">参考价</td><td>¥2,998</td><td class="win">¥2,200</td></tr>
-</table></div>
+<div class="pk-vs"><span class="pk-topic">全山性能</span>VS</div>
+<div class="pk-side">
+<div class="nm">Ride Agenda</div>
+<div class="score-row">
+<div class="pk-stars"><span class="s-empty">★★★★★</span><span class="s-fill" style="width:72%">★★★★★</span></div>
+</div>
+</div>
+</div>
+<div class="pk-params">
+<div class="pk-row">
+<div class="pk-val win">Flat Top（方向性）</div>
+<div class="pk-dim">板型</div>
+<div class="pk-val" style="text-align:right">Twin（对称）</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">★★★★★</div>
+<div class="pk-dim">全山适配</div>
+<div class="pk-val" style="text-align:right">★★★★☆</div>
+</div>
+<div class="pk-row">
+<div class="pk-val">★★★☆☆</div>
+<div class="pk-dim">公园玩法</div>
+<div class="pk-val win" style="text-align:right">★★★★★</div>
+</div>
+<div class="pk-row">
+<div class="pk-val win">中等偏上</div>
+<div class="pk-dim">高速稳定</div>
+<div class="pk-val" style="text-align:right">中等</div>
+</div>
+<div class="pk-row">
+<div class="pk-val">一般</div>
+<div class="pk-dim">反滑</div>
+<div class="pk-val win" style="text-align:right">优秀</div>
+</div>
+<div class="pk-row">
+<div class="pk-val">¥2,800</div>
+<div class="pk-dim">参考价</div>
+<div class="pk-val win" style="text-align:right">¥2,200</div>
+</div>
+</div>
+</div>
+<div class="pk-explain">
+全山为主 Ripcord 更稳，方向性板型天生适合巡航和刻滑。Agenda 的优势在公园和反脚滑，对称板型正反手感一致。
+</div>
 <div class="sec-label">🧭 按你的情况选 <span class="ann dm" data-reason="分场景路由，用户对号入座">懂我</span><span class="ann yp">有判断</span></div>
 <div class="scene">
-<div class="scene-row"><span class="cond">主要<b>全山巡航、就想爽快往下滑</b></span><span class="arrow">→</span><span class="pick a">Ripcord</span></div>
-<div class="scene-row"><span class="cond">全山为主、偶尔想进公园试试</span><span class="arrow">→</span><span class="pick b">Agenda 省 ¥600</span></div>
+<div class="scene-row"><span class="cond">主要<b>全山巡航、练刻滑</b></span><span class="arrow">→</span><span class="pick a">Ripcord</span></div>
+<div class="scene-row"><span class="cond">想学<b>公园、跳台、反脚滑</b></span><span class="arrow">→</span><span class="pick b">Agenda</span></div>
+<div class="scene-row"><span class="cond">全山为主、偶尔进公园</span><span class="arrow">→</span><span class="pick b">Agenda 省 ¥600</span></div>
+<div class="scene-row"><span class="cond">不确定自己喜欢什么</span><span class="arrow">→</span><span class="pick a">Ripcord 适用面更广</span></div>
 </div>
-<div class="follow"><button class="fbtn">全山板以后想进公园可以吗？</button><button class="fbtn">固定器配什么好？</button><button class="fbtn">这两块二手哪个好出？</button></div>
+<div class="lead">告诉我你的水平和主要玩法，我帮你做最终决定。<span class="ann dm" data-reason="收集用户信息，给出最终建议">懂我</span></div>
+<div class="follow"><button class="fbtn">全山板以后想进公园可以吗？</button><button class="fbtn">固定器配什么好？</button><button class="fbtn">这两个二手哪个更好出？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人对比体验</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
 <!-- 户外 · 攻略咨询 -->
 <div class="case-panel cat-outdoor" data-cat="outdoor" data-intent="guide">
-<div class="col-head"><div class="col-tag">攻略咨询</div><div class="col-query">买雪板最易踩的坑是什么？</div></div>
-<div class="col-strategy"><div class="cs-label">回答思路</div><div class="cs-text">教用户怎么选 → 拆解需求维度（要想清楚哪几个问题）→ 每个维度怎么判断 → 补充需要明白的真相 / 避坑</div></div>
 <div class="phone"><div class="nav"><div class="av"></div><div class="nm">点点</div></div><div class="chat-body">
 <div class="userq"><span>买雪板最易踩的坑是什么？</span></div>
 <div class="answer">
 <div class="ref"><div class="avs"><i style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></i><i style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></i><i style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></i></div><span>综合 <b style="color:var(--t62)">203 篇</b>买板踩坑帖</span></div>
-<div class="lead">新手买板的坑，几乎都逃不开下面这几个。<span class="hl">把这几个坑避开，第一块板就不会买亏。</span><span class="ann dh" data-reason="先给全局判断，再逐条拆坑">懂行</span></div>
-<div class="sec-label">① 只看身高选长度 <span class="ann dh" data-reason="点破最常见的选长度误区">懂行</span><span class="ann zs" data-reason="给出体重这个真正的关键变量">真实</span></div>
-<ul class="blist">
-<li>网上常说"站直板头卡在下巴到鼻子之间"，但这套下巴鼻子法其实已经过时了。</li>
-<li>真正决定板长的是<span class="hl">体重</span>——同样 175，55kg 和 70kg 的人适合的板长能差好几公分。</li>
-<li>真要准就看<span class="hl">官网的体重对照表</span>（每个长度都标了适用体重区间）：身材匀称的人两种方法结果差不多，但偏瘦高、偏矮壮的人两边会给出不同答案，这时候听体重的。</li>
-</ul>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#8FD3F4,#5A9AFF)"></div><div class="nm">按身高买亏过的雪友</div><div class="lk">♡ 1,720</div></div><div class="tx"><span class="q">"</span>当初照着身高买，板子对我太长压不动，学半天换刃都学不会，换了短一点的立马就顺了<span class="q">"</span></div></div>
-</div>
-<div class="sec-label">② 图"一步到位"买硬板 <span class="ann dh" data-reason="破除「进阶=更好」的误区">懂行</span></div>
-<ul class="blist">
-<li>贵的进阶板大多更硬。<b>硬板新手压不动，换刃老打滑，还更容易摔伤。</b><sup class="cite">提及 76%</sup></li>
-<li>软板才好学，等滑顺了、开始嫌它撑不住，再换进阶板也不迟——一般是滑够一二十天以后的事。</li>
-</ul>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div><div class="nm">滑雪教练老陈</div><div class="lk">♡ 3,050</div></div><div class="tx"><span class="q">"</span>新手最爱犯的错就是一步到位买硬板，觉得能多用几年。结果板子压不弯，转弯全靠甩，姿势全练坏了<span class="q">"</span></div></div>
-</div>
-<div class="sec-label">③ 钱全砸在板上，鞋和固定器买最便宜 <span class="ann dm" data-reason="纠正预算分配，替用户守住钱">懂我</span><span class="ann dh">懂行</span></div>
-<div class="lead">脚感的大头其实在<b>雪鞋和固定器</b><sup class="cite">提及 68%</sup>上，板只占一部分。鞋不合脚、固定器太软，再好的板也白搭。预算别全给板，留一部分给鞋和固定器。</div>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F4C58F,#E8A04D)"></div><div class="nm">踩过坑的小红书网友</div><div class="lk">♡ 1,280</div></div><div class="tx"><span class="q">"</span>板花了大几千，鞋图便宜买了双租赁款，结果脚被磨得生疼，一天下来全在忍痛，根本没心思练<span class="q">"</span></div></div>
-</div>
-<div class="sec-label">④ 脚大没挑加宽板 <span class="ann dh" data-reason="大脚用户容易忽略的宽度问题">懂行</span></div>
-<div class="lead">脚偏大（差不多 44 码以上）要专门挑<b>加宽版</b><sup class="cite">提及 41%</sup>，不然转弯压低时脚尖脚跟会蹭到雪、容易摔。挑板时带上雪鞋比一下，鞋头鞋跟别超出板边太多。</div>
-<div class="voice">
-<div class="v"><div class="f"><div class="avv" style="background:linear-gradient(135deg,#F7B4C4,#E88DA0)"></div><div class="nm">45 码大脚玩家</div><div class="lk">♡ 890</div></div><div class="tx"><span class="q">"</span>第一块板没注意宽度，压弯道的时候鞋跟老是蹭雪，摔了好几次才反应过来是板太窄。换了加宽版之后再没蹭过<span class="q">"</span></div></div>
-</div>
-<div class="sec-label">⑤ 贪便宜买到暗伤二手板 <span class="ann zs" data-reason="给出可操作的验板方法">真实</span></div>
-<ul class="blist">
-<li>二手板重点看：板底划痕有没有深到里面、边刃有没有锈和缺口、板身有没有分层鼓包、固定器孔位螺纹好不好。<sup class="cite">提及 55%</sup></li>
-<li>看不出暗伤的话，省的那几百块可能一个雪季就报废。一般三到五折才值得下手。</li>
-</ul>
-<div class="shots">
-<figure><img src="images/snow_used_damage_1.png"></figure>
-<figure><img src="images/snow_used_damage_2.png"></figure>
-<figure><img src="images/snow_used_damage_3.png"></figure>
-</div>
-<div class="shots-cap">常见暗伤：板底划痕、板头缺口、金属边分层</div>
-<div class="sec-label">📌 一句话总结 <span class="ann dm" data-reason="收尾前用一句高亮总结把五个坑串起来">懂我</span></div>
-<div class="tips"><div class="tips-text">这几个坑里最容易踩的是<b>照身高选长度</b>——身高只是参考，真正决定板长的是体重，按身高选大概率买长了、压不动、换刃学不会。挑板时<b>直接看官网体重对照表</b>，比按身高猜准得多。软硬度、预算怎么分、宽度、二手咋验，照着前面的攻略来就行。</div></div>
-<div class="lead">你打算板 + 固定器 + 鞋一共花多少？告诉我预算，我帮你把整套配下来。<span class="ann dm" data-reason="主动收集预算，进一步精准推荐">懂我</span></div>
-<div class="follow"><button class="fbtn">入门全套预算大概多少合理？</button><button class="fbtn">雪鞋和固定器怎么挑？</button><button class="fbtn">二手板怎么验有没有暗伤？</button></div>
+<div class="lead">新手买板最大的误区：<span class="hl">以为"贵的=好的"，其实是"合适的=好的"</span>。大部分踩坑都是觉得省了钱或一步到位了，其实花了冤枉钱。<span class="ann dh" data-reason="先破除误区再讲怎么选">懂行</span></div>
+<div class="sec-label">🧠 先建立 3 个核心认知 <span class="ann dh" data-reason="用三个认知帮新手建选板框架">懂行</span></div>
+<div class="lead"><b>新手别碰硬板，"进阶"不是"更好"</b><br>进阶板不是"更好"，是"更硬"。<b>新手用硬板学不出来，还容易受伤</b>。等滑够 20 天再考虑换板</div>
+<div class="lead"><b>鞋和固定器比板重要，别把预算全砸在板上</b><br>脚感 70% 来自鞋和固定器，板只占 30%。<b>预算全砸在板上、鞋买最便宜的</b>是最常见的错误</div>
+<div class="lead"><b>买错板型比买错牌子影响大</b><br>Camber、Rocker、Flat 各有用途。新手选 Flat 或 Rocker，别碰 Camber</div>
+<div class="sec-label">⚠️ 五大经典坑 <span class="ann dh">懂行</span><span class="ann zs" data-reason="来自真人踩坑经历的经验总结">真实</span></div>
+<div class="lead"><b>一步到位买进阶板</b><br>比如 Burton Custom 这类硬板，新手根本压不住，每次换刃都打滑</div>
+<div class="lead"><b>只看板、忽略鞋和固定器</b><br>合理比例是板 40% + 固定器 25% + 鞋 35%</div>
+<div class="lead"><b>按身高选长度</b><br>体重才是关键。同样 175cm，55kg 和 70kg 的人板长差 5cm</div>
+<div class="lead"><b>二手捡漏来路不明的板</b><br>看不出芯材断裂和暗伤，省了几百块可能一个赛季就报废</div>
+<div class="lead"><b>不了解板型就下单</b><br>新手选 Flat 或 Rocker（比如 Burton Ripcord），别碰 Camber，卡刃容易摔</div>
+<div class="sec-label">💬 过来人的经验 <span class="ann zs" data-reason="展示社区真实讨论热点">真实</span></div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#B5C7F7,#5A9AFF)"></div>"入门千万别碰硬板，我第一块买的 Custom，练了一周换刃都学不会，换了软板两天就上手了"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#FBD3B4,#E8A33D)"></div>"鞋比板重要！我之前板子花了三千多，鞋买了个两百的，脚疼得根本没心思练。后来换了好鞋，同一块板感觉完全不一样"</div>
+<div class="iq"><div class="av" style="background:linear-gradient(135deg,#7EE8D4,#34B39D)"></div>"闲鱼收了块二手看着挺新的，结果第三天芯材断了。二手板暗伤真的看不出来，新手别省这个钱"</div>
+<div class="lead">告诉我你的预算和想怎么玩，我帮你从零开始规划装备。<span class="ann dm" data-reason="主动收集需求，精准推荐">懂我</span></div>
+<div class="follow"><button class="fbtn">入门全套预算大概多少合理？</button><button class="fbtn">Camber 和 Rocker 到底啥区别？</button><button class="fbtn">二手板怎么验有没有暗伤？</button></div>
 <div class="foot-info">内容由 AI 生成 · 综合小红书真人买板踩坑经验</div>
 </div></div><div class="input-bar"><div class="ib-voice">◉</div><span class="ib-ph">发消息或按住说话...</span><span class="ib-icon">📷</span><span class="ib-icon">＋</span></div></div></div>
 
